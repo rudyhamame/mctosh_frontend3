@@ -1,0 +1,72 @@
+#content_main_app {
+  order: 2;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+#contentView_div {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 30px;
+  gap: 50px;
+}
+
+#notes {
+  order: 1;
+  flex-grow: 1;
+  padding: 0 20px;
+  font-family: "Roboto", sans-serif;
+  font-size: 16pt;
+  gap: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+
+#div_icons {
+  order: 2;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+#div_icons i {
+  color: var(--blue);
+  font-size: 20pt;
+}
+
+#notes li {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#newInput_div {
+  order: 2;
+  padding: 1px 0;
+}
+textarea {
+  padding: 20px;
+  outline-style: none;
+  border: none;
+  border-radius: 5px;
+  width: 400px;
+  font-size: 16pt;
+  font-family: "Roboto", sans-serif;
+  width: 100%;
+}
+
+#newInput_div [type="submit"] {
+  outline-style: none;
+  padding: 5px;
+  font-size: 16pt;
+  background-color: #42b72a;
+  border: none;
+  cursor: pointer;
+  font-family: "Roboto", sans-serif;
+  width: 100%;
+  color: var(--white);
+}

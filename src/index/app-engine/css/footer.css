@@ -1,0 +1,14 @@
+#footer_app {
+  padding: 10px 30px;
+  font-family: "Roboto", sans-serif;
+  background-color: var(--blue);
+}
+
+#footer_app_container {
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+#footer_app h4 {
+  color: var(--white);
+}

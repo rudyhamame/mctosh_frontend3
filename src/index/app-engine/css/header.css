@@ -1,0 +1,28 @@
+#header_app_content {
+  padding: 10px 30px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1300px;
+  margin: 0 auto;
+  flex-grow: 1;
+}
+#header_app {
+  z-index: 100;
+  display: flex;
+  font-family: "Pacifico", cursive;
+  letter-spacing: 1px;
+  box-shadow: 0px 0 4px black;
+  background-color: var(--blue);
+}
+
+#logo_header_app h1 {
+  color: var(--white);
+  text-align: center;
+}
+
+#header_app i {
+  color: var(--white);
+  font-size: 2em;
+}
