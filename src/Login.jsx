@@ -142,6 +142,16 @@ class Login extends React.Component {
     );
   };
 
+  componentDidUpdate = () => {
+    sessionStorage.setItem("loginState", JSON.stringify(this.state.isLogged));
+  };
+  componentDidMount = () => {
+    const loginData = sessionStorage.getItem("loginState");
+    if (loginData) {
+      this.setState({ isLogged: JSON.parse(loginData) });
+    }
+  };
+
   render() {
     return (
       <div id="login_div">
