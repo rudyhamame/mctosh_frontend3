@@ -150,6 +150,9 @@ class Login extends React.Component {
     if (loginData) {
       this.setState({ isLogged: JSON.parse(loginData) });
     }
+    if (this.state.isLogged === true) {
+      this.renderHome();
+    }
   };
 
   render() {
