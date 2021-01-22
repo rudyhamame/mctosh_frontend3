@@ -63,7 +63,7 @@ textarea {
   outline-style: none;
   padding: 5px;
   font-size: 16pt;
-  background-color: #42b72a;
+  background-color: var(--green);
   border: none;
   cursor: pointer;
   font-family: "Roboto", sans-serif;
