@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import "../../home/app-engine/css/content.css";
+
 const BiochemMolbio = () => {
   const fetchData = () => {
     const url = "https://backendstep1.herokuapp.com/api/BiochemMolbio ";
@@ -154,8 +156,10 @@ const BiochemMolbio = () => {
     <div id="contentView_div">
       <ol id="notes"></ol>
       <div id="newInput_div">
-        <textarea id="input_area" type="text" />
-        <input type="submit" onClick={addList} />
+        <form action="">
+          <textarea id="input_area" type="text" />
+          <input type="submit" onClick={addList} />
+        </form>
       </div>
     </div>
   );

@@ -1,13 +1,23 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter as Router, Route } from "react-router-dom";
 import Login from "./Login";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
 
-ReactDOM.render(
-  <React.StrictMode>
+ReactDOM.render(<FirstRouter />, document.getElementById("root"));
+
+function FirstRouter() {
+  return (
     <Router>
-      <Route exact path="/" component={Login}></Route>
+      <Switch>
+        <Route exact path="/" component={Login} />
+      </Switch>
+      <Redirect to="/" />
     </Router>
-  </React.StrictMode>,
-  document.getElementById("root")
-);
+  );
+}
+export default FirstRouter;

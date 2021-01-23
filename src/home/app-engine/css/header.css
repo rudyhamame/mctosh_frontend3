@@ -25,4 +25,15 @@
 #header_app i {
   color: var(--white);
   font-size: 2em;
+  cursor: pointer;
+}
+
+#nav {
+  gap: 30px;
+  display: flex;
+  flex-direction: row;
+}
+
+#header_app i:hover {
+  transform: scale(0.96);
 }

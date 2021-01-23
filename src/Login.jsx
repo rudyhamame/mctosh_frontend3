@@ -1,7 +1,8 @@
 import React from "react";
-import "./auth/css/login.css";
-import Index from "./index/Index";
+import "./login.css";
+import App from "./App";
 import ReactDOM from "react-dom";
+import { Collection } from "mongoose";
 
 class Login extends React.Component {
   constructor() {
@@ -10,10 +11,14 @@ class Login extends React.Component {
       username_correct: false,
       password_correct: false,
       isLogged: false,
+      isLoading: false,
     };
   }
 
   fetchData = (event) => {
+    this.setState({
+      isLoading: true,
+    });
     event.preventDefault();
     const url = "https://backendstep1.herokuapp.com/login";
     let req = new Request(url, { method: "GET", mode: "cors" });
@@ -49,6 +54,7 @@ class Login extends React.Component {
         } else {
           this.setState({
             isLogged: true,
+            isLoading: false,
           });
           this.renderHome();
         }
@@ -134,16 +140,11 @@ class Login extends React.Component {
     login_title.style.display = "none";
   };
   renderHome = () => {
-    ReactDOM.render(
-      <React.StrictMode>
-        <Index />
-      </React.StrictMode>,
-      document.getElementById("root")
-    );
+    ReactDOM.render(<App />, document.getElementById("root"));
   };
 
   componentDidUpdate = () => {
-    sessionStorage.setItem("loginState", JSON.stringify(true));
+    sessionStorage.setItem("loginState", JSON.stringify(this.state.isLogged));
     if (this.state.isLogged === true) {
       this.renderHome();
     }
@@ -155,9 +156,32 @@ class Login extends React.Component {
     }
   };
 
+  loader = () => {
+    while (this.state.isLoading) {
+      return (
+        <div
+          style={{
+            fontSize: "20pt",
+            display: "flex",
+            position: "absolute",
+            top: "0",
+            bottom: "0",
+            justifyContent: "center",
+            alignContent: "center",
+            flexDirection: "column",
+            zIndex: "100",
+          }}
+        >
+          <img src="/img/loader.gif" alt="" width="70px" />
+        </div>
+      );
+    }
+  };
+
   render() {
     return (
       <div id="login_div">
+        {this.loader()}
         <header id="header_login">
           <h1>Study Planner</h1>
         </header>
