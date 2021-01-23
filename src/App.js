@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
 import IndexBiochemMolbio from "./pages/biochem_molbio/IndexBiochemMolbio";
 import IndexBioOfCells from "./pages/bio_of_cells/IndexBioOfCells";
 import IndexHumanDevGen from "./pages/human_devgen/IndexHumanDevGen";
@@ -14,6 +19,7 @@ function App() {
         <Route exact path="/bio_of_cells" component={IndexBioOfCells} />
         <Route exact path="/human_devgen" component={IndexHumanDevGen} />
       </Switch>
+      <Redirect to="/" />
     </Router>
   );
 }
