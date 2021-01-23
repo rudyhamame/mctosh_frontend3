@@ -19,7 +19,6 @@ function App() {
         <Route exact path="/bio_of_cells" component={IndexBioOfCells} />
         <Route exact path="/human_devgen" component={IndexHumanDevGen} />
       </Switch>
-      <Redirect to="/" />
     </Router>
   );
 }
