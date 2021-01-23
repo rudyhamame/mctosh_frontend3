@@ -2,7 +2,6 @@
   padding: 10px 30px;
   font-family: "Roboto", sans-serif;
   background-color: var(--blue);
-  font-weight: 300;
 }
 
 #footer_app_container {
@@ -12,4 +11,5 @@
 
 #footer_app h4 {
   color: var(--white);
+  font-weight: 300;
 }
