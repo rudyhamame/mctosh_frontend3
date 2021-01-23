@@ -3,7 +3,7 @@ import "../../home/app-engine/css/content.css";
 
 const BioOfCells = () => {
   const fetchData = () => {
-    const url = "https://backendstep1.herokuapp.com/api/BioOfCells ";
+    const url = "https://backendstep1.herokuapp.com/api/BioOfCells";
     let req = new Request(url, { method: "GET", mode: "cors" });
     fetch(req)
       .then((response) => {

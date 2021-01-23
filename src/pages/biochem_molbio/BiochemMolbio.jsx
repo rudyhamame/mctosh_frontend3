@@ -3,7 +3,7 @@ import "../../home/app-engine/css/content.css";
 
 const BiochemMolbio = () => {
   const fetchData = () => {
-    const url = "https://backendstep1.herokuapp.com/api/BiochemMolbio ";
+    const url = "https://backendstep1.herokuapp.com/api/BiochemMolbio";
     let req = new Request(url, { method: "GET", mode: "cors" });
     fetch(req)
       .then((response) => {

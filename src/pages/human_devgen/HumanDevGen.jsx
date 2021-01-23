@@ -3,7 +3,7 @@ import "../../home/app-engine/css/content.css";
 
 const HumanDevGen = () => {
   const fetchData = () => {
-    const url = "https://backendstep1.herokuapp.com/api/HumanDevGen ";
+    const url = "https://backendstep1.herokuapp.com/api/HumanDevGen";
     let req = new Request(url, { method: "GET", mode: "cors" });
     fetch(req)
       .then((response) => {
