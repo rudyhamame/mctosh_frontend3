@@ -2,7 +2,6 @@ import React from "react";
 import "./login.css";
 import App from "./App";
 import ReactDOM from "react-dom";
-import { Collection } from "mongoose";
 
 class Login extends React.Component {
   constructor() {
