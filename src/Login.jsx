@@ -11,6 +11,7 @@ class Login extends React.Component {
       password_correct: false,
       isLogged: false,
       isLoading: false,
+      badAuth: null,
     };
   }
 
@@ -49,9 +50,10 @@ class Login extends React.Component {
           this.state.username_correct === false &&
           this.state.password_correct === false
         ) {
-          alert("Login bad");
           this.setState({
             isLoading: false,
+            badAuth:
+              "The password you entered is not correct, please try again",
           });
         } else {
           this.setState({
@@ -239,6 +241,7 @@ class Login extends React.Component {
           <h4 id="signup_title" onClick={this.enableSignup}>
             Sign up?
           </h4>
+          <h4 style={{ color: "red" }}>{this.state.badAuth}</h4>
         </div>
         <footer id="login_footer">©2021 Rudy Hamame</footer>
       </div>
