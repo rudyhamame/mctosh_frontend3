@@ -12,6 +12,7 @@
   flex-grow: 1;
   gap: 10px;
   font-family: "Roboto", sans-serif;
+  font-weight: 300;
 }
 
 #notes {
