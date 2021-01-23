@@ -4,7 +4,7 @@
   width: 20%;
   overflow: auto;
   order: 2;
-  box-shadow: 0 0px 2px black;
+  box-shadow: 0px 0 7px rgba(0, 0, 0, 0.342);
 }
 #aside_main_app_container {
   padding: 20px;

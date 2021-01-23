@@ -10,7 +10,8 @@
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  gap: 50px;
+  gap: 10px;
+  font-family: "Roboto", sans-serif;
 }
 
 #notes {
@@ -47,6 +48,7 @@
   order: 2;
   padding: 30px;
   background-color: rgba(0, 0, 0, 0.034);
+  box-shadow: -1px 0 10px rgba(0, 0, 0, 0.342);
 }
 textarea {
   padding: 20px;
@@ -66,11 +68,18 @@ textarea {
   background-color: var(--green);
   border: none;
   cursor: pointer;
-  font-family: "Roboto", sans-serif;
   width: 100%;
   color: var(--white);
 }
 
 #newInput_div form [type="submit"]:hover {
   transform: scale(0.993);
+}
+
+#contentView_div h2 {
+  text-align: center;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.034);
+  box-shadow: -1px 0 10px rgba(0, 0, 0, 0.342);
+  font-weight: 300;
 }

@@ -154,6 +154,7 @@ const BiochemMolbio = () => {
 
   return (
     <div id="contentView_div">
+      <h2>Notes</h2>
       <ol id="notes"></ol>
       <div id="newInput_div">
         <form action="">
