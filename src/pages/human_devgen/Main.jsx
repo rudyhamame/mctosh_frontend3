@@ -1,14 +1,14 @@
 import React from "react";
-import "./css/aside.css";
-import "./css/content.css";
-import "./css/main.css";
-import Content from "./Content";
+import "../../home/app-engine/css/aside.css";
+import "../../home/app-engine/css/content.css";
+import "../../home/app-engine/css/main.css";
+import HumanDevGen from "./HumanDevGen";
 import { Link } from "react-router-dom";
 
 const Main = () => {
   return (
     <main id="main_app">
-      <Content />
+      <HumanDevGen />
       <aside id="aside_main_app">
         <div id="aside_main_app_container">
           <h3>General Principles of Foundational Science</h3>

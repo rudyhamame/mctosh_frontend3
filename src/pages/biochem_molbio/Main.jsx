@@ -1,24 +1,43 @@
 import React from "react";
 import "../../home/app-engine/css/aside.css";
 import "../../home/app-engine/css/content.css";
+import "../../home/app-engine/css/main.css";
 import BiochemMolbio from "./BiochemMolbio";
+import { Link } from "react-router-dom";
 
 const Main = () => {
   return (
     <main id="main_app">
       <BiochemMolbio />
-
       <aside id="aside_main_app">
         <div id="aside_main_app_container">
           <h3>General Principles of Foundational Science</h3>
           <ul>
-            <li>Biochemistry and molecular biology</li>
-            <li>Biology of cells</li>
-            <li>Human development and genetics</li>
-            <li>Biology of tissue response to disease</li>
-            <li>Pharmacodynamic and pharmacokinetic processes</li>
-            <li>Microbial biology</li>
-            <li>Normal age-related findings and care of the well patient</li>
+            <Link to="/biochem_molbio">
+              <li>Biochemistry and molecular biology</li>
+            </Link>
+            <Link to="/bio_of_cells">
+              <li>Biology of cells</li>
+            </Link>
+            <Link to="/human_devgen">
+              <li>Human development and genetics</li>
+            </Link>
+
+            <Link to="/bio_of_tissue">
+              <li>Biology of tissue response to disease</li>
+            </Link>
+
+            <Link to="/pharma_processes">
+              <li>Pharmacodynamic and pharmacokinetic processes</li>
+            </Link>
+
+            <Link to="/micro_bio">
+              <li>Microbial biology</li>
+            </Link>
+
+            <Link to="/age_related">
+              <li>Normal age-related findings and care of the well patient</li>
+            </Link>
           </ul>
           <h3>Organ System</h3>
           <ul>
