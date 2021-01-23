@@ -46,16 +46,18 @@
 
 #newInput_div {
   order: 2;
-  padding: 30px;
+  padding: 5px 30px;
   background-color: rgba(0, 0, 0, 0.034);
   box-shadow: -1px 0 10px rgba(0, 0, 0, 0.342);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 textarea {
   padding: 20px;
   outline-style: none;
   border: none;
   border-radius: 5px;
-  width: 400px;
   font-size: 12pt;
   font-family: "Roboto", sans-serif;
   width: 100%;
@@ -82,4 +84,15 @@ textarea {
   background-color: rgba(0, 0, 0, 0.034);
   box-shadow: -1px 0 10px rgba(0, 0, 0, 0.342);
   font-weight: 300;
+}
+
+#form_buttons {
+  font-size: 16pt;
+  gap: 10px;
+  padding: 5px 1px;
+  color: var(--blue);
+}
+
+#open_icon {
+  display: none;
 }

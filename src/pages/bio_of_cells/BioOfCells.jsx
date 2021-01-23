@@ -152,12 +152,34 @@ const BioOfCells = () => {
     fetchData();
   }, [counter]);
 
+  const closeForm = () => {
+    let input_form = document.getElementById("input_form");
+    let close_icon = document.getElementById("close_icon");
+    let open_icon = document.getElementById("open_icon");
+
+    input_form.style.display = "none";
+    close_icon.style.display = "none";
+    open_icon.style.display = "inline";
+  };
+  const openForm = () => {
+    let input_form = document.getElementById("input_form");
+    let close_icon = document.getElementById("close_icon");
+    let open_icon = document.getElementById("open_icon");
+
+    input_form.style.display = "initial";
+    close_icon.style.display = "initial";
+    open_icon.style.display = "none";
+  };
   return (
     <div id="contentView_div">
       <h2>Notes</h2>
       <ol id="notes"></ol>
       <div id="newInput_div">
-        <form action="">
+        <div id="form_buttons">
+          <i id="close_icon" onClick={closeForm} class="fas fa-times"></i>
+          <i id="open_icon" onClick={openForm} class="fas fa-plus"></i>
+        </div>
+        <form id="input_form" action="">
           <textarea id="input_area" type="text" />
           <input type="submit" onClick={addList} />
         </form>

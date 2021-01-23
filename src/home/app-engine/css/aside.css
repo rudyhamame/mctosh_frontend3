@@ -5,6 +5,7 @@
   overflow: auto;
   order: 2;
   box-shadow: 0px 0 7px rgba(0, 0, 0, 0.342);
+  display: none;
 }
 #aside_main_app_container {
   padding: 20px;
