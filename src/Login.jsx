@@ -50,6 +50,9 @@ class Login extends React.Component {
           this.state.password_correct === false
         ) {
           alert("Login bad");
+          this.setState({
+            isLoading: false,
+          });
         } else {
           this.setState({
             isLogged: true,
