@@ -53,7 +53,6 @@ class Login extends React.Component {
         } else {
           this.setState({
             isLogged: true,
-            isLoading: false,
           });
           this.renderHome();
         }
@@ -139,6 +138,9 @@ class Login extends React.Component {
     login_title.style.display = "none";
   };
   renderHome = () => {
+    this.setState({
+      isLoading: false,
+    });
     ReactDOM.render(<App />, document.getElementById("root"));
   };
 
