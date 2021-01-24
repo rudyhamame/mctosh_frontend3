@@ -1,6 +1,5 @@
 import React from "react";
 import "../css/aside.css";
-import "../css/content.css";
 import "../css/main.css";
 import Content from "./Content";
 import Aside from "./Aside";
