@@ -79,12 +79,12 @@ const Content = () => {
           editIcon.setAttribute("class", "fas fa-edit");
           deleteIcon.setAttribute("class", "fas fa-eraser");
 
-          // editIcon.addEventListener("click", () =>
-          //   editList(String(jsonData[i]._id))
-          // );
-          // deleteIcon.addEventListener("click", () =>
-          //   deleteNote(String(jsonData[i]._id))
-          // );
+          editIcon.addEventListener("click", () =>
+            editList(String(jsonData[i]._id))
+          );
+          deleteIcon.addEventListener("click", () =>
+            deleteList(String(jsonData[i]._id))
+          );
 
           divIcons.appendChild(deleteIcon);
           divIcons.appendChild(editIcon);
@@ -142,12 +142,12 @@ const Content = () => {
       });
   }
   function editList(id) {
-    let targeID = id;
+    let targetID = id;
     let task_input = document.getElementById("task_input");
     let deadline_input = document.getElementById("deadline_input");
     let status_input = document.getElementById("status_input");
 
-    let url = "https://backendstep1.herokuapp.com/api/Todo" + targeID;
+    let url = "https://backendstep1.herokuapp.com/api/Todo" + targetID;
     let options = {
       method: "PUT", // *GET, POST, PUT, DELETE, etc.
       mode: "cors", // no-cors, *cors, same-origin
@@ -184,6 +184,23 @@ const Content = () => {
       })
       .catch((err) => {
         console.log("error:", err.message);
+      });
+  }
+
+  function deleteList(id) {
+    let targetID = id;
+    const url = "https://backendstep1.herokuapp.com/api/Todo" + targetID;
+    let req = new Request(url, { method: "DELETE", mode: "cors" });
+    fetch(req)
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error("BAD HTTP!");
+        }
+      })
+      .then(() => {
+        setCounter(counter + 1);
       });
   }
   const [counter, setCounter] = useState(0);
