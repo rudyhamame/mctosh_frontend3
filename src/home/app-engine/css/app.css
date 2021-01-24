@@ -12,6 +12,7 @@
   --blue: #1877f2;
   --white: #f0f2f5;
   --green: #42b72a;
+  --gray: #858585;
 }
 #app {
   display: flex;

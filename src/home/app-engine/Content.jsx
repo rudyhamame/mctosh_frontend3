@@ -19,7 +19,6 @@ const Content = () => {
         document.getElementById("deadline_todo").innerHTML = "";
         document.getElementById("status_todo").innerHTML = "";
         document.getElementById("tools").innerHTML = "";
-
         for (var i = 0; i < jsonData.length; i++) {
           //........................................p....................................
 
@@ -73,18 +72,15 @@ const Content = () => {
           let deleteIcon = document.createElement("i");
           let editIcon = document.createElement("i");
 
-          divIcons.setAttribute("id", "div_icons");
-          deleteIcon.setAttribute("id", "todo_delete" + i);
+          divIcons.setAttribute("id", String(jsonData[i]._id));
+          divIcons.setAttribute("class", "div_icons");
+
+          deleteIcon.setAttribute("id", "todo_edit" + i);
           editIcon.setAttribute("id", "todo_edit" + i);
           editIcon.setAttribute("class", "fas fa-edit");
           deleteIcon.setAttribute("class", "fas fa-eraser");
-
-          editIcon.addEventListener("click", () =>
-            editList(String(jsonData[i]._id))
-          );
-          deleteIcon.addEventListener("click", () =>
-            deleteList(String(jsonData[i]._id))
-          );
+          editIcon.addEventListener("click", () => editList(editIcon.id));
+          deleteIcon.addEventListener("click", () => deleteList(deleteIcon.id));
 
           divIcons.appendChild(deleteIcon);
           divIcons.appendChild(editIcon);
@@ -142,12 +138,12 @@ const Content = () => {
       });
   }
   function editList(id) {
-    let targetID = id;
+    let targetID = document.getElementById(id).parentElement.id;
     let task_input = document.getElementById("task_input");
     let deadline_input = document.getElementById("deadline_input");
     let status_input = document.getElementById("status_input");
 
-    let url = "https://backendstep1.herokuapp.com/api/Todo" + targetID;
+    let url = "https://backendstep1.herokuapp.com/api/Todo/" + targetID;
     let options = {
       method: "PUT", // *GET, POST, PUT, DELETE, etc.
       mode: "cors", // no-cors, *cors, same-origin
@@ -188,8 +184,8 @@ const Content = () => {
   }
 
   function deleteList(id) {
-    let targetID = id;
-    const url = "https://backendstep1.herokuapp.com/api/Todo" + targetID;
+    let targetID = document.getElementById(id).parentElement.id;
+    const url = "https://backendstep1.herokuapp.com/api/Todo/" + targetID;
     let req = new Request(url, { method: "DELETE", mode: "cors" });
     fetch(req)
       .then((response) => {
@@ -212,32 +208,32 @@ const Content = () => {
     <div id="content_main_app">
       <div id="todo_table">
         <div>
-          <h1>Task</h1>
+          <h3>Task</h3>
           <ul id="task_todo"></ul>
         </div>
         <hr />
         <div>
-          <h1>Deadline</h1>
+          <h3>Deadline</h3>
           <ul id="deadline_todo"></ul>
         </div>
         <hr />
 
         <div>
-          <h1>Status</h1>
+          <h3>Status</h3>
           <ul id="status_todo"></ul>
         </div>
         <div>
-          <h1 style={{ color: "var(--white)" }}>.</h1>
+          <h3 style={{ color: "var(--white)" }}>.</h3>
           <ul id="tools"></ul>
         </div>
       </div>
 
       <div id="todo_table_form">
-        <form id="input_form" action="">
+        <form id="input_form_todo" action="">
           <input type="text" name="task_input" id="task_input" />
-          <input type="date" name="deadline_input" id="deadline_input" />
           <input type="text" name="status_input" id="status_input" />
-          <input type="submit" onClick={addList} />
+          <input type="date" name="deadline_input" id="deadline_input" />
+          <i onClick={addList} class="fas fa-paper-plane"></i>
         </form>
       </div>
     </div>
