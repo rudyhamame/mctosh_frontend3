@@ -108,9 +108,9 @@ const Content = () => {
         status: status_input.value,
       }), // body data type must match "Content-Type" header
     };
-    task_input.value = "";
-    deadline_input.value = "";
-    status_input.value = "";
+    // task_input.value = "";
+    // deadline_input.value = "";
+    // status_input.value = "";
 
     let req = new Request(url, options);
 
@@ -144,7 +144,7 @@ const Content = () => {
         <form id="input_form" action="">
           <input type="text" name="task_input" id="task_input" />
           <input type="date" name="deadline_input" id="deadline_input" />
-          <input type="checkbox" name="status_input" id="status_input" />
+          <input type="text" name="status_input" id="status_input" />
           <input type="submit" onClick={addList} />
         </form>
       </div>
