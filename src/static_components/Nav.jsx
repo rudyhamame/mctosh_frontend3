@@ -1,4 +1,5 @@
 import React from "react";
+import HomeContent from "../content_components/home_content/HomeContent";
 
 const Nav = (props) => {
   const loggingOUT = () => {
@@ -19,7 +20,10 @@ const Nav = (props) => {
   };
   return (
     <nav id="nav">
-      <i onClick={props.content_component_switcher} class="fas fa-home"></i>
+      <i
+        onClick={() => props.content_component_switcher(<HomeContent />)}
+        class="fas fa-home"
+      ></i>
       <i onClick={loggingOUT} class="fas fa-sign-out-alt"></i>
       <i
         id="menu_icon"
