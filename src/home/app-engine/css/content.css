@@ -97,3 +97,18 @@ textarea {
 #open_icon {
   display: none;
 }
+
+#content_main_app h1 {
+  text-align: center;
+  margin-top: 20px;
+  color: black;
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+}
+
+#todo_table {
+  width: 50%;
+  font-size: 16pt;
+  font-family: "Roboto", sans-serif;
+  margin: 50px auto;
+}
