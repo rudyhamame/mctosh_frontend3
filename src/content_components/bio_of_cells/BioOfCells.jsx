@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import "../../home/app-engine/css/content.css";
 
-const HumanDevGen = () => {
-  const fetchData = () => {
-    const url = "https://backendstep1.herokuapp.com/api/HumanDevGen";
+const BioOfCells = () => {
+  //.........................GET...................................
+  const getData = () => {
+    const url = "https://backendstep1.herokuapp.com/api/BioOfCells";
     let req = new Request(url, { method: "GET", mode: "cors" });
     fetch(req)
       .then((response) => {
@@ -30,10 +30,10 @@ const HumanDevGen = () => {
           deleteIcon.setAttribute("class", "fas fa-eraser");
           deleteIcon.setAttribute("id", "BiochemMolbioNote" + i);
           editIcon.addEventListener("click", () =>
-            editList(editIcon.getAttribute("id", "BiochemMolbioNote" + i))
+            putData(editIcon.getAttribute("id", "BiochemMolbioNote" + i))
           );
           deleteIcon.addEventListener("click", () =>
-            deleteNote(deleteIcon.getAttribute("id", "BiochemMolbioNote" + i))
+            deleteData(deleteIcon.getAttribute("id", "BiochemMolbioNote" + i))
           );
           li.setAttribute("id", String(jsonData[i]._id));
           p.textContent = jsonData[i].notes;
@@ -51,12 +51,12 @@ const HumanDevGen = () => {
         console.log("Error", err.message);
       });
   };
-
-  function deleteNote(id) {
+  //.........................DELETE...................................
+  function deleteData(id) {
     let targeNoteID = document.getElementById(id).parentElement.parentElement
       .id;
     const url =
-      "https://backendstep1.herokuapp.com/api/HumanDevGen/" + targeNoteID;
+      "https://backendstep1.herokuapp.com/api/BioOfCells/" + targeNoteID;
     let req = new Request(url, { method: "DELETE", mode: "cors" });
     fetch(req)
       .then((response) => {
@@ -71,10 +71,12 @@ const HumanDevGen = () => {
       });
   }
 
-  function addList(event) {
+  //.........................POST...................................
+
+  function postData(event) {
     event.preventDefault();
     let newCase = document.getElementById("input_area");
-    let url = "https://backendstep1.herokuapp.com/api/HumanDevGen";
+    let url = "https://backendstep1.herokuapp.com/api/BioOfCells";
     let options = {
       method: "POST", // *GET, POST, PUT, DELETE, etc.
       mode: "cors", // no-cors, *cors, same-origin
@@ -106,13 +108,13 @@ const HumanDevGen = () => {
         console.log("error:", err.message);
       });
   }
-
-  function editList(id) {
+  //.........................PUT...................................
+  function putData(id) {
     let targeNoteID = document.getElementById(id).parentElement.parentElement
       .id;
     let newCase = document.getElementById("input_area");
     let url =
-      "https://backendstep1.herokuapp.com/api/HumanDevGen/" + targeNoteID;
+      "https://backendstep1.herokuapp.com/api/BioOfCells/" + targeNoteID;
     let options = {
       method: "PUT", // *GET, POST, PUT, DELETE, etc.
       mode: "cors", // no-cors, *cors, same-origin
@@ -146,12 +148,14 @@ const HumanDevGen = () => {
       });
   }
 
+  //...............CONTROL STATE...................
   const [counter, setCounter] = useState(0);
 
   useEffect(() => {
-    fetchData();
+    getData();
   }, [counter]);
 
+  //...............Functions...................
   const closeForm = () => {
     let input_form = document.getElementById("input_form");
     let close_icon = document.getElementById("close_icon");
@@ -170,6 +174,7 @@ const HumanDevGen = () => {
     close_icon.style.display = "initial";
     open_icon.style.display = "none";
   };
+  //....................RETURN.................................
   return (
     <div id="contentView_div">
       <h2>Notes</h2>
@@ -181,11 +186,11 @@ const HumanDevGen = () => {
         </div>
         <form id="input_form" action="">
           <textarea id="input_area" type="text" />
-          <input type="submit" onClick={addList} />
+          <input type="submit" onClick={postData} />
         </form>
       </div>
     </div>
   );
 };
 
-export default HumanDevGen;
+export default BioOfCells;

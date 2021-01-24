@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "../../home/app-engine/css/content.css";
 
 const BiochemMolbio = () => {
   const fetchData = () => {

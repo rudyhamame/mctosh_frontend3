@@ -1,7 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
-const Nav = () => {
+const Nav = (props) => {
   const loggingOUT = () => {
     sessionStorage.removeItem("loginState");
     window.location.reload();
@@ -20,9 +19,7 @@ const Nav = () => {
   };
   return (
     <nav id="nav">
-      <Link to="/">
-        <i class="fas fa-home"></i>
-      </Link>
+      <i onClick={props.content_component_switcher} class="fas fa-home"></i>
       <i onClick={loggingOUT} class="fas fa-sign-out-alt"></i>
       <i
         id="menu_icon"

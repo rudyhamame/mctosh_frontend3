@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import "../../home/app-engine/css/content.css";
-
-const BioOfCells = () => {
+const HumanDevGen = () => {
   const fetchData = () => {
-    const url = "https://backendstep1.herokuapp.com/api/BioOfCells";
+    const url = "https://backendstep1.herokuapp.com/api/HumanDevGen";
     let req = new Request(url, { method: "GET", mode: "cors" });
     fetch(req)
       .then((response) => {
@@ -56,7 +54,7 @@ const BioOfCells = () => {
     let targeNoteID = document.getElementById(id).parentElement.parentElement
       .id;
     const url =
-      "https://backendstep1.herokuapp.com/api/BioOfCells/" + targeNoteID;
+      "https://backendstep1.herokuapp.com/api/HumanDevGen/" + targeNoteID;
     let req = new Request(url, { method: "DELETE", mode: "cors" });
     fetch(req)
       .then((response) => {
@@ -74,7 +72,7 @@ const BioOfCells = () => {
   function addList(event) {
     event.preventDefault();
     let newCase = document.getElementById("input_area");
-    let url = "https://backendstep1.herokuapp.com/api/BioOfCells";
+    let url = "https://backendstep1.herokuapp.com/api/HumanDevGen";
     let options = {
       method: "POST", // *GET, POST, PUT, DELETE, etc.
       mode: "cors", // no-cors, *cors, same-origin
@@ -112,7 +110,7 @@ const BioOfCells = () => {
       .id;
     let newCase = document.getElementById("input_area");
     let url =
-      "https://backendstep1.herokuapp.com/api/BioOfCells/" + targeNoteID;
+      "https://backendstep1.herokuapp.com/api/HumanDevGen/" + targeNoteID;
     let options = {
       method: "PUT", // *GET, POST, PUT, DELETE, etc.
       mode: "cors", // no-cors, *cors, same-origin
@@ -188,4 +186,4 @@ const BioOfCells = () => {
   );
 };
 
-export default BioOfCells;
+export default HumanDevGen;
