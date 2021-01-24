@@ -145,7 +145,7 @@ const Content = () => {
           <input type="text" name="task_input" id="task_input" />
           <input type="date" name="deadline_input" id="deadline_input" />
           <input type="checkbox" name="status_input" id="status_input" />
-          <input type="submit" />
+          <input type="submit" onClick={addList} />
         </form>
       </div>
     </div>
