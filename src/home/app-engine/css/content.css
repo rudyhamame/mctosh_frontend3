@@ -107,8 +107,40 @@ textarea {
 }
 
 #todo_table {
-  width: 50%;
+  width: 90%;
   font-size: 16pt;
   font-family: "Roboto", sans-serif;
   margin: 50px auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  gap: 30px;
+  padding: 30px;
+  font-size: 16pt;
+  overflow: auto;
+  flex-grow: 1;
+}
+/*..............................*/
+#todo_table li {
+  list-style: none;
+  padding: 10px 0;
+}
+
+#div_icons {
+  padding: 10px 0;
+}
+/*..............................*/
+
+li p {
+  font-family: "Roboto", sans-serif;
+}
+
+#todo_table_form {
+  order: 2;
+  padding: 5px 30px;
+  background-color: rgba(0, 0, 0, 0.034);
+  box-shadow: -1px 0 10px rgba(0, 0, 0, 0.342);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }

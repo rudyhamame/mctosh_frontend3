@@ -32,8 +32,20 @@ const Content = () => {
           status_p.setAttribute("id", "status_column_p" + i);
 
           task_p.textContent = jsonData[i].task;
-          deadline_p.textContent = jsonData[i].deadline;
           status_p.textContent = jsonData[i].status;
+
+          let date = new Date();
+          deadline_p.textContent =
+            date.getDate(jsonData[i].deadline) +
+            "/" +
+            date.getMonth(jsonData[i].deadline) +
+            "/" +
+            date.getFullYear(jsonData[i].deadline) +
+            "  :  " +
+            date.getHours(jsonData[i].deadline) +
+            ":" +
+            date.getMinutes(jsonData[i].deadline);
+
           //........................................li....................................
           let task_li = document.createElement("li");
           let deadline_li = document.createElement("li");
@@ -108,9 +120,54 @@ const Content = () => {
         status: status_input.value,
       }), // body data type must match "Content-Type" header
     };
-    // task_input.value = "";
-    // deadline_input.value = "";
-    // status_input.value = "";
+    task_input.value = "";
+    deadline_input.value = "";
+    status_input.value = "";
+
+    let req = new Request(url, options);
+
+    fetch(req)
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error("bad Http");
+        }
+      })
+      .then(() => {
+        setCounter(counter + 1);
+      })
+      .catch((err) => {
+        console.log("error:", err.message);
+      });
+  }
+  function editList(id) {
+    let targeID = id;
+    let task_input = document.getElementById("task_input");
+    let deadline_input = document.getElementById("deadline_input");
+    let status_input = document.getElementById("status_input");
+
+    let url = "https://backendstep1.herokuapp.com/api/Todo" + targeID;
+    let options = {
+      method: "PUT", // *GET, POST, PUT, DELETE, etc.
+      mode: "cors", // no-cors, *cors, same-origin
+      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: "same-origin", // include, *same-origin, omit
+      headers: {
+        "Content-Type": "application/json",
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      redirect: "follow", // manual, *follow, error
+      referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+      body: JSON.stringify({
+        task: task_input.value,
+        deadline: deadline_input.value,
+        status: status_input.value,
+      }), // body data type must match "Content-Type" header
+    };
+    task_input.value = "";
+    deadline_input.value = "";
+    status_input.value = "";
 
     let req = new Request(url, options);
 
@@ -136,11 +193,29 @@ const Content = () => {
   });
   return (
     <div id="content_main_app">
-      <ul id="task_todo"></ul>
-      <ul id="deadline_todo"></ul>
-      <ul id="status_todo"></ul>
-      <ul id="tools"></ul>
-      <div>
+      <div id="todo_table">
+        <div>
+          <h1>Task</h1>
+          <ul id="task_todo"></ul>
+        </div>
+        <hr />
+        <div>
+          <h1>Deadline</h1>
+          <ul id="deadline_todo"></ul>
+        </div>
+        <hr />
+
+        <div>
+          <h1>Status</h1>
+          <ul id="status_todo"></ul>
+        </div>
+        <div>
+          <h1 style={{ color: "var(--white)" }}>.</h1>
+          <ul id="tools"></ul>
+        </div>
+      </div>
+
+      <div id="todo_table_form">
         <form id="input_form" action="">
           <input type="text" name="task_input" id="task_input" />
           <input type="date" name="deadline_input" id="deadline_input" />
