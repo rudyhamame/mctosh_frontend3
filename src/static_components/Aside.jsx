@@ -1,7 +1,7 @@
 import React from "react";
-import BiochemMolbio from "../content_components/biochem_molbio/BiochemMolbio";
-import BioOfCells from "../content_components/bio_of_cells/BioOfCells";
-import HumanDevGen from "../content_components/human_devgen/HumanDevGen";
+import BiochemMolbioIndex from "../content_components/biochem_molbio/BiochemMolbioIndex";
+import BioOfCellsIndex from "../content_components/bio_of_cells/BioOfCellsIndex";
+import HumanDevGenIndex from "../content_components/human_devgen/HumanDevGenIndex";
 
 const Aside = (props) => {
   return (
@@ -10,15 +10,29 @@ const Aside = (props) => {
         <h3>General Principles of Foundational Science</h3>
         <ul>
           <li
-            onClick={() => props.content_component_switcher(<BiochemMolbio />)}
+            onClick={() =>
+              props.content_component_switcher(<BiochemMolbioIndex />)
+            }
           >
             Biochemistry and molecular biology
           </li>
 
-          <li onClick={() => props.content_component_switcher(<BioOfCells />)}>
+          <li
+            onClick={() =>
+              props.content_component_switcher(
+                <BioOfCellsIndex
+                  content_component_switcher={props.content_component_switcher}
+                />
+              )
+            }
+          >
             Biology of cells
           </li>
-          <li onClick={() => props.content_component_switcher(<HumanDevGen />)}>
+          <li
+            onClick={() =>
+              props.content_component_switcher(<HumanDevGenIndex />)
+            }
+          >
             Human development and genetics
           </li>
 

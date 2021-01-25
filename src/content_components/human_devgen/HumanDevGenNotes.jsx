@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-
-const BioOfCells = () => {
-  //.........................GET...................................
-  const getData = () => {
-    const url = "https://backendstep1.herokuapp.com/api/BioOfCells";
+const HumanDevGen = () => {
+  const fetchData = () => {
+    const url = "https://backendstep1.herokuapp.com/api/HumanDevGen";
     let req = new Request(url, { method: "GET", mode: "cors" });
     fetch(req)
       .then((response) => {
@@ -30,10 +28,10 @@ const BioOfCells = () => {
           deleteIcon.setAttribute("class", "fas fa-eraser");
           deleteIcon.setAttribute("id", "BiochemMolbioNote" + i);
           editIcon.addEventListener("click", () =>
-            putData(editIcon.getAttribute("id", "BiochemMolbioNote" + i))
+            editList(editIcon.getAttribute("id", "BiochemMolbioNote" + i))
           );
           deleteIcon.addEventListener("click", () =>
-            deleteData(deleteIcon.getAttribute("id", "BiochemMolbioNote" + i))
+            deleteNote(deleteIcon.getAttribute("id", "BiochemMolbioNote" + i))
           );
           li.setAttribute("id", String(jsonData[i]._id));
           p.textContent = jsonData[i].notes;
@@ -51,12 +49,12 @@ const BioOfCells = () => {
         console.log("Error", err.message);
       });
   };
-  //.........................DELETE...................................
-  function deleteData(id) {
+
+  function deleteNote(id) {
     let targeNoteID = document.getElementById(id).parentElement.parentElement
       .id;
     const url =
-      "https://backendstep1.herokuapp.com/api/BioOfCells/" + targeNoteID;
+      "https://backendstep1.herokuapp.com/api/HumanDevGen/" + targeNoteID;
     let req = new Request(url, { method: "DELETE", mode: "cors" });
     fetch(req)
       .then((response) => {
@@ -71,12 +69,10 @@ const BioOfCells = () => {
       });
   }
 
-  //.........................POST...................................
-
-  function postData(event) {
+  function addList(event) {
     event.preventDefault();
     let newCase = document.getElementById("input_area");
-    let url = "https://backendstep1.herokuapp.com/api/BioOfCells";
+    let url = "https://backendstep1.herokuapp.com/api/HumanDevGen";
     let options = {
       method: "POST", // *GET, POST, PUT, DELETE, etc.
       mode: "cors", // no-cors, *cors, same-origin
@@ -108,13 +104,13 @@ const BioOfCells = () => {
         console.log("error:", err.message);
       });
   }
-  //.........................PUT...................................
-  function putData(id) {
+
+  function editList(id) {
     let targeNoteID = document.getElementById(id).parentElement.parentElement
       .id;
     let newCase = document.getElementById("input_area");
     let url =
-      "https://backendstep1.herokuapp.com/api/BioOfCells/" + targeNoteID;
+      "https://backendstep1.herokuapp.com/api/HumanDevGen/" + targeNoteID;
     let options = {
       method: "PUT", // *GET, POST, PUT, DELETE, etc.
       mode: "cors", // no-cors, *cors, same-origin
@@ -148,14 +144,12 @@ const BioOfCells = () => {
       });
   }
 
-  //...............CONTROL STATE...................
   const [counter, setCounter] = useState(0);
 
   useEffect(() => {
-    getData();
+    fetchData();
   }, [counter]);
 
-  //...............Functions...................
   const closeForm = () => {
     let input_form = document.getElementById("input_form");
     let close_icon = document.getElementById("close_icon");
@@ -174,10 +168,8 @@ const BioOfCells = () => {
     close_icon.style.display = "initial";
     open_icon.style.display = "none";
   };
-  //....................RETURN.................................
   return (
     <div id="contentView_div">
-      <h2>Notes</h2>
       <ol id="notes"></ol>
       <div id="newInput_div">
         <div id="form_buttons">
@@ -186,11 +178,11 @@ const BioOfCells = () => {
         </div>
         <form id="input_form" action="">
           <textarea id="input_area" type="text" />
-          <input type="submit" onClick={postData} />
+          <input type="submit" onClick={addList} />
         </form>
       </div>
     </div>
   );
 };
 
-export default BioOfCells;
+export default HumanDevGen;

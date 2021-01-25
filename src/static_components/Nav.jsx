@@ -1,5 +1,5 @@
 import React from "react";
-import HomeContent from "../content_components/home_content/HomeContent";
+import HomeContent from "../content_components/home_content/HomeContentTodo";
 
 const Nav = (props) => {
   const loggingOUT = () => {

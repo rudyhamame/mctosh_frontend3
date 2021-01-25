@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const HomeContent = () => {
+const HomeContentTodo = () => {
   const getData = () => {
     const url = "https://backendstep1.herokuapp.com/api/Todo";
     let req = new Request(url, { method: "GET", mode: "cors" });
@@ -232,11 +232,11 @@ const HomeContent = () => {
           <input type="text" name="task_input" id="task_input" />
           <input type="text" name="status_input" id="status_input" />
           <input type="date" name="deadline_input" id="deadline_input" />
-          <i onClick={postData} class="fas fa-paper-plane"></i>
+          <i id="submit_icon" onClick={postData} class="fas fa-paper-plane"></i>
         </form>
       </section>
     </div>
   );
 };
 
-export default HomeContent;
+export default HomeContentTodo;
