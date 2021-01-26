@@ -1,15 +1,17 @@
+/*......Page scope.......*/
 #login_page {
   min-height: 100vh;
   background-color: var(--white);
   align-items: center;
 }
 
+/*......Header and Loginform Container.......*/
 #header_loginform_container {
-  gap: 80px;
+  gap: 50px;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   flex-grow: 1;
-  padding: 70px 30px;
+  padding: 0 30px;
 }
 
 #header_login {
@@ -41,7 +43,7 @@
 [type="submit"],
 [type="email"],
 [type="date"] {
-  font-size: 14pt;
+  font-size: 12pt;
   width: 400px;
   outline-style: none;
   border: none;
@@ -51,6 +53,7 @@
   box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.226);
   margin: 10px 0;
   font-family: "Roboto", sans-serif;
+  font-weight: 300;
 }
 
 #login_form [type="submit"] {
@@ -60,6 +63,7 @@
   cursor: pointer;
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bold;
+  font-size: 14pt;
 }
 
 #login_form [type="submit"]:hover {
@@ -73,7 +77,6 @@
   font-family: "Roboto", sans-serif;
   display: block;
   width: 100%;
-  flex-grow: 1;
   padding: 30px;
 }
 
@@ -84,15 +87,44 @@
 #login_form_button,
 #signup_form_button {
   font-weight: 300;
+  font-size: 12pt;
+  cursor: pointer;
 }
 
 #submit_signup_input {
   display: none;
 }
 
-@media screen and (min-width: 900px) {
+@media screen and (max-width: 600px) {
   #h1_header_login {
+    font-size: 50pt;
   }
   #login_form {
+    transform: scale(0.8);
+  }
+  #login_form [type="text"],
+  [type="password"],
+  [type="submit"],
+  [type="email"],
+  [type="date"] {
+    width: 400px;
+  }
+}
+@media screen and (max-width: 500px) {
+  #h1_header_login {
+    font-size: 35pt;
+  }
+  #login_form {
+    transform: scale(0.8);
+  }
+  #login_form [type="text"],
+  [type="password"],
+  [type="submit"],
+  [type="email"],
+  [type="date"] {
+    width: 250px;
+  }
+  #h4_footer_login {
+    font-size: 9pt;
   }
 }

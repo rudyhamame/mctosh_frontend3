@@ -35,8 +35,8 @@ class Login extends React.Component {
         }
       })
       .then((jsonData) => {
-        let username_try = document.getElementById("username_input");
-        let password_try = document.getElementById("password_input");
+        let username_try = document.getElementById("username_login_input");
+        let password_try = document.getElementById("password_login_input");
         let flag = true;
         for (var i = 0; i < jsonData.length && flag === true; i++) {
           if (
@@ -77,10 +77,10 @@ class Login extends React.Component {
   //..........POST Route...........
   post_signup_data = (event) => {
     event.preventDefault();
-    let newUser = document.getElementById("username_input");
-    let newPassword = document.getElementById("password_input");
-    let newEmail = document.getElementById("email_input");
-    let newDOB = document.getElementById("dob_input");
+    let newUser = document.getElementById("username_login_input");
+    let newPassword = document.getElementById("password_login_input");
+    let newEmail = document.getElementById("email_signup_input");
+    let newDOB = document.getElementById("dob_signup_input");
 
     let url = "https://backendstep1.herokuapp.com/login";
     let options = {
@@ -121,12 +121,12 @@ class Login extends React.Component {
       });
   };
   enableSignup = () => {
-    let signup_button = document.getElementById("signup");
-    let login_button = document.getElementById("login");
-    let login_title = document.getElementById("login_title");
-    let signup_title = document.getElementById("signup_title");
-    let email_input = document.getElementById("email_input");
-    let dob_input = document.getElementById("dob_input");
+    let signup_button = document.getElementById("submit_signup_input");
+    let login_button = document.getElementById("submit_login_input");
+    let login_title = document.getElementById("login_form_button");
+    let signup_title = document.getElementById("signup_form_button");
+    let email_input = document.getElementById("email_signup_input");
+    let dob_input = document.getElementById("dob_signup_input");
     signup_button.style.display = "initial";
     signup_title.style.display = "none";
     login_button.style.display = "none";
@@ -136,12 +136,12 @@ class Login extends React.Component {
   };
 
   enableLogin = () => {
-    let signup_button = document.getElementById("signup");
-    let login_button = document.getElementById("login");
-    let login_title = document.getElementById("login_title");
-    let signup_title = document.getElementById("signup_title");
-    let email_input = document.getElementById("email_input");
-    let dob_input = document.getElementById("dob_input");
+    let signup_button = document.getElementById("submit_signup_input");
+    let login_button = document.getElementById("submit_login_input");
+    let login_title = document.getElementById("login_form_button");
+    let signup_title = document.getElementById("signup_form_button");
+    let email_input = document.getElementById("email_signup_input");
+    let dob_input = document.getElementById("dob_signup_input");
     signup_button.style.display = "none";
     signup_title.style.display = "initial";
     login_button.style.display = "initial";
