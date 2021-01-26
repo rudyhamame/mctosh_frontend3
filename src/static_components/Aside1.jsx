@@ -3,7 +3,7 @@ import BiochemMolbioIndex from "../content_components/biochem_molbio/BiochemMolb
 import BioOfCellsIndex from "../content_components/bio_of_cells/BioOfCellsIndex";
 import HumanDevGenIndex from "../content_components/human_devgen/HumanDevGenIndex";
 
-const Aside = (props) => {
+const Aside1 = (props) => {
   return (
     <aside id="aside_main_app">
       <div id="aside_main_app_container">
@@ -75,4 +75,4 @@ const Aside = (props) => {
   );
 };
 
-export default Aside;
+export default Aside1;

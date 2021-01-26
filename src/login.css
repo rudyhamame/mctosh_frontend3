@@ -1,43 +1,39 @@
-#login_div {
-  height: 100vh;
+#login_page {
+  min-height: 100vh;
   background-color: var(--white);
-  display: flex;
-  justify-content: center;
   align-items: center;
-  flex-direction: column;
+}
+
+#header_loginform_container {
+  gap: 80px;
+  align-items: center;
+  justify-content: flex-start;
+  flex-grow: 1;
+  padding: 70px 30px;
 }
 
 #header_login {
-  position: absolute;
-  top: 0px;
   font-family: "Pacifico", cursive;
-  padding: 60px;
-  font-size: 35px;
   color: var(--blue);
 }
 
-#header_login h1 {
+#h1_header_login {
+  font-size: 60pt;
   font-weight: 500;
+  text-align: center;
 }
 
 #login_form {
-  display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 1px;
-}
-#form_container {
   padding: 20px;
   background-color: white;
   border-radius: 10px;
   text-align: center;
   font-family: "Roboto", sans-serif;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 10px;
   box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.486);
+  width: fit-content;
 }
 
 #login_form [type="text"],
@@ -58,7 +54,7 @@
 }
 
 #login_form [type="submit"] {
-  background-color: rgba(6, 6, 241, 0.719);
+  background-color: var(--blue);
   margin-top: 20px;
   color: #ffffff;
   cursor: pointer;
@@ -67,30 +63,36 @@
 }
 
 #login_form [type="submit"]:hover {
-  transform: scale(0.993);
+  transform: scale(0.992);
 }
 
-#login_footer {
-  position: absolute;
-  bottom: 0;
+#footer_login {
   background-color: #fff;
-  width: 100%;
   text-align: center;
-  height: 10%;
-  padding: 20px 500px;
   box-shadow: 0px 60px 100px rgba(18, 118, 175, 0.486);
-}
-
-#form_container h1 {
-  font-weight: 500;
   font-family: "Roboto", sans-serif;
-  color: black;
+  display: block;
+  width: 100%;
+  flex-grow: 1;
+  padding: 30px;
 }
 
-#form_container h4 {
+#h4_footer_login {
   font-weight: 300;
 }
 
-#signup {
+#login_form_button,
+#signup_form_button {
+  font-weight: 300;
+}
+
+#submit_signup_input {
   display: none;
+}
+
+@media screen and (min-width: 900px) {
+  #h1_header_login {
+  }
+  #login_form {
+  }
 }

@@ -2,7 +2,8 @@ import React from "react";
 import "../css/aside.css";
 import "../css/main.css";
 import Content from "./Content";
-import Aside from "./Aside";
+import Aside1 from "./Aside1";
+import Aside2 from "./Aside2";
 
 const Main = (props) => {
   return (
@@ -11,7 +12,8 @@ const Main = (props) => {
         content_component={props.content_component}
         content_component_switcher={props.content_component_switcher}
       />
-      <Aside content_component_switcher={props.content_component_switcher} />
+      <Aside1 content_component_switcher={props.content_component_switcher} />
+      <Aside2 username={props.username} />
     </main>
   );
 };

@@ -1,9 +1,12 @@
+//...........import..................
 import React from "react";
 import "./login.css";
 import App from "./App";
 import ReactDOM from "react-dom";
 
+//...........component..................
 class Login extends React.Component {
+  //..........states...........
   constructor() {
     super();
     this.state = {
@@ -12,10 +15,11 @@ class Login extends React.Component {
       isLogged: false,
       isLoading: false,
       badAuth: null,
+      username: null,
     };
   }
-
-  fetchData = (event) => {
+  //..........GET Route...........
+  get_login_data = (event) => {
     this.setState({
       isLoading: true,
     });
@@ -59,6 +63,7 @@ class Login extends React.Component {
           this.setState({
             isLogged: true,
             isLoading: false,
+            username: username_try.value,
           });
           this.renderHome();
         }
@@ -69,7 +74,8 @@ class Login extends React.Component {
       });
   };
 
-  addUser = (event) => {
+  //..........POST Route...........
+  post_signup_data = (event) => {
     event.preventDefault();
     let newUser = document.getElementById("username_input");
     let newPassword = document.getElementById("password_input");
@@ -143,23 +149,38 @@ class Login extends React.Component {
     dob_input.style.display = "none";
     login_title.style.display = "none";
   };
+
+  //.....Home page after successful login..........
   renderHome = () => {
-    ReactDOM.render(<App />, document.getElementById("root"));
+    ReactDOM.render(
+      <App username={this.state.username} />,
+      document.getElementById("root")
+    );
   };
 
+  //.....functions when a state of component changes..........
   componentDidUpdate = () => {
     sessionStorage.setItem("loginState", JSON.stringify(this.state.isLogged));
+    sessionStorage.setItem("username", JSON.stringify(this.state.username));
+
     if (this.state.isLogged === true) {
       this.renderHome();
     }
   };
+
+  //.....functions when component mounted..........
   componentDidMount = () => {
     const loginData = sessionStorage.getItem("loginState");
+    const usernameData = sessionStorage.getItem("username");
     if (loginData) {
-      this.setState({ isLogged: JSON.parse(loginData) });
+      this.setState({
+        isLogged: JSON.parse(loginData),
+        username: JSON.parse(usernameData),
+      });
     }
   };
 
+  //.....loader function..........
   loader = () => {
     while (this.state.isLoading) {
       return (
@@ -182,36 +203,37 @@ class Login extends React.Component {
     }
   };
 
+  //.....Reander Login HTML..........
   render() {
     return (
-      <div id="login_div">
+      <div id="login_page" className="fc">
         {this.state.isLoading && this.loader()}
-        <header id="header_login">
-          <h1>Study Planner</h1>
-        </header>
-        <div id="form_container" className="slide-top">
-          <form id="login_form" action="">
+        <section id="header_loginform_container" className="fc">
+          <header id="header_login">
+            <h1 id="h1_header_login">Study Planner</h1>
+          </header>
+          <form id="login_form" className="fc">
             <input
-              id="username_input"
+              id="username_login_input"
               type="text"
               name="username"
               placeholder="username"
             />
             <input
-              id="password_input"
+              id="password_login_input"
               type="password"
               name="password"
               placeholder="password"
             />
             <input
-              id="email_input"
+              id="email_signup_input"
               type="email"
               name="email"
               placeholder="email address"
               style={{ display: "none" }}
             />
             <input
-              id="dob_input"
+              id="dob_signup_input"
               type="date"
               name="dob"
               placeholder="date of birth"
@@ -220,30 +242,32 @@ class Login extends React.Component {
             <input
               type="submit"
               name="submit"
-              id="login"
-              onClick={this.fetchData}
+              id="submit_login_input"
+              onClick={this.get_login_data}
             />
 
             <input
-              id="signup"
+              id="submit_signup_input"
               type="submit"
-              onClick={this.addUser}
+              onClick={this.post_signup_data}
               value="SignUp"
             />
+            <h4
+              style={{ display: "none" }}
+              id="login_form_button"
+              onClick={this.enableLogin}
+            >
+              Log in?
+            </h4>
+            <h4 id="signup_form_button" onClick={this.enableSignup}>
+              Sign up?
+            </h4>
+            <h4 style={{ color: "red" }}>{this.state.badAuth}</h4>
           </form>
-          <h4
-            style={{ display: "none" }}
-            id="login_title"
-            onClick={this.enableLogin}
-          >
-            Log in?
-          </h4>
-          <h4 id="signup_title" onClick={this.enableSignup}>
-            Sign up?
-          </h4>
-          <h4 style={{ color: "red" }}>{this.state.badAuth}</h4>
-        </div>
-        <footer id="login_footer">©2021 Rudy Hamame</footer>
+        </section>
+        <footer id="footer_login">
+          <h4 id="h4_footer_login">©2021 Rudy Hamame</h4>
+        </footer>
       </div>
     );
   }

@@ -8,7 +8,10 @@ const Header = (props) => {
     <header id="header_app">
       <div id="header_app_content">
         <Logo />
-        <Nav content_component_switcher={props.content_component_switcher} />
+        <Nav
+          content_component_switcher={props.content_component_switcher}
+          username={props.username}
+        />
       </div>
     </header>
   );

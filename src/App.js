@@ -7,11 +7,13 @@ import {
 
 import Home from "./Home";
 
-function App() {
+function App(props) {
   return (
     <Router>
       <Switch>
-        <Route exact path="/" component={Home} />
+        <Route exact path="/">
+          <Home username={props.username} />
+        </Route>
       </Switch>
     </Router>
   );

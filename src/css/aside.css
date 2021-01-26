@@ -1,21 +1,21 @@
 #aside_main_app {
   font-family: "Roboto", sans-serif;
-  background-color: var(--blue);
+  background-color: var(--gray);
   width: fit-content;
   overflow: auto;
   order: 2;
-  display: none;
+  width: 0;
 }
 #aside_main_app_container {
-  padding: 20px;
   overflow: auto;
 }
 
 #aside_main_app li {
   list-style: none;
   border-bottom: solid black 1px;
-  color: var(--white);
+  color: var(--black);
   cursor: pointer;
+  font-weight: 300;
 }
 
 #aside_main_app ul {
@@ -28,9 +28,9 @@
 #aside_main_app h3 {
   font-family: "Pacifico", cursive;
   padding: 10px;
-  font-weight: 500;
-  color: black;
-  background-color: var(--white);
+  font-weight: 300;
+  color: var(--white);
   text-align: center;
   white-space: nowrap;
+  background-color: var(--gray_for_read);
 }

@@ -152,35 +152,40 @@ const BiochemMolbio = () => {
   }, [counter]);
 
   const closeForm = () => {
-    let input_form = document.getElementById("input_form");
+    let textarea_div = document.getElementById("textarea_div");
     let close_icon = document.getElementById("close_icon");
     let open_icon = document.getElementById("open_icon");
 
-    input_form.style.display = "none";
+    textarea_div.style.display = "none";
     close_icon.style.display = "none";
     open_icon.style.display = "inline";
   };
   const openForm = () => {
-    let input_form = document.getElementById("input_form");
+    let textarea_div = document.getElementById("textarea_div");
     let close_icon = document.getElementById("close_icon");
     let open_icon = document.getElementById("open_icon");
 
-    input_form.style.display = "initial";
+    textarea_div.style.display = "initial";
     close_icon.style.display = "initial";
     open_icon.style.display = "none";
   };
   return (
-    <div id="contentView_div">
+    <div id="contentView_div" className="fc" style={{ flexGrow: 1 }}>
       <ol id="notes"></ol>
       <div id="newInput_div">
         <div id="form_buttons">
           <i id="close_icon" onClick={closeForm} class="fas fa-times"></i>
           <i id="open_icon" onClick={openForm} class="fas fa-plus"></i>
         </div>
-        <form id="input_form" action="">
+        <div id="textarea_div" className="fr" style={{ display: "none" }}>
           <textarea id="input_area" type="text" />
-          <input type="submit" onClick={addList} />
-        </form>
+          <i
+            id="submit_icon"
+            onClick={addList}
+            class="fas fa-paper-plane"
+            style={{ color: "var(--white)" }}
+          ></i>
+        </div>
       </div>
     </div>
   );

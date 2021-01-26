@@ -6,13 +6,19 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  transition: background-color cubic-bezier(0.445, 0.05, 0.55, 0.95) 0.7s,
+    width cubic-bezier(1, 0.46, 0.33, 1) 0.7s,
+    height cubic-bezier(1, 0.46, 0.33, 1) 0.7s;
 }
 
 :root {
   --blue: #1877f2;
   --white: #f0f2f5;
   --green: #42b72a;
-  --gray: #858585;
+  --gray: rgb(224, 214, 214);
+  --gray_for_read: #696969;
+  --pacifico: "Pacifico", cursive;
+  --orange: #f04e1f;
 }
 #app {
   display: flex;
@@ -37,6 +43,16 @@ a {
 i:hover {
   transform: scale(0.98);
   cursor: pointer;
+}
+
+.fc {
+  display: flex;
+  flex-direction: column;
+}
+
+.fr {
+  display: flex;
+  flex-direction: row;
 }
 
 /* ----------------------------------------------

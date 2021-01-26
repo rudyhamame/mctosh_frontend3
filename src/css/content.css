@@ -1,30 +1,26 @@
 #content_main_app {
   order: 1;
-  overflow: auto;
-  display: flex;
-  flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.061);
+  overflow: hidden;
   flex-grow: 1;
-}
-
-#contentView_div {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  gap: 10px;
-  font-family: "Roboto", sans-serif;
-  font-weight: 300;
+  background-color: var(--blue);
+  margin: 0 auto;
+  box-shadow: 1px 0 6px black;
+  z-index: 2;
 }
 
 #notes {
   order: 1;
-  flex-grow: 1;
   padding: 30px;
   font-family: "Roboto", sans-serif;
-  font-size: 16pt;
+  font-size: 14pt;
+  font-weight: 300;
   gap: 20px;
   display: flex;
   flex-direction: column;
   overflow: auto;
+  background-color: var(--gray);
+  height: 80%;
 }
 
 #div_icons {
@@ -35,33 +31,38 @@
 }
 
 #div_icons i {
-  color: var(--blue);
-  font-size: 20pt;
+  color: black;
+  font-size: 14pt;
 }
 
 #notes li {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  color: black;
 }
 
 #newInput_div {
   order: 2;
   padding: 5px 30px;
-  background-color: rgba(0, 0, 0, 0.034);
-  box-shadow: -1px 0 10px rgba(0, 0, 0, 0.342);
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
-textarea {
+
+#textarea_div {
+  gap: 10px;
+}
+#input_area {
   padding: 20px;
   outline-style: none;
   border: none;
   border-radius: 5px;
   font-size: 12pt;
   font-family: "Roboto", sans-serif;
-  width: 100%;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
 }
 
 #newInput_div [type="submit"] {
@@ -73,6 +74,7 @@ textarea {
   cursor: pointer;
   width: 100%;
   color: var(--white);
+  height: 20%;
 }
 
 #newInput_div form [type="submit"]:hover {
@@ -88,10 +90,10 @@ textarea {
 }
 
 #form_buttons {
-  font-size: 16pt;
+  font-size: 14pt;
   gap: 10px;
   padding: 5px 1px;
-  color: var(--blue);
+  color: var(--white);
 }
 
 #close_icon {
@@ -105,18 +107,46 @@ textarea {
   font-family: "Roboto", sans-serif;
 }
 
-#todo_table {
-  font-size: 16pt;
+#notes_div h2,
+#terminology_div h2 {
+  font-family: "Pacifico", cursive;
+  font-weight: 300;
+  color: var(--white);
+  padding: 10px 0;
+  font-size: 14pt;
+  cursor: pointer;
+  text-align: center;
+  padding: 10px 20px;
+}
+
+@keyframes jump_icon {
+  0% {
+    position: relative;
+    top: 10px;
+  }
+  90% {
+    position: relative;
+    top: -10px;
+  }
+  100% {
+    position: relative;
+    top: 0px;
+  }
+}
+
+/* todo */
+#todo_table p {
+  font-weight: 300;
+}
+
+#todo_table li {
+  background-color: rgb(224, 214, 214);
+  padding: 10px 0;
+  color: black;
+}
+#todo_table p {
   font-family: "Roboto", sans-serif;
-  margin: 20px auto;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  gap: 30px;
-  padding: 10px;
-  font-size: 16pt;
-  overflow: auto;
-  flex-grow: 1;
+  padding: 5px 10px;
 }
 
 #todo_table h3 {
@@ -135,8 +165,11 @@ textarea {
   order: 2;
   display: flex;
   flex-direction: row;
+  justify-content: center;
   gap: 20px;
   padding: 10px 0;
+  background-color: var(--gray_for_read);
+  color: var(--white);
 }
 /*..............................*/
 
@@ -144,106 +177,34 @@ li p {
   font-family: "Roboto", sans-serif;
 }
 
-#todo_table_form {
-  order: 2;
-  padding: 5px 30px;
-  background-color: rgba(0, 0, 0, 0.034);
-  box-shadow: -1px 0 10px rgba(0, 0, 0, 0.342);
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-#tools i {
-  color: var(--blue);
-  font-size: 20pt;
-}
-
-#todo_table_form {
+#input_form_todo {
+  text-align: center;
+  font-family: "Roboto", sans-serif;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 1px;
-  width: 100%;
-}
-#todo_table_form #input_form_todo {
-  padding: 20px;
-  border-radius: 10px;
-  text-align: center;
-  font-family: "Roboto", sans-serif;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  align-items: center;
-  gap: 20px;
+  gap: 5px;
+  padding: 10px 10px;
+  background-color: var(--gray_for_read);
+  z-index: 1;
+  box-shadow: 0 0 2px black;
 }
 
 #input_form_todo i {
-  color: var(--blue);
-  font-size: 30pt;
+  color: var(--white);
+  font-size: 16pt;
 }
 
 #input_form_todo [type="text"],
 #input_form_todo [type="date"] {
   font-family: "Roboto", sans-serif;
   padding: 5px 10px;
-  font-size: 15pt;
+  font-size: 10pt;
   font-weight: 300;
-}
-
-#input_form {
-  display: none;
-}
-
-#home_content_div {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-#horizontal_nav_div {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  background-color: var(--blue);
-  padding: 0px;
-  width: 300px;
-  height: 100px;
-  margin: auto auto;
-}
-
-#horizontal_nav_div h2 {
-  font-family: "Pacifico", cursive;
-  font-weight: 300;
-  color: var(--white);
-  padding: 10px 0;
-  font-size: 20pt;
-  margin: auto;
-  cursor: pointer;
-}
-
-#horizontal_nav_div hr {
-  height: 60%;
-  margin: auto 0;
-}
-
-@keyframes jump_icon {
-  0% {
-    position: relative;
-    top: 10px;
-  }
-  90% {
-    position: relative;
-    top: -10px;
-  }
-  100% {
-    position: relative;
-    top: 0px;
-  }
-}
-
-#todo_table p {
-  font-weight: 300;
+  outline-style: none;
+  border: none;
+  width: fit-content;
+  box-shadow: 0 0 3px white;
+  border-radius: 5px;
 }

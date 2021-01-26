@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 
-const HomeContentTodo = () => {
+const Aside2 = () => {
   const getData = () => {
+    let todo_ul = document.getElementById("todo_table");
+    todo_ul.innerHTML = "";
     const url = "https://backendstep1.herokuapp.com/api/Todo";
     let req = new Request(url, { method: "GET", mode: "cors" });
     fetch(req)
@@ -14,10 +16,8 @@ const HomeContentTodo = () => {
       })
 
       .then((jsonData) => {
-        document.getElementById("task_todo").innerHTML = "";
-        document.getElementById("deadline_todo").innerHTML = "";
-        document.getElementById("status_todo").innerHTML = "";
-        document.getElementById("tools").innerHTML = "";
+        let df = new DocumentFragment();
+
         for (var i = 0; i < jsonData.length; i++) {
           //........................................p....................................
 
@@ -29,41 +29,24 @@ const HomeContentTodo = () => {
           deadline_p.setAttribute("id", "deadline_column_p" + i);
           status_p.setAttribute("id", "status_column_p" + i);
 
-          task_p.textContent = jsonData[i].task;
-          status_p.textContent = jsonData[i].status;
+          task_p.textContent = "Task: " + jsonData[i].task;
+          status_p.textContent = "Status: " + jsonData[i].status;
 
           let date = new Date();
           deadline_p.textContent =
+            "Deadline: " +
             date.getDate(jsonData[i].deadline) +
             "/" +
             date.getMonth(jsonData[i].deadline) +
             "/" +
-            date.getFullYear(jsonData[i].deadline) +
-            "  :  " +
-            date.getHours(jsonData[i].deadline) +
-            ":" +
-            date.getMinutes(jsonData[i].deadline);
+            date.getFullYear(jsonData[i].deadline);
 
           //........................................li....................................
-          let task_li = document.createElement("li");
-          let deadline_li = document.createElement("li");
-          let status_li = document.createElement("li");
-
-          task_li.setAttribute("id", "task_column_li" + i);
-          deadline_li.setAttribute("id", "deadline_column_li" + i);
-          status_li.setAttribute("id", "status_column_li" + i);
-
-          task_li.appendChild(task_p);
-          deadline_li.appendChild(deadline_p);
-          status_li.appendChild(status_p);
-
-          let task_todo_ul = document.getElementById("task_todo");
-          let deadline_todo_ul = document.getElementById("deadline_todo");
-          let status_todo_ul = document.getElementById("status_todo");
-
-          task_todo_ul.appendChild(task_li);
-          deadline_todo_ul.appendChild(deadline_li);
-          status_todo_ul.appendChild(status_li);
+          let todo_li = document.createElement("li");
+          todo_li.appendChild(task_p);
+          todo_li.appendChild(deadline_p);
+          todo_li.appendChild(status_p);
+          todo_li.setAttribute("id", "todo_li" + i);
 
           //........................................delete/edit icons....................................
 
@@ -83,9 +66,10 @@ const HomeContentTodo = () => {
 
           divIcons.appendChild(deleteIcon);
           divIcons.appendChild(editIcon);
-          let tools_ul = document.getElementById("tools");
-          tools_ul.appendChild(divIcons);
+          todo_li.appendChild(divIcons);
+          df.appendChild(todo_li);
         }
+        todo_ul.appendChild(df);
       })
       .catch((err) => {
         console.log("Error", err.message);
@@ -198,45 +182,113 @@ const HomeContentTodo = () => {
         setCounter(counter + 1);
       });
   }
+  const closeAside2 = () => {
+    let home_content_div = document.getElementById("home_content_div");
+    let close_aside2 = document.getElementById("close_aside2");
+    let open_aside2 = document.getElementById("open_aside2");
+
+    home_content_div.style.display = "none";
+    close_aside2.style.display = "none";
+    open_aside2.style.display = "inline";
+  };
+  const openAside2 = () => {
+    let home_content_div = document.getElementById("home_content_div");
+    let close_aside2 = document.getElementById("close_aside2");
+    let open_aside2 = document.getElementById("open_aside2");
+
+    home_content_div.style.display = "inline";
+    close_aside2.style.display = "inline";
+    open_aside2.style.display = "none";
+  };
   const [counter, setCounter] = useState(0);
 
   useEffect(() => {
     getData();
-  });
+  }, [counter]);
 
   return (
-    <div id="home_content_div">
-      <section id="todo_table">
-        <div>
-          <h3>Task</h3>
-          <ul id="task_todo"></ul>
-        </div>
-        <hr />
-        <div>
-          <h3>Deadline</h3>
-          <ul id="deadline_todo"></ul>
-        </div>
-        <hr />
-
-        <div>
-          <h3>Status</h3>
-          <ul id="status_todo"></ul>
-        </div>
-        <div>
-          <h3 style={{ color: "var(--white)" }}>.</h3>
-          <ul id="tools"></ul>
-        </div>
-      </section>
-      <section id="todo_table_form">
+    <div className="fr">
+      <div
+        id="home_content_div"
+        className="fc"
+        style={{ display: "none", backgroundColor: "var(--gray_for_read)" }}
+      >
+        <h3
+          style={{
+            fontFamily: "'Pacifico',cursive",
+            fontWeight: "300",
+            padding: "10px",
+            backgroundColor: "var(--gray_for_read)",
+            textAlign: "center",
+            boxShadow: "0 0 3px black",
+            color: "var(--white)",
+            fontSize: "14pt",
+          }}
+        >
+          Todo list
+        </h3>
+        <ul
+          id="todo_table"
+          style={{
+            flexGrow: "1",
+            fontSize: "16pt",
+            fontFamily: "'Roboto', sans-serif",
+            backgroundColor: "black",
+            fontSize: "12pt",
+            overflow: "auto",
+            overflowWrap: "break-word",
+          }}
+        ></ul>
         <form id="input_form_todo" action="">
-          <input type="text" name="task_input" id="task_input" />
-          <input type="text" name="status_input" id="status_input" />
-          <input type="date" name="deadline_input" id="deadline_input" />
+          <input
+            type="text"
+            name="task_input"
+            id="task_input"
+            placeholder="task"
+          />
+          <input
+            type="text"
+            name="status_input"
+            id="status_input"
+            placeholder="status"
+          />
+          <input
+            type="date"
+            name="deadline_input"
+            id="deadline_input"
+            placeholder="deadline"
+          />
           <i id="submit_icon" onClick={postData} class="fas fa-paper-plane"></i>
         </form>
-      </section>
+      </div>
+      <div
+        style={{
+          backgroundColor: "var(--gray_for_read)",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+        className="fr"
+      >
+        <i
+          id="open_aside2"
+          class="fas fa-arrow-right"
+          style={{ color: "var(--white)", fontSize: "16pt", padding: "10px" }}
+          onClick={openAside2}
+        ></i>
+        <i
+          id="close_aside2"
+          class="fas fa-arrow-left"
+          style={{
+            color: "var(--white)",
+            fontSize: "16pt",
+            padding: "10px",
+            display: "none",
+          }}
+          onClick={closeAside2}
+        ></i>
+      </div>
     </div>
   );
 };
 
-export default HomeContentTodo;
+export default Aside2;

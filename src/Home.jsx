@@ -3,27 +3,46 @@ import "./css/app.css";
 import Footer from "./static_components/Footer";
 import Header from "./static_components/Header";
 import Main from "./static_components/Main";
-import HomeContentTodo from "./content_components/home_content/HomeContentTodo";
+import HomeContent from "./content_components/home_content/HomeContent";
 
 class Home extends React.Component {
-  constructor() {
+  constructor(props) {
     super();
     this.state = {
-      content_component: <HomeContentTodo />,
+      date_now: new Date(),
+      username: props.username,
+      content_component: null,
     };
   }
+
+  update_date = () => {
+    setInterval(() => this.setState({ date_now: new Date() }), 1000);
+  };
+
+  componentDidMount() {
+    this.update_date();
+    this.setState({
+      content_component: <HomeContent username={this.state.username} />,
+    });
+  }
+
   content_component_switcher = (props) => {
     this.setState({ content_component: props });
   };
+
   render() {
     return (
       <div id="app">
-        <Header content_component_switcher={this.content_component_switcher} />
+        <Header
+          content_component_switcher={this.content_component_switcher}
+          username={this.state.username}
+        />
         <Main
           content_component_switcher={this.content_component_switcher}
           content_component={this.state.content_component}
+          username={this.state.username}
         />
-        <Footer />
+        <Footer date_now={this.state.date_now} />
       </div>
     );
   }
