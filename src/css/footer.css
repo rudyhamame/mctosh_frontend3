@@ -38,3 +38,15 @@
     background-color: var(--blue);
   }
 }
+
+@media screen and (max-width: 600px) {
+  #footer_app_container h4 {
+    font-size: 5pt;
+  }
+  #header_app_content i {
+    font-size: 10pt;
+  }
+  #app_nav {
+    gap: 25px;
+  }
+}

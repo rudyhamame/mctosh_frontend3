@@ -14,7 +14,7 @@ const BiochemMolbioIndex = (props) => {
       style={{
         margin: "0 auto",
         overflow: "hidden",
-        backgroundColor: "var(--gray_for_read)",
+        backgroundColor: "var(--blue)",
         boxShadow: "0 -1px 3px black",
         flexGrow: "1",
         width: "100%",
@@ -27,7 +27,6 @@ const BiochemMolbioIndex = (props) => {
         </h2>
         <BiochemMolbioNotes />
       </div>
-      <hr />
       <div id="terminology_div">
         <h2 title="unclicked" id="terminology_h2">
           terminology

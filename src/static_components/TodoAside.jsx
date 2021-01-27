@@ -207,7 +207,6 @@ const TodoAside = () => {
         <ul
           id="ul_table_todoaside"
           style={{
-            backgroundImage: "url(" + "/img/todo.jpg" + ")",
             backgroundOrigin: "border-box",
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",

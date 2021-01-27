@@ -13,12 +13,10 @@ const Nav = (props) => {
 
     if (i_nav_menu.title === "unclicked") {
       i_nav_menu.title = "clicked";
-      document.documentElement.style.setProperty("--blue", "#f04e1f");
-      menuaside_main_page.style.width = "20%";
+      menuaside_main_page.style.display = "inline";
     } else {
       i_nav_menu.title = "unclicked";
-      document.documentElement.style.setProperty("--blue", "#1877f2");
-      menuaside_main_page.style.width = "0";
+      menuaside_main_page.style.display = "none";
     }
   };
   return (

@@ -1,14 +1,28 @@
 /*....content_main_page....*/
 #content_main_page {
   order: 1;
-  background-color: var(--gay_for_read);
-  overflow: hidden;
   flex-grow: 1;
+  overflow: hidden;
   background-color: var(--blue);
-  margin: 0 auto;
-  box-shadow: 1px 0 6px black;
+  justify-content: start;
+  align-items: center;
 }
 
+#content_home_welcome_container {
+  width: 1100px;
+  background-color: var(--white);
+  height: 100%;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+#h1_content_home_welcome {
+  text-align: center;
+  color: black;
+  font-family: "Roboto", sans-serif;
+  background-color: var(--white);
+  margin: 0 0;
+}
 #notes {
   order: 1;
   padding: 30px;
@@ -100,13 +114,6 @@
   display: none;
 }
 
-#content_main_app h1 {
-  text-align: center;
-  margin-top: 20px;
-  color: black;
-  font-family: "Roboto", sans-serif;
-}
-
 #notes_div h2,
 #terminology_div h2 {
   font-family: "Pacifico", cursive;
@@ -134,68 +141,12 @@
   }
 }
 
-/* todo */
-#todo_table p {
-  font-weight: 300;
-}
-
-#todo_table li {
-  background-color: rgb(224, 214, 214);
-  padding: 10px 0;
-  color: black;
-}
-#todo_table p {
-  font-family: "Roboto", sans-serif;
-  padding: 5px 10px;
-}
-
-#todo_table h3 {
-  font-family: "Roboto", sans-serif;
-  text-align: center;
-  padding: 20px;
-  color: var(--black);
-  font-weight: 500;
-}
-/*..............................*/
-#todo_table li {
-  list-style: none;
-  padding: 10px 0;
-}
-
-/*..............................*/
-
-li p {
-  font-family: "Roboto", sans-serif;
-}
-
-#input_form_todo {
-  text-align: center;
-  font-family: "Roboto", sans-serif;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
-  padding: 10px 10px;
-  background-color: var(--gray_for_read);
-  z-index: 1;
-  box-shadow: 0 0 2px black;
-}
-
-#input_form_todo i {
-  color: var(--white);
-  font-size: 16pt;
-}
-
-#input_form_todo [type="text"],
-#input_form_todo [type="date"] {
-  font-family: "Roboto", sans-serif;
-  padding: 5px 10px;
-  font-size: 10pt;
-  font-weight: 300;
-  outline-style: none;
-  border: none;
-  width: fit-content;
-  box-shadow: 0 0 3px white;
-  border-radius: 5px;
+@media screen and (max-width: 600px) {
+  #h1_content_home_welcome {
+    text-align: center;
+    margin-top: 20px;
+    color: black;
+    font-family: "Roboto", sans-serif;
+    font-size: 10pt !important;
+  }
 }

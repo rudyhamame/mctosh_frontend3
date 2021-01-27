@@ -1,12 +1,20 @@
 /*......menuAside.....*/
 #menuaside_main_page {
   order: 2;
-  width: 0;
+  position: absolute;
+  right: 10px;
+  display: none;
+  height: 480px;
+  overflow: hidden;
+  width: min-content;
+  justify-content: center;
+  align-items: flex-start;
+  box-shadow: 0 0 10px black;
 }
 #menuaside_main_container {
   font-family: "Roboto", sans-serif;
   overflow: auto;
-  height: 100%;
+  height: 480px;
 }
 
 #menuaside_main_container li {
@@ -16,6 +24,7 @@
   padding: 15px;
   font-size: 12pt;
   font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--gray);
 }
 
 #menuaside_main_container h3 {
@@ -29,6 +38,9 @@
 }
 
 /*......todoAside.....*/
+#todoaside_main_page {
+  max-width: 70%;
+}
 #todouaside_main_container {
   animation-name: test;
   animation-duration: 1s;
@@ -36,8 +48,6 @@
 }
 
 #todouaside_main_container li {
-  background-color: var(--gray);
-  border-radius: 20px;
   margin: 15px 5px;
 }
 
@@ -55,7 +65,7 @@
   font-family: "Pacifico", cursive;
   font-weight: 300;
   padding: 10px;
-  background-color: var(--gray_for_read);
+  background-color: var(--blue);
   text-align: center;
   box-shadow: 0 0 3px black;
   color: var(--white);
@@ -69,6 +79,7 @@
   font-size: 12pt;
   overflow: auto;
   overflow-wrap: break-word;
+  background-color: var(--white);
 }
 
 #ul_table_todoaside i {
@@ -76,9 +87,11 @@
 }
 
 #control_todoAside {
-  background-color: var(--gray_for_read);
+  background-color: var(--blue);
   justify-content: center;
   align-items: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.479);
+  z-index: 1;
 }
 #control_todoAside i {
   color: var(--white);
@@ -88,15 +101,16 @@
 
 #form_post_todoaside {
   padding: 10px;
-  background-color: var(--gray);
+  background-color: var(--blue);
   gap: 10px;
   justify-content: center;
   align-items: center;
+  box-shadow: 0 0 5px black;
 }
 
 #form_post_todoaside i {
   font-size: 18pt;
-  color: var(--blue);
+  color: var(--white);
 }
 
 #form_post_todoaside input {
@@ -114,10 +128,10 @@
   order: 2;
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: flex-end;
   gap: 20px;
-  padding: 10px 0;
-  color: var(--gray_for_read);
+  padding: 10px 10px;
+  color: var(--blue);
 }
 
 @keyframes test {
@@ -130,5 +144,17 @@
 
   100% {
     width: 0px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  #menuaside_main_container li {
+    font-size: 7pt;
+  }
+  #menuaside_main_container {
+    font-size: 7pt;
+  }
+  #todoaside_main_page {
+    display: none;
   }
 }

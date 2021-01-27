@@ -4,13 +4,19 @@ import BioOfCellsIndex from "../content_components/bio_of_cells/BioOfCellsIndex"
 import HumanDevGenIndex from "../content_components/human_devgen/HumanDevGenIndex";
 
 const MenuAside = (props) => {
+  function close_menu() {
+    let i_nav_menu = document.getElementById("i_nav_menu");
+    document.getElementById("menuaside_main_page").style.display = "none";
+    i_nav_menu.title = "unclicked";
+  }
+
   return (
     <aside id="menuaside_main_page">
       <div id="menuaside_main_container">
         <h3 id="h3_first_title_menuaside">
           General Principles of Foundational Science
         </h3>
-        <ul id="ul_first_submenu_menuaside" className="fc">
+        <ul id="ul_first_submenu_menuaside" className="fc" onClick={close_menu}>
           <li
             onClick={() =>
               props.content_component_switcher(<BiochemMolbioIndex />)
