@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 
-const Aside2 = () => {
+const TodoAside = () => {
   const getData = () => {
-    let todo_ul = document.getElementById("todo_table");
+    let todo_ul = document.getElementById("ul_table_todoaside");
     todo_ul.innerHTML = "";
     const url = "https://backendstep1.herokuapp.com/api/Todo";
     let req = new Request(url, { method: "GET", mode: "cors" });
@@ -23,14 +23,11 @@ const Aside2 = () => {
 
           let task_p = document.createElement("p");
           let deadline_p = document.createElement("p");
-          let status_p = document.createElement("p");
 
           task_p.setAttribute("id", "task_column_p" + i);
           deadline_p.setAttribute("id", "deadline_column_p" + i);
-          status_p.setAttribute("id", "status_column_p" + i);
 
           task_p.textContent = "Task: " + jsonData[i].task;
-          status_p.textContent = "Status: " + jsonData[i].status;
 
           let date = new Date();
           deadline_p.textContent =
@@ -45,7 +42,6 @@ const Aside2 = () => {
           let todo_li = document.createElement("li");
           todo_li.appendChild(task_p);
           todo_li.appendChild(deadline_p);
-          todo_li.appendChild(status_p);
           todo_li.setAttribute("id", "todo_li" + i);
 
           //........................................delete/edit icons....................................
@@ -77,9 +73,8 @@ const Aside2 = () => {
   };
   function postData(event) {
     event.preventDefault();
-    let task_input = document.getElementById("task_input");
-    let deadline_input = document.getElementById("deadline_input");
-    let status_input = document.getElementById("status_input");
+    let task_input = document.getElementById("input_task_todoaside");
+    let deadline_input = document.getElementById("input_deadline_todoaside");
 
     let url = "https://backendstep1.herokuapp.com/api/Todo";
     let options = {
@@ -96,12 +91,10 @@ const Aside2 = () => {
       body: JSON.stringify({
         task: task_input.value,
         deadline: deadline_input.value,
-        status: status_input.value,
       }), // body data type must match "Content-Type" header
     };
     task_input.value = "";
     deadline_input.value = "";
-    status_input.value = "";
 
     let req = new Request(url, options);
 
@@ -122,9 +115,8 @@ const Aside2 = () => {
   }
   function putData(id) {
     let targetID = document.getElementById(id).parentElement.id;
-    let task_input = document.getElementById("task_input");
-    let deadline_input = document.getElementById("deadline_input");
-    let status_input = document.getElementById("status_input");
+    let task_input = document.getElementById("input_task_todoaside");
+    let deadline_input = document.getElementById("input_deadline_todoaside");
 
     let url = "https://backendstep1.herokuapp.com/api/Todo/" + targetID;
     let options = {
@@ -141,12 +133,10 @@ const Aside2 = () => {
       body: JSON.stringify({
         task: task_input.value,
         deadline: deadline_input.value,
-        status: status_input.value,
       }), // body data type must match "Content-Type" header
     };
     task_input.value = "";
     deadline_input.value = "";
-    status_input.value = "";
 
     let req = new Request(url, options);
 
@@ -182,23 +172,27 @@ const Aside2 = () => {
         setCounter(counter + 1);
       });
   }
-  const closeAside2 = () => {
-    let home_content_div = document.getElementById("home_content_div");
-    let close_aside2 = document.getElementById("close_aside2");
-    let open_aside2 = document.getElementById("open_aside2");
+  const closetodoAside = () => {
+    let todouaside_main_container = document.getElementById(
+      "todouaside_main_container"
+    );
+    let i_close_todoAside = document.getElementById("i_close_todoAside");
+    let i_open_todoAside = document.getElementById("i_open_todoAside");
 
-    home_content_div.style.display = "none";
-    close_aside2.style.display = "none";
-    open_aside2.style.display = "inline";
+    todouaside_main_container.style.width = "0";
+    i_close_todoAside.style.display = "none";
+    i_open_todoAside.style.display = "inline";
   };
-  const openAside2 = () => {
-    let home_content_div = document.getElementById("home_content_div");
-    let close_aside2 = document.getElementById("close_aside2");
-    let open_aside2 = document.getElementById("open_aside2");
+  const opentodoAside = () => {
+    let todouaside_main_container = document.getElementById(
+      "todouaside_main_container"
+    );
+    let i_close_todoAside = document.getElementById("i_close_todoAside");
+    let i_open_todoAside = document.getElementById("i_open_todoAside");
 
-    home_content_div.style.display = "inline";
-    close_aside2.style.display = "inline";
-    open_aside2.style.display = "none";
+    todouaside_main_container.style.width = "300px";
+    i_close_todoAside.style.display = "inline";
+    i_open_todoAside.style.display = "none";
   };
   const [counter, setCounter] = useState(0);
 
@@ -207,88 +201,55 @@ const Aside2 = () => {
   }, [counter]);
 
   return (
-    <div className="fr">
-      <div
-        id="home_content_div"
-        className="fc"
-        style={{ display: "none", backgroundColor: "var(--gray_for_read)" }}
-      >
-        <h3
-          style={{
-            fontFamily: "'Pacifico',cursive",
-            fontWeight: "300",
-            padding: "10px",
-            backgroundColor: "var(--gray_for_read)",
-            textAlign: "center",
-            boxShadow: "0 0 3px black",
-            color: "var(--white)",
-            fontSize: "14pt",
-          }}
-        >
-          Todo list
-        </h3>
+    <aside id="todoaside_main_page" className="fr">
+      <section id="todouaside_main_container" className="fc">
+        <h3 id="h3_title_todoaside">Todo list</h3>
         <ul
-          id="todo_table"
+          id="ul_table_todoaside"
           style={{
-            flexGrow: "1",
-            fontSize: "16pt",
-            fontFamily: "'Roboto', sans-serif",
-            backgroundColor: "black",
-            fontSize: "12pt",
-            overflow: "auto",
-            overflowWrap: "break-word",
+            backgroundImage: "url(" + "/img/todo.jpg" + ")",
+            backgroundOrigin: "border-box",
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
           }}
         ></ul>
-        <form id="input_form_todo" action="">
+        <form id="form_post_todoaside" className="fc">
           <input
             type="text"
             name="task_input"
-            id="task_input"
+            id="input_task_todoaside"
             placeholder="task"
-          />
-          <input
-            type="text"
-            name="status_input"
-            id="status_input"
-            placeholder="status"
           />
           <input
             type="date"
             name="deadline_input"
-            id="deadline_input"
+            id="input_deadline_todoaside"
             placeholder="deadline"
           />
-          <i id="submit_icon" onClick={postData} class="fas fa-paper-plane"></i>
+          <i
+            id="i_submit_todoAside"
+            onClick={postData}
+            class="fas fa-paper-plane"
+          ></i>
         </form>
-      </div>
-      <div
-        style={{
-          backgroundColor: "var(--gray_for_read)",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-        className="fr"
-      >
+      </section>
+      <section className="fr" id="control_todoAside">
         <i
-          id="open_aside2"
+          id="i_open_todoAside"
           class="fas fa-arrow-right"
-          style={{ color: "var(--white)", fontSize: "16pt", padding: "10px" }}
-          onClick={openAside2}
+          onClick={opentodoAside}
         ></i>
         <i
-          id="close_aside2"
+          id="i_close_todoAside"
           class="fas fa-arrow-left"
           style={{
-            color: "var(--white)",
-            fontSize: "16pt",
-            padding: "10px",
             display: "none",
           }}
-          onClick={closeAside2}
+          onClick={closetodoAside}
         ></i>
-      </div>
-    </div>
+      </section>
+    </aside>
   );
 };
 
-export default Aside2;
+export default TodoAside;

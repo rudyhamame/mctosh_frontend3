@@ -8,21 +8,21 @@ const Nav = (props) => {
   };
 
   const clickMenu = () => {
-    let aside_main_app = document.getElementById("aside_main_app");
-    let menu_icon = document.getElementById("menu_icon");
+    let menuaside_main_page = document.getElementById("menuaside_main_page");
+    let i_nav_menu = document.getElementById("i_nav_menu");
 
-    if (menu_icon.title === "unclicked") {
-      menu_icon.title = "clicked";
+    if (i_nav_menu.title === "unclicked") {
+      i_nav_menu.title = "clicked";
       document.documentElement.style.setProperty("--blue", "#f04e1f");
-      aside_main_app.style.width = "20%";
+      menuaside_main_page.style.width = "20%";
     } else {
-      menu_icon.title = "unclicked";
+      i_nav_menu.title = "unclicked";
       document.documentElement.style.setProperty("--blue", "#1877f2");
-      aside_main_app.style.width = "0";
+      menuaside_main_page.style.width = "0";
     }
   };
   return (
-    <nav id="nav">
+    <nav id="app_nav" className="fr">
       <i
         onClick={() =>
           props.content_component_switcher(
@@ -30,10 +30,11 @@ const Nav = (props) => {
           )
         }
         class="fas fa-home"
+        id="i_nav_home"
       ></i>
-      <i onClick={loggingOUT} class="fas fa-sign-out-alt"></i>
+      <i onClick={loggingOUT} class="fas fa-sign-out-alt" id="i_nav_logout"></i>
       <i
-        id="menu_icon"
+        id="i_nav_menu"
         title="unclicked"
         onClick={clickMenu}
         class="fas fa-bars"

@@ -1,12 +1,12 @@
-#content_main_app {
+/*....content_main_page....*/
+#content_main_page {
   order: 1;
-  background-color: rgba(0, 0, 0, 0.061);
+  background-color: var(--gay_for_read);
   overflow: hidden;
   flex-grow: 1;
   background-color: var(--blue);
   margin: 0 auto;
   box-shadow: 1px 0 6px black;
-  z-index: 2;
 }
 
 #notes {
@@ -161,16 +161,7 @@
   list-style: none;
   padding: 10px 0;
 }
-.div_icons {
-  order: 2;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  gap: 20px;
-  padding: 10px 0;
-  background-color: var(--gray_for_read);
-  color: var(--white);
-}
+
 /*..............................*/
 
 li p {

@@ -2,8 +2,8 @@ import React from "react";
 
 const Logo = () => {
   return (
-    <div id="logo_header_app">
-      <h1>Study Planner</h1>
+    <div>
+      <h2 id="h2_logo">Step1 Study Planner</h2>
     </div>
   );
 };

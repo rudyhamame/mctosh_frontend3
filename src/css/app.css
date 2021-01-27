@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Teko:wght@500&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Exo:wght@600&display=swap");
 * {
   padding: 0;
   margin: 0;
@@ -15,15 +16,12 @@
 :root {
   --blue: #1877f2;
   --white: #f0f2f5;
-  --green: #42b72a;
   --gray: rgb(224, 214, 214);
   --gray_for_read: #696969;
   --pacifico: "Pacifico", cursive;
   --orange: #f04e1f;
 }
-#app {
-  display: flex;
-  flex-direction: column;
+#app_page {
   height: 100vh;
 }
 
@@ -54,6 +52,10 @@ i:hover {
 .fr {
   display: flex;
   flex-direction: row;
+}
+
+li {
+  list-style: none;
 }
 
 /* ----------------------------------------------

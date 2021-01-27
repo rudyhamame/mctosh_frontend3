@@ -8,9 +8,9 @@ import {
   Redirect,
 } from "react-router-dom";
 
-ReactDOM.render(<FirstRouter />, document.getElementById("root"));
+ReactDOM.render(<LoginRouter />, document.getElementById("root"));
 
-function FirstRouter() {
+function LoginRouter() {
   return (
     <Router>
       <Switch>
@@ -20,4 +20,4 @@ function FirstRouter() {
     </Router>
   );
 }
-export default FirstRouter;
+export default LoginRouter;

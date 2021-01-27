@@ -3,12 +3,14 @@ import BiochemMolbioIndex from "../content_components/biochem_molbio/BiochemMolb
 import BioOfCellsIndex from "../content_components/bio_of_cells/BioOfCellsIndex";
 import HumanDevGenIndex from "../content_components/human_devgen/HumanDevGenIndex";
 
-const Aside1 = (props) => {
+const MenuAside = (props) => {
   return (
-    <aside id="aside_main_app">
-      <div id="aside_main_app_container">
-        <h3>General Principles of Foundational Science</h3>
-        <ul>
+    <aside id="menuaside_main_page">
+      <div id="menuaside_main_container">
+        <h3 id="h3_first_title_menuaside">
+          General Principles of Foundational Science
+        </h3>
+        <ul id="ul_first_submenu_menuaside" className="fc">
           <li
             onClick={() =>
               props.content_component_switcher(<BiochemMolbioIndex />)
@@ -44,8 +46,8 @@ const Aside1 = (props) => {
 
           <li>Normal age-related findings and care of the well patient</li>
         </ul>
-        <h3>Organ System</h3>
-        <ul>
+        <h3 id="h3_second_title_menuaside">Organ System</h3>
+        <ul id="ul_second_submenu_menuaside" className="fc">
           <li>Immune System</li>
           <li>Blood & Lymphoreticular System</li>
           <li>Behavioral Health</li>
@@ -62,8 +64,8 @@ const Aside1 = (props) => {
           <li>Endocrine System</li>
           <li>Multisystem Processes & Disorders</li>
         </ul>
-        <h3>Medical Literature</h3>
-        <ul>
+        <h3 id="h3_third_title_menuaside"> Medical Literature</h3>
+        <ul id="ul_third_submenu_menuaside" className="fc">
           <li>
             Biostatistics, Epidemiology/Population Health, & Interpretation of
             the Medical Literature
@@ -75,4 +77,4 @@ const Aside1 = (props) => {
   );
 };
 
-export default Aside1;
+export default MenuAside;

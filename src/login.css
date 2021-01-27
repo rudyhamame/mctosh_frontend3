@@ -15,14 +15,15 @@
 }
 
 #header_login {
-  font-family: "Pacifico", cursive;
+  font-family: "Exo", sans-serif;
   color: var(--blue);
 }
 
 #h1_header_login {
-  font-size: 60pt;
-  font-weight: 500;
+  font-size: 50pt;
+  font-weight: 700;
   text-align: center;
+  line-height: 45px;
 }
 
 #login_form {
@@ -39,10 +40,10 @@
 }
 
 #login_form [type="text"],
-[type="password"],
-[type="submit"],
-[type="email"],
-[type="date"] {
+#login_form [type="password"],
+#login_form [type="submit"],
+#login_form [type="email"],
+#login_form [type="date"] {
   font-size: 12pt;
   width: 400px;
   outline-style: none;
@@ -64,6 +65,14 @@
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bold;
   font-size: 14pt;
+}
+
+#login_form [type="text"]::selection,
+#login_form [type="password"]::selection,
+#login_form [type="submit"]::selection,
+#login_form [type="email"]::selection,
+#login_form [type="date"] ::selection {
+  background-color: rgba(0, 128, 0, 0.432);
 }
 
 #login_form [type="submit"]:hover {
@@ -103,10 +112,10 @@
     transform: scale(0.8);
   }
   #login_form [type="text"],
-  [type="password"],
-  [type="submit"],
-  [type="email"],
-  [type="date"] {
+  #login_form [type="password"],
+  #login_form [type="submit"],
+  #login_form [type="email"],
+  #login_form [type="date"] {
     width: 400px;
   }
 }
@@ -118,10 +127,10 @@
     transform: scale(0.8);
   }
   #login_form [type="text"],
-  [type="password"],
-  [type="submit"],
-  [type="email"],
-  [type="date"] {
+  #login_form [type="password"],
+  #login_form [type="submit"],
+  #login_form [type="email"],
+  #login_form [type="date"] {
     width: 250px;
   }
   #h4_footer_login {

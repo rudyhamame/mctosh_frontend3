@@ -7,7 +7,7 @@ import {
 
 import Home from "./Home";
 
-function App(props) {
+function AppRouter(props) {
   return (
     <Router>
       <Switch>
@@ -18,4 +18,4 @@ function App(props) {
     </Router>
   );
 }
-export default App;
+export default AppRouter;

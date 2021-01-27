@@ -1,8 +1,8 @@
 //...........import..................
 import React from "react";
 import "./login.css";
-import App from "./App";
 import ReactDOM from "react-dom";
+import AppRouter from "./App";
 
 //...........component..................
 class Login extends React.Component {
@@ -153,7 +153,7 @@ class Login extends React.Component {
   //.....Home page after successful login..........
   renderHome = () => {
     ReactDOM.render(
-      <App username={this.state.username} />,
+      <AppRouter username={this.state.username} />,
       document.getElementById("root")
     );
   };
@@ -210,7 +210,19 @@ class Login extends React.Component {
         {this.state.isLoading && this.loader()}
         <section id="header_loginform_container" className="fc">
           <header id="header_login">
-            <h1 id="h1_header_login">Study Planner</h1>
+            <h1 id="h1_header_login">
+              USMLE Step1 <br></br>
+              <span
+                style={{
+                  fontFamily: "'Pacifico', cursive",
+                  fontWeight: "300",
+                  fontSize: "30pt",
+                  color: "var(--gray_for_read)",
+                }}
+              >
+                study planner
+              </span>
+            </h1>
           </header>
           <form id="login_form" className="fc">
             <input

@@ -6,19 +6,7 @@ import "../css/content.css";
 
 const Content = (props) => {
   return (
-    <div
-      id="content_main_app"
-      style={{
-        order: "1",
-        backgroundColor: "var(--gay_for_read)",
-        overflow: "hidden",
-        flexGrow: "1",
-        backgroundColor: "var(--blue)",
-        margin: "0 auto",
-        boxShadow: "1px 0 6px black",
-      }}
-      className="fc"
-    >
+    <div id="content_main_page" className="fc">
       {props.content_component}
     </div>
   );

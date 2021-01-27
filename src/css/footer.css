@@ -4,6 +4,9 @@
   background-color: var(--blue);
   box-shadow: 0 10px 20px black;
   z-index: 100;
+  animation-name: footer_blinker;
+  animation-duration: 1s;
+  animation-delay: 1s;
 }
 
 #footer_app_container {
@@ -18,4 +21,20 @@
 #footer_app h4 {
   color: var(--white);
   font-weight: 300;
+}
+
+@keyframes footer_blinker {
+  20% {
+    background-color: var(--orange);
+  }
+  30% {
+    background-color: var(--blue);
+  }
+
+  50% {
+    background-color: var(--orange);
+  }
+  100% {
+    background-color: var(--blue);
+  }
 }
