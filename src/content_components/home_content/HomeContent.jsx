@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import "./HomeContent.css";
 
 const HomeContent = (props) => {
   const searchByDeadlineData = () => {
