@@ -1,4 +1,42 @@
 p {
+  font-size: 14pt;
+  padding: 10px;
+  text-align: left;
+}
+
+#content_home_page {
+  width: 1100px;
+  background-color: var(--white);
+  height: 100%;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.281);
+}
+
+#main_content_home_container {
+  justify-content: left;
+  padding: 50px 100px;
+  gap: 10px;
+}
+
+#greeting_content_home_container {
+  padding: 10px;
+}
+#h1_greeting_content_home_container {
+  text-align: center;
+  color: black;
+  font-family: "Roboto", sans-serif;
+  background-color: var(--white);
+  margin: 0 0;
+  font-weight: 500;
+}
+
+#ol_table_homecontent {
+  padding: 10px 100px;
+}
+
+#ol_table_homecontent li {
+  list-style: decimal;
+  font-size: 14pt;
+  font-weight: bold;
 }
 
 @media screen and (max-width: 600px) {

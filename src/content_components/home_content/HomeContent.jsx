@@ -57,23 +57,24 @@ const HomeContent = (props) => {
   });
 
   return (
-    <div id="content_home_welcome_container" className="fc">
-      <section>
-        <h1 id="h1_content_home_welcome">
-          Hello {props.username}! Welcome to your profile on <br></br>
-          <span style={{ fontFamily: "var(--pacifico)" }}>
-            Step1 Study Planner
-          </span>
-        </h1>
-      </section>
-
-      <section>
-        <p>
-          Accorping to the imformation you posted in "To do menu", you have the
-          following tasks for today:{" "}
-        </p>
-        <ol id="ol_table_homecontent"></ol>
-      </section>
+    <div id="content_home_page" className="fc">
+      <article id="main_content_home_container" className="fc">
+        <section id="greeting_content_home_container">
+          <h1 id="h1_greeting_content_home_container">
+            Hello {props.username}! Welcome to your profile on <br></br>
+            <span style={{ fontFamily: "var(--pacifico)" }}>
+              Step1 Study Planner
+            </span>
+          </h1>
+        </section>
+        <section>
+          <p>
+            According to the information you posted in "To do menu", you have
+            the following tasks to do for today:{" "}
+          </p>
+          <ol id="ol_table_homecontent"></ol>
+        </section>
+      </article>
     </div>
   );
 };
