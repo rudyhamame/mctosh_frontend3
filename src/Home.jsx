@@ -25,7 +25,13 @@ class Home extends React.Component {
   }
 
   update_date = () => {
-    setInterval(() => this.setState({ date_now: new Date() }), 1000);
+    setInterval(
+      () =>
+        this.setState({
+          date_now: new Date(),
+        }),
+      1000
+    );
   };
 
   componentDidMount() {

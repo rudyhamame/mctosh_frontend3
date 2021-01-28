@@ -24,6 +24,12 @@
   background-color: var(--white);
   margin: 0 0;
 }
+
+#ol_table_homecontent li {
+  list-style: decimal;
+  padding: 20px;
+}
+
 #notes {
   order: 1;
   padding: 30px;
