@@ -15,7 +15,7 @@ const Main = (props) => {
       <MenuAside
         content_component_switcher={props.content_component_switcher}
       />
-      <TodoAside username={props.username} />
+      <TodoAside username={props.username} fetchData={props.fetchData} />
     </main>
   );
 };
