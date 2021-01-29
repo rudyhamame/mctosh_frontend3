@@ -1,45 +1,36 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 const TodoAside = (props) => {
-  // function onChangeSearching(query) {
-  //   // searchByDeadlineData(query);
-  //   if (query === "") {
-  //     // getData();
-  //   }
-  // }
-
-  const closetodoAside = () => {
-    let todouaside_main_container = document.getElementById(
-      "todouaside_main_container"
-    );
-    let i_close_todoAside = document.getElementById("i_close_todoAside");
-    let i_open_todoAside = document.getElementById("i_open_todoAside");
-
-    todouaside_main_container.style.width = "0";
-    i_close_todoAside.style.display = "none";
-    i_open_todoAside.style.display = "inline";
-  };
   const opentodoAside = () => {
     let todouaside_main_container = document.getElementById(
       "todouaside_main_container"
     );
-    let i_close_todoAside = document.getElementById("i_close_todoAside");
-    let i_open_todoAside = document.getElementById("i_open_todoAside");
-
-    todouaside_main_container.style.width = "300px";
-    i_close_todoAside.style.display = "inline";
-    i_open_todoAside.style.display = "none";
+    let control_todoAside = document.getElementById("control_todoAside");
+    let open_icon = document.getElementById("i_open_todoAside");
+    if (control_todoAside.title === "unclicked") {
+      todouaside_main_container.style.width = "300px";
+      control_todoAside.title = "clicked";
+      open_icon.className = "fas fa-arrow-left";
+    } else {
+      todouaside_main_container.style.width = "0";
+      control_todoAside.title = "unclicked";
+      open_icon.className = "fas fa-arrow-right";
+    }
   };
-  const [counter, setCounter] = useState(0);
 
   function postData() {
-    props.fetchData(null, "post", "", null);
-    setCounter(counter + 1);
+    props.fetchData(null, "post", "", null, "Todo");
   }
 
-  useEffect(() => {
-    props.fetchData(null, "get", "getAll", null);
-  }, [counter]);
+  function search_by_deadline_Data(search_deadline_value) {
+    props.fetchData(
+      null,
+      "get",
+      "search_by_deadline",
+      search_deadline_value,
+      "Todo"
+    );
+  }
 
   return (
     <aside id="todoaside_main_page" className="fr">
@@ -50,11 +41,11 @@ const TodoAside = (props) => {
           <input
             id="input_deadline_search"
             type="date"
-            // onChange={() =>
-            //   onChangeSearching(
-            //     document.getElementById("input_deadline_search").value
-            //   )
-            // }
+            onChange={() =>
+              search_by_deadline_Data(
+                document.getElementById("input_deadline_search").value
+              )
+            }
           />
         </section>
         <ul
@@ -65,6 +56,7 @@ const TodoAside = (props) => {
             backgroundSize: "cover",
           }}
         ></ul>
+
         <form id="form_post_todoaside" className="fc">
           <input
             type="text"
@@ -85,20 +77,13 @@ const TodoAside = (props) => {
           ></i>
         </form>
       </section>
-      <section className="fr" id="control_todoAside">
-        <i
-          id="i_open_todoAside"
-          class="fas fa-arrow-right"
-          onClick={opentodoAside}
-        ></i>
-        <i
-          id="i_close_todoAside"
-          class="fas fa-arrow-left"
-          style={{
-            display: "none",
-          }}
-          onClick={closetodoAside}
-        ></i>
+      <section
+        onClick={opentodoAside}
+        className="fr"
+        id="control_todoAside"
+        title="unclicked"
+      >
+        <i id="i_open_todoAside" class="fas fa-arrow-right"></i>
       </section>
     </aside>
   );

@@ -1,98 +1,47 @@
-/*......menuAside.....*/
-#menuaside_main_page {
-  order: 2;
-  position: absolute;
-  right: 10px;
-  display: none;
-  height: 480px;
-  overflow: hidden;
-  width: min-content;
-  justify-content: center;
-  align-items: flex-start;
-  box-shadow: 0 0 10px black;
-  z-index: 10;
-}
-#menuaside_main_container {
-  font-family: "Roboto", sans-serif;
-  overflow: auto;
-  height: 480px;
-}
-
-#menuaside_main_container li {
-  border-bottom: solid black 1px;
-  color: var(--black);
-  cursor: pointer;
-  padding: 15px;
-  font-size: 12pt;
-  font-family: Arial, Helvetica, sans-serif;
-  background-color: var(--white);
-}
-
-#menuaside_main_container h3 {
-  font-family: "Pacifico", cursive;
-  color: var(--white);
-  text-align: center;
-  white-space: nowrap;
-  background-color: var(--gray_for_read);
-  font-weight: 300;
-  padding: 8px;
-}
-
-/*......todoAside.....*/
-#todoaside_main_page {
+#NotesAside_main_page {
   max-width: 70%;
+  order: 3;
 }
-#todouaside_main_container {
+
+#NotesAside_main_container {
   animation-name: width;
   animation-duration: 1s;
-}
-
-#todouaside_main_container {
+  order: 2;
   width: 0;
-  background-color: var(--gray_for_read);
   overflow: hidden;
 }
-#h3_title_todoaside {
+#h3_title_NotesAside {
   font-family: "Pacifico", cursive;
   font-weight: 300;
   padding: 10px;
   background-color: var(--orange);
   text-align: center;
-  box-shadow: 0 0 5px black;
   color: var(--white);
   font-size: 14pt;
   z-index: 1;
+  box-shadow: 0 0 5px black;
 }
 
-#ul_table_todoaside {
-  flex-grow: 1;
-  overflow: auto;
-  overflow-wrap: break-word;
-  background-color: var(--white);
+#gpForm_post_NotesAside h2 {
+  font-family: "Pacifico", cursive;
+  font-weight: 300;
+  padding: 10px;
+  background-color: var(--orange);
+  text-align: center;
+  color: var(--white);
+  font-size: 14pt;
+  width: 100%;
 }
 
-#ul_table_todoaside i {
-  font-size: 16pt;
-}
-
-#ul_table_todoaside li {
-  box-shadow: 0 0 1px rgba(0, 0, 0, 0.288);
-  padding: 20px;
-}
-
-#ul_table_todoaside li p {
-  font-family: "Roboto", sans-serif;
-  font-size: 12pt;
-}
-
-#control_todoAside {
+#control_NotesAside {
   background-color: var(--blue);
   justify-content: center;
   align-items: center;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.479);
   z-index: 1;
+  order: 1;
 }
-#control_todoAside i {
+#control_NotesAside i {
   color: var(--white);
   font-size: 16pt;
   padding: 10px;
@@ -100,22 +49,23 @@
   animation-duration: 1.5s;
 }
 
-#form_post_todoaside {
-  padding: 10px;
+#gpForm_post_NotesAside {
   background-color: var(--blue);
   gap: 10px;
   justify-content: center;
   align-items: center;
   box-shadow: 0 0 5px black;
+  flex-grow: 1;
 }
 
-#form_post_todoaside i {
+#gpForm_post_NotesAside i {
   font-size: 16pt;
   color: var(--white);
   padding: 10px;
 }
 
-#form_post_todoaside input {
+#gpForm_post_NotesAside input,
+select {
   border-radius: 8px;
   outline-style: none;
   border: none;
@@ -136,28 +86,32 @@
   color: var(--blue);
 }
 
-#input_deadline_search {
+#input_keyword_search {
   outline-style: none;
   border: none;
   font-size: 10pt;
   padding: 10px;
-  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.226);
   font-family: "Roboto", sans-serif;
   flex-grow: 1;
 }
 
-#title_search_todoaside {
+#keyword_search_NotesAside {
   background-color: var(--green);
   justify-content: space-between;
   align-items: center;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.226);
 }
 
-#label_search_todoaside {
+#label_search_NotesAside {
   padding: 10px;
 }
 input[value=""]::-webkit-datetime-edit {
   color: transparent;
+}
+
+#piano_for_study {
+  box-shadow: 0 0 2px black;
+  margin-top: 50px;
 }
 
 @media screen and (max-width: 600px) {
@@ -167,7 +121,7 @@ input[value=""]::-webkit-datetime-edit {
   #menuaside_main_container {
     font-size: 7pt;
   }
-  #todoaside_main_page {
+  #NotesAside_main_page {
     display: none;
   }
 }

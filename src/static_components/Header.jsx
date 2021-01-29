@@ -8,7 +8,7 @@ const Header = (props) => {
       <div id="header_app_content" className="fr">
         <Logo />
         <Nav
-          content_component_switcher={props.content_component_switcher}
+          rendered_page_switcher={props.rendered_page_switcher}
           username={props.username}
         />
       </div>

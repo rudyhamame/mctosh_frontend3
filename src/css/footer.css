@@ -6,7 +6,7 @@
   z-index: 100;
   animation-name: footer_blinker;
   animation-duration: 1s;
-  animation-delay: 1s;
+  animation-delay: 0.8s;
 }
 
 #footer_app_container {

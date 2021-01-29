@@ -2,6 +2,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Exo:wght@600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Satisfy&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Tangerine:wght@700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@600&display=swap");
 * {
   padding: 0;
   margin: 0;
@@ -20,9 +23,12 @@
   --gray_for_read: #696969;
   --pacifico: "Pacifico", cursive;
   --orange: #f04e1f;
+  --green: rgb(50, 187, 50);
+  --black: #282828;
 }
 #app_page {
   height: 100vh;
+  background-color: var(--blue);
 }
 
 ::-webkit-scrollbar {

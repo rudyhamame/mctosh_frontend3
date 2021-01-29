@@ -2,7 +2,7 @@ import React from "react";
 import Footer from "./static_components/Footer";
 import Header from "./static_components/Header";
 import Main from "./static_components/Main";
-import HomeContent from "./content_components/home_content/HomeContent";
+import Greeting from "./content_components/greeting/Greeting";
 
 //........import CSS...........
 import "./css/app.css";
@@ -11,7 +11,6 @@ import "./css/footer.css";
 import "./css/aside.css";
 import "./css/content.css";
 import "./css/main.css";
-import "./css/home_content.css";
 
 //........Home Component...........
 class Home extends React.Component {
@@ -19,13 +18,13 @@ class Home extends React.Component {
     super();
     this.state = {
       username: props.username,
-      content_component: null,
-      post_state: null,
+      rendered_page: <Greeting username={props.username} />,
+      afterFetch_refresher: null,
     };
   }
 
   //...............Todo REST functions.......................
-  buildData = (jsonData, goal) => {
+  buildData = (jsonData, goal, page) => {
     let df = new DocumentFragment();
     for (var i = 0; i < jsonData.length; i++) {
       //........................................p....................................
@@ -66,10 +65,10 @@ class Home extends React.Component {
         editIcon.setAttribute("class", "fas fa-edit");
         deleteIcon.setAttribute("class", "fas fa-eraser");
         editIcon.addEventListener("click", () =>
-          this.fetchData(editIcon.id, "put", "", "")
+          this.fetchData(editIcon.id, "put", "", "", page)
         );
         deleteIcon.addEventListener("click", () =>
-          this.fetchData(deleteIcon.id, "delete", "", "")
+          this.fetchData(deleteIcon.id, "delete", "", "", page)
         );
 
         divIcons.appendChild(deleteIcon);
@@ -91,8 +90,8 @@ class Home extends React.Component {
     }
   };
 
-  //....................PUT and POST......................
-  fetchData = (targetID, method_type, goal, search_deadline_value) => {
+  //....................Fetch DATA......................
+  fetchData = (targetID, method_type, goal, search_deadline_value, page) => {
     //to get date now for search_by_today goal
     let today = new Date();
     let date = today.getDate();
@@ -105,22 +104,39 @@ class Home extends React.Component {
     let task_input_ID = document.getElementById("input_task_todoaside"); //for PUT and POST method
     let deadline_input_ID = document.getElementById("input_deadline_todoaside"); //for PUT and POST method
     let deadline_search = new Date(search_deadline_value); //for search by deadline goal
+    let used_targetID; //for id that is needed for DELETE&PUT
 
     //Deciding which route it will take depending on METHOD_TYPE
     switch (method_type) {
       case "put":
       case "post":
+      case "delete":
         //Preparing fetching request
         let method;
         switch (method_type) {
           case "put":
-            url = "https://backendstep1.herokuapp.com/api/Todo/" + targetID;
+            used_targetID = document.getElementById(targetID).parentElement.id; //for id that is needed for DELETE&PUT
+
+            url =
+              "https://backendstep1.herokuapp.com/api/" +
+              page +
+              "/" +
+              used_targetID;
             method = "PUT";
             break;
-
           case "post":
-            url = "https://backendstep1.herokuapp.com/api/Todo";
+            url = "https://backendstep1.herokuapp.com/api/" + page;
             method = "POST";
+            break;
+          case "delete":
+            used_targetID = document.getElementById(targetID).parentElement.id; //for id that is needed for DELETE&PUT
+
+            url =
+              "https://backendstep1.herokuapp.com/api/" +
+              page +
+              "/" +
+              used_targetID;
+            method = "DELETE";
             break;
         }
         options = {
@@ -140,15 +156,20 @@ class Home extends React.Component {
         switch (goal) {
           case "search_by_deadline":
             url =
-              "https://backendstep1.herokuapp.com/api/Todo/search?deadline=" +
+              "https://backendstep1.herokuapp.com/api/" +
+              page +
+              "/search?deadline=" +
               deadline_search;
             break;
           case "getAll":
-            url = "https://backendstep1.herokuapp.com/api/Todo";
+            url = "https://backendstep1.herokuapp.com/api/" + page;
+
             break;
           case "search_by_today":
             url =
-              "https://backendstep1.herokuapp.com/api/Todo/search?deadline=" +
+              "https://backendstep1.herokuapp.com/api/" +
+              page +
+              "/search?deadline=" +
               real_today;
             break;
         }
@@ -168,10 +189,10 @@ class Home extends React.Component {
       })
       .then((response) => {
         if (method_type === "get") {
-          this.buildData(response, goal);
+          this.buildData(response, goal, page);
         } else {
           this.setState({
-            post_state: Math.random,
+            afterFetch_refresher: Math.random,
           });
         }
       })
@@ -182,50 +203,35 @@ class Home extends React.Component {
     deadline_input_ID.value = "";
   };
 
-  //.................DELETE......................
-  deleteData = (id) => {
-    let targetID = document.getElementById(id).parentElement.id;
-    const url = "https://backendstep1.herokuapp.com/api/Todo/" + targetID;
-    let req = new Request(url, { method: "DELETE", mode: "cors" });
-    fetch(req).then((response) => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw new Error("BAD HTTP!");
-      }
-    });
-  };
-
-  //................SEARCH.............................
-
   //...............REST functions.......................
 
   componentDidMount() {
-    this.setState({
-      content_component: <HomeContent username={this.state.username} />,
-    });
+    this.fetchData(null, "get", "getAll", null, "Todo");
+    this.fetchData(null, "get", "search_by_today", null, "Todo");
   }
 
-  content_component_switcher = (props) => {
-    this.setState({ content_component: props });
+  rendered_page_switcher = (props) => {
+    this.setState({ rendered_page: props });
   };
 
   componentDidUpdate() {
-    this.fetchData(null, "get", "getAll", null);
+    this.fetchData(null, "get", "getAll", null, "Todo");
+    this.fetchData(null, "get", "search_by_today", null, "Todo");
   }
 
   render() {
     return (
       <div id="app_page" className="fc">
         <Header
-          content_component_switcher={this.content_component_switcher}
+          rendered_page_switcher={this.rendered_page_switcher}
           username={this.state.username}
         />
         <Main
-          content_component_switcher={this.content_component_switcher}
-          content_component={this.state.content_component}
+          rendered_page_switcher={this.rendered_page_switcher}
+          rendered_page={this.state.rendered_page}
           username={this.state.username}
           fetchData={this.fetchData}
+          // NotesAndTerms_switcher={this.NotesAndTerms_switcher()}
         />
         <Footer />
       </div>

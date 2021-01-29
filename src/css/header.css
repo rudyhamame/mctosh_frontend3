@@ -6,7 +6,6 @@
   box-shadow: 0 -5px 10px black;
   animation-name: header_blinker;
   animation-duration: 1s;
-  animation-delay: 1s;
 }
 
 #header_app_content {
