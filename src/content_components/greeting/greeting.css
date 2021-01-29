@@ -11,7 +11,7 @@
 #greeting_articleGreeting {
   margin: auto;
   font-family: "Roboto", sans-serif;
-  overflow: hidden;
+  overflow: auto;
 
   width: 100%;
   background-color: var(--white);
