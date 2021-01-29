@@ -20,7 +20,7 @@ const NotesAside = (props) => {
   };
 
   function postData() {
-    props.fetchData(null, "post", "", null, "Notes");
+    props.fetchData(null, "post", "", null, "BiochemMolbio");
   }
 
   //   function search_by_deadline_Data(search_deadline_value) {
@@ -67,7 +67,7 @@ const NotesAside = (props) => {
             <option value="Individual Organ">Individual Organ</option>
           </select>
           <label>Subject</label>
-          <select id="input_gpSubject_notes" name="gpSubject">
+          <select id="input_subject_notes" name="subject">
             <option value="Pathology">Pathology</option>
             <option value="Physiology">Physiology</option>
             <option value="Pharmacology">Pharmacology</option>
@@ -99,7 +99,7 @@ const NotesAside = (props) => {
           />
           <i
             id="i_submit_NotesAside"
-            // onClick={postData}
+            onClick={postData}
             class="fas fa-paper-plane"
           ></i>
         </form>
