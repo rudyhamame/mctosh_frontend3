@@ -28,7 +28,7 @@ const AppRouter = () => {
     let memoryAuth = JSON.parse(sessionStorage.getItem("is_loggingin"));
 
     if (received_auth_report.is_authorized === true || memoryAuth === true) {
-      sessionStorage.setItem("is_loggedin", JSON.stringify(true));
+      sessionStorage.setItem("is_loggedin", true);
       return (
         <React.Fragment>
           <Route {...rest} render={() => children} />
