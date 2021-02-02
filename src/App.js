@@ -18,10 +18,6 @@ class App extends React.Component {
 
   /////////////////////////////////////////////////////Lifecycle//////////////////////////
   componentDidMount() {
-    sessionStorage.setItem(
-      "is_loggingin",
-      JSON.stringify(this.state.is_loggingin)
-    );
     this.fetchData(null, "get", "getAll", null, "Todo");
     this.fetchData(null, "get", "search_by_today", null, "Todo");
     this.fetchData(null, "get", "getAll", null, "BiochemMolbio");
