@@ -2,8 +2,7 @@ import React from "react";
 import Greeting from "../content_components/greeting/Greeting";
 const Nav = (props) => {
   const loggingOUT = () => {
-    sessionStorage.removeItem("loginState");
-    window.location.reload();
+    props.logOut();
   };
   const dim = () => {
     let i_dim_menu = document.getElementById("i_dim_menu");

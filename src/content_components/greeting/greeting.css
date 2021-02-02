@@ -12,12 +12,11 @@
   margin: auto;
   font-family: "Roboto", sans-serif;
   overflow: auto;
-
   width: 100%;
   background-color: var(--white);
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.281);
   flex-grow: 1;
-  padding: 50px 100px;
+  padding: 50px 60px;
   gap: 50px;
 }
 
@@ -29,7 +28,8 @@
 
 #content_sectionGreeting p {
   font-size: 14pt;
-  padding: 10px 0px;
+  padding: 10px 50px;
+  line-height: 20pt;
 }
 
 #content_sectionGreeting {

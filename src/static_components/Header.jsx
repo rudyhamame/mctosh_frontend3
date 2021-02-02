@@ -10,6 +10,8 @@ const Header = (props) => {
         <Nav
           rendered_page_switcher={props.rendered_page_switcher}
           username={props.username}
+          dbUpdate_isConnected={props.dbUpdate_isConnected}
+          logOut={props.logOut}
         />
       </div>
     </header>

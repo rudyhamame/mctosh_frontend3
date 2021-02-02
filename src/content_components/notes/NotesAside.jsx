@@ -97,6 +97,8 @@ const NotesAside = (props) => {
             id="input_page_notes"
             placeholder="Page Number"
           />
+          <label>Note</label>
+          <textarea id="input_note_notes" placeholder="Page Number"></textarea>
           <i
             id="i_submit_NotesAside"
             onClick={postData}

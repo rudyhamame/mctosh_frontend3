@@ -51,8 +51,8 @@
 
 #gpForm_post_NotesAside {
   background-color: var(--blue);
-  gap: 10px;
-  justify-content: center;
+  gap: 8px;
+  justify-content: flex-start;
   align-items: center;
   box-shadow: 0 0 5px black;
   flex-grow: 1;
@@ -61,11 +61,12 @@
 #gpForm_post_NotesAside i {
   font-size: 16pt;
   color: var(--white);
-  padding: 10px;
+  padding: 20px;
 }
 
 #gpForm_post_NotesAside input,
-select {
+select,
+textarea {
   border-radius: 8px;
   outline-style: none;
   border: none;
@@ -74,6 +75,10 @@ select {
   padding: 10px;
   box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.226);
   font-family: "Roboto", sans-serif;
+}
+
+#gpForm_post_NotesAside textarea {
+  flex-grow: 1;
 }
 
 .div_icons {
@@ -111,7 +116,6 @@ input[value=""]::-webkit-datetime-edit {
 
 #piano_for_study {
   box-shadow: 0 0 2px black;
-  margin-top: 50px;
 }
 
 @media screen and (max-width: 600px) {

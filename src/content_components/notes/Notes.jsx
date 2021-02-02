@@ -22,7 +22,7 @@ const Notes = (props) => {
           >
             Notes
           </h1>
-          <ol id="ol_notes_content"></ol>
+          <ol id="ol_notes_content" className="fc"></ol>
         </section>
       </article>
     </div>
