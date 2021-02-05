@@ -25,10 +25,9 @@ const Footer = (props) => {
           className="fc"
         >
           <div
-            id="test"
+            id="chat"
             style={{
               position: "absolute",
-              backgroundColor: "var(--black)",
               width: "250px",
               textAlign: "center",
               color: "white",
@@ -40,14 +39,14 @@ const Footer = (props) => {
               overflow: "hidden",
             }}
             onClick={function () {
-              document.getElementById("test").style.height = "0";
+              document.getElementById("chat").style.height = "0";
             }}
           >
             <ul className="fc" id="users"></ul>
           </div>
           <div
             onClick={function () {
-              document.getElementById("test").style.height = "500px";
+              document.getElementById("chat").style.height = "400px";
               props.fetchData(
                 {
                   url: "http://localhost:4000/user/",
