@@ -2,6 +2,22 @@
 import React from "react";
 import "./App.css";
 import Home from "./static_components/Home/Home";
+import { Route, Switch } from "react-router-dom";
+import Profile from "./static_components/Profile/Profile";
+import Footer from "./static_components/Footer";
+import Header from "./static_components/Header";
+
+//........import CSS...........
+import "./static_components/css/aside.css";
+import "./static_components/css/footer.css";
+import "./static_components/css/content.css";
+import "./static_components/css/main.css";
+import "./static_components/css/header.css";
+import "./content_components/greeting/greeting.css";
+import MenuAside from "./static_components/MenuAside";
+import TodoAside from "./static_components/TodoAside";
+import NotesAside from "./content_components/notes/NotesAside";
+import Content from "./static_components/Content";
 
 //...........component..................
 class App extends React.Component {
@@ -9,25 +25,104 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      user_name: this.props.received_auth_report.user_name,
-      user_id: this.props.received_auth_report.user_id,
-      first_name: this.props.first_name,
+      app: {
+        is_loading: false,
+      },
+      me: {
+        username: this.props.received_auth_report.username,
+        user_id: this.props.received_auth_report.user_id,
+        first_name: this.props.received_auth_report.first_name,
+        last_name: this.props.received_auth_report.last_name,
+        friends_IDlist: this.props.received_auth_report.friends_list,
+      },
+
+      friends: null,
       is_loggingin: this.props.received_auth_report.is_authorized,
     };
   }
 
+  //////////////////////////////////////ELEMENTS IDs////////////////////////////////
+  // state_updater = () => {
+  //   fetch("https://backendstep1.herokuapp.com/user/" + this.state.me.user_id, {
+  //     method: "GET",
+  //     mode: "cors",
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       this.setState({
+  //         me: {
+  //           username: data.username,
+  //           user_id: data._id,
+  //           first_name: data.first_name,
+  //           last_name: data.last_name,
+  //           friends_IDlist: data.friends_list,
+  //           is_loggingin: data.is_loggingin,
+  //         },
+  //       });
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error:", error);
+  //     });
+  // };
+
+  build_online_friendsList = () => {
+    let users = document.getElementById("users");
+    users.innerHTML = "";
+    this.state.friends.forEach((online_friend) => {
+      if (online_friend.is_loggingin) {
+        let p = document.createElement("p");
+        let li = document.createElement("li");
+        p.textContent = online_friend.first_name;
+        li.appendChild(p);
+        users.appendChild(li);
+      }
+    });
+  };
+
+  build_friendsINFO = () => {
+    let friends_list = [];
+    this.state.me.friends_IDlist.forEach((friend) => {
+      fetch("https://backendstep1.herokuapp.com/user/" + friend, {
+        method: "GET",
+        mode: "cors",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          friends_list.push({
+            user_id: data._id,
+            username: data.username,
+            first_name: data.first_name,
+            last_name: data.last_name,
+            is_loggingin: data.is_loggingin,
+          });
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        })
+        .then(
+          this.setState({
+            friends: friends_list,
+          })
+        )
+        .finally(() => {
+          this.build_online_friendsList();
+        });
+    });
+  };
+
   /////////////////////////////////////////////////////Lifecycle//////////////////////////
   componentDidMount() {
-    this.fetchData(null, "get", "getAll", null, "Todo");
-    this.fetchData(null, "get", "search_by_today", null, "Todo");
-    this.fetchData(null, "get", "getAll", null, "BiochemMolbio");
+    // this.fetchData(null, "get", "getAll", null, "Todo");
+    // this.fetchData(null, "get", "search_by_today", null, "Todo");
+    // this.fetchData(null, "get", "getAll", null, "BiochemMolbio");
     this.dbUpdate_is_loggingin();
+    this.build_friendsINFO();
   }
 
   componentDidUpdate() {
-    this.fetchData(null, "get", "getAll", null, "Todo");
-    this.fetchData(null, "get", "search_by_today", null, "Todo");
-    this.fetchData(null, "get", "getAll", null, "BiochemMolbio");
+    // this.fetchData(null, "get", "getAll", null, "Todo");
+    // this.fetchData(null, "get", "search_by_today", null, "Todo");
+    // this.fetchData(null, "get", "getAll", null, "BiochemMolbio");
     this.dbUpdate_is_loggingin();
   }
 
@@ -35,7 +130,7 @@ class App extends React.Component {
   dbUpdate_is_loggingin = () => {
     let url =
       "https://backendstep1.herokuapp.com/api/user/connection/" +
-      this.state.user_id;
+      this.state.me.user_id;
     let options = {
       method: "PUT",
       mode: "cors",
@@ -52,7 +147,7 @@ class App extends React.Component {
       .then((response) => {
         if (response.ok) {
           if (this.state.is_loggingin === false) {
-            sessionStorage.removeItem("is_loggingin", JSON.stringify(true));
+            sessionStorage.removeItem("auth_report");
             window.location.reload();
           }
           return response.json();
@@ -206,148 +301,193 @@ class App extends React.Component {
   };
 
   ////////////////////////////////////Fetch DATA (ALL)///////////////////////////////////////
-  fetchData = (targetID, method_type, goal, search_deadline_value, page) => {
-    //..............Loader Working..........
-
-    //to get date now for search_by_today goal
-    let today = new Date();
-    let date = today.getDate();
-    let month = today.getMonth() + 1;
-    let year = today.getFullYear();
-    let real_today = year + "-" + month + "-" + date;
-
-    //to build options
-    let url;
-    let options;
-    let used_targetID; //for id that is needed for DELETE&PUT
-
-    //.....................for Todo..............
-    let task_input_ID = document.getElementById("input_task_todoaside"); //for PUT and POST method
-    let deadline_input_ID = document.getElementById("input_deadline_todoaside"); //for PUT and POST method
-    let deadline_search = new Date(search_deadline_value); //for search by deadline goal
-    //.....................for Todo..............
-    let note_input_ID = document.getElementById("input_note_notes"); //for PUT and POST method
-    let category_input_ID = document.getElementById("input_category_notes"); //for PUT and POST method
-    let subject_input_ID = document.getElementById("input_subject_notes"); //for PUT and POST method
-    let textbook_input_ID = document.getElementById("input_textbook_notes"); //for PUT and POST method
-    let page_input_ID = document.getElementById("input_page_notes"); //for PUT and POST method
-
-    //.....................for BiochemMolbio............
-
-    //Deciding which route it will take depending on METHOD_TYPE
+  fetchData = (fetchInfo, method_type) => {
+    let fetch_requirements;
     switch (method_type) {
-      case "put":
-      case "post":
-      case "delete":
-        //Preparing fetching request
-        let method;
-        let body;
-        switch (method_type) {
-          case "put":
-            used_targetID = document.getElementById(targetID).parentElement.id; //for id that is needed for DELETE&PUT
-
-            url =
-              "https://backendstep1.herokuapp.com/api/" +
-              page +
-              "/" +
-              used_targetID;
-            method = "PUT";
-            break;
-          case "post":
-            url = "https://backendstep1.herokuapp.com/api/" + page;
-            method = "POST";
-            switch (page) {
-              case "Todo":
-                body = JSON.stringify({
-                  task: task_input_ID.value,
-                  deadline: deadline_input_ID.value,
-                });
-                break;
-
-              case "BiochemMolbio":
-                body = JSON.stringify({
-                  notes: note_input_ID.value,
-                  subject: subject_input_ID.value,
-                  category: category_input_ID.value,
-                  textbook: textbook_input_ID.value,
-                  page: page_input_ID.value,
-                });
-                break;
-            }
-            break;
-          case "delete":
-            used_targetID = document.getElementById(targetID).parentElement.id; //for id that is needed for DELETE&PUT
-
-            url =
-              "https://backendstep1.herokuapp.com/api/" +
-              page +
-              "/" +
-              used_targetID;
-            method = "DELETE";
-            break;
-        }
-        options = {
-          method: method,
-          mode: "cors",
-          headers: {
-            "Content-Type": "application/json",
+      case "GET":
+        fetch_requirements = {
+          req: {
+            url: fetchInfo.url + fetchInfo.user_id,
+            options: {
+              method: fetchInfo.method,
+              mode: "cors",
+            },
           },
-          body: body,
         };
         break;
-
-      case "get":
-        switch (goal) {
-          case "search_by_deadline":
-            url =
-              "https://backendstep1.herokuapp.com/api/" +
-              page +
-              "/search?deadline=" +
-              deadline_search;
-            break;
-          case "getAll":
-            url = "https://backendstep1.herokuapp.com/api/" + page;
-            break;
-          case "search_by_today":
-            url =
-              "https://backendstep1.herokuapp.com/api/" +
-              page +
-              "/search?deadline=" +
-              real_today;
-            break;
-        }
-        options = { method: "GET", mode: "cors" };
+      case "POST":
+        fetch_requirements = {
+          req: {
+            url: fetchInfo.url + this.state.user_id,
+            options: {
+              method: fetchInfo.method,
+              mode: "cors",
+              headers: fetchInfo.headers,
+              body: JSON.stringify(fetchInfo.body),
+            },
+          },
+        };
+        break;
+      case "DELETE":
+      case "PUT":
+        fetch_requirements = {
+          req: {
+            url: fetchInfo.url + this.state.user_id + fetchInfo.otherID,
+            options: {
+              method: fetchInfo.method,
+              mode: "cors",
+              headers: fetchInfo.headers,
+              body: JSON.stringify(fetchInfo.body),
+            },
+          },
+        };
         break;
     }
-    //After getting all the required information for fetching
-    let req = new Request(url, options); //request
-    fetch(req)
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error("bad Http");
-        }
+    fetch(fetch_requirements.req.url, fetch_requirements.req.options)
+      .then((response) => response.json())
+      .then((data) => {
+        this.friends_list.push(data.first_name);
       })
-      .then((response) => {
-        if (method_type === "get") {
-          this.buildData(response, goal, page);
-        } else {
-          // this.setState({
-          //   afterFetch_refresher: Math.random,
-          // });
-        }
-      })
-      .catch((err) => {
-        console.log("error:", err.message);
+      .catch((error) => {
+        console.error("Error:", error);
       });
   };
+  // .then((response) => {
+  // if (method_type === "get") {
+  //   this.buildData(response, goal, page);
+  // } else {
+  //   // this.setState({
+  //   //   afterFetch_refresher: Math.random,
+  //   // });
+  // }
+  // })
+
+  //..............Loader Working..........
+  // //to get date now for search_by_today goal
+  // let today = new Date();
+  // let date = today.getDate();
+  // let month = today.getMonth() + 1;
+  // let year = today.getFullYear();
+  // let real_today = year + "-" + month + "-" + date; //time to be used as NOW
+  // //to build options
+  // let url;
+  // let options;
+  // let used_targetID; //for id that is needed for DELETE&PUT
+  // let params = params;
+  // //.....................for Todo..............
+  // let task_input_ID = document.getElementById("input_task_todoaside"); //for PUT and POST method
+  // let deadline_input_ID = document.getElementById("input_deadline_todoaside"); //for PUT and POST method
+  // let deadline_search = new Date(search_deadline_value); //for search by deadline goal
+  // //.....................for Todo..............
+  // let note_input_ID = document.getElementById("input_note_notes"); //for PUT and POST method
+  // let category_input_ID = document.getElementById("input_category_notes"); //for PUT and POST method
+  // let subject_input_ID = document.getElementById("input_subject_notes"); //for PUT and POST method
+  // let textbook_input_ID = document.getElementById("input_textbook_notes"); //for PUT and POST method
+  // let page_input_ID = document.getElementById("input_page_notes"); //for PUT and POST method
+  // //.....................for BiochemMolbio............
+  // //Deciding which route it will take depending on METHOD_TYPE
+  // switch (method_type) {
+  //   case "put":
+  //   case "post":
+  //   case "delete":
+  //     //Preparing fetching request
+  //     let method;
+  //     let body;
+  //     switch (method_type) {
+  //       case "put":
+  //         used_targetID = document.getElementById(targetID).parentElement.id; //for id that is needed for DELETE&PUT
+  //         url =
+  //           "https://backendstep1.herokuapp.com/api/" +
+  //           page +
+  //           "/" +
+  //           used_targetID;
+  //         method = "PUT";
+  //         break;
+  //       case "post":
+  //         url = "https://backendstep1.herokuapp.com/api/" + page;
+  //         method = "POST";
+  //         switch (page) {
+  //           case "Todo":
+  //             body = JSON.stringify({
+  //               task: task_input_ID.value,
+  //               deadline: deadline_input_ID.value,
+  //             });
+  //             break;
+  //           case "BiochemMolbio":
+  //             body = JSON.stringify({
+  //               notes: note_input_ID.value,
+  //               subject: subject_input_ID.value,
+  //               category: category_input_ID.value,
+  //               textbook: textbook_input_ID.value,
+  //               page: page_input_ID.value,
+  //             });
+  //             break;
+  //         }
+  //         break;
+  //       case "delete":
+  //         used_targetID = document.getElementById(targetID).parentElement.id; //for id that is needed for DELETE&PUT
+  //         url =
+  //           "https://backendstep1.herokuapp.com/api/" +
+  //           page +
+  //           "/" +
+  //           used_targetID;
+  //         method = "DELETE";
+  //         break;
+  //     }
+  //     options = {
+  //       method: method,
+  //       mode: "cors",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: body,
+  //     };
+  //     break;
+  //   case "get":
+  //     switch (goal) {
+  //       case "search_by_deadline":
+  //         url =
+  //           "https://backendstep1.herokuapp.com/api/" +
+  //           page +
+  //           "/search?deadline=" +
+  //           deadline_search;
+  //         break;
+  //       case "getAll":
+  //         url = "https://backendstep1.herokuapp.com/api/" + page;
+  //         break;
+  //       case "search_by_today":
+  //         url =
+  //           "https://backendstep1.herokuapp.com/api/" +
+  //           page +
+  //           "/search?deadline=" +
+  //           real_today;
+  //         break;
+  //     }
+  //     options = { method: "GET", mode: "cors" };
+  //     break;
+  // }
+  //After getting all the required information for fetching
+  // let req = new Request(POSTmessenger.req.url, POSTmessenger.req.options); //request
+  // fetch(req)
+  //   .then((response) => response.json())
+  //   .then((data) => console.log("Success:", data))
+  // .then((response) => {
+  //   if (method_type === "get") {
+  //     this.buildData(response, goal, page);
+  //   } else {
+  //     // this.setState({
+  //     //   afterFetch_refresher: Math.random,
+  //     // });
+  //   }
+  // })
+  // .catch((error) => {
+  //   console.error("Error:", error);
+  // });
+  // };
 
   //////////////////////////////////////////////Logging out///////////////////////////////////
   logOut = () => {
-    this.setState({
-      is_loggingin: false,
-    });
+    this.setState({ is_loggingin: false });
   };
 
   //////////////////////////////////////////////Redirect to Login///////////////////////////////////
@@ -385,10 +525,28 @@ class App extends React.Component {
   //.....Reander Login HTML..........
   render() {
     return (
-      <React.Fragment>
-        {this.state.first_name}
-        <Home logOut={this.logOut} first_name={this.state.first_name} />
-      </React.Fragment>
+      <div id="app_page" className="fc">
+        <Header state={this.state} logOut={this.logOut} />
+        <main id="main_app_page" className="fr">
+          <Content
+            username={this.state.username}
+            first_name={this.state.first_name}
+            page="home"
+            state={this.state}
+            fetchData={this.fetchData}
+            loader={this.loader}
+          />
+          <MenuAside />
+          <Route exact path="/">
+            <TodoAside fetchData={this.fetchData} />
+            <NotesAside fetchData={this.fetchData} />
+          </Route>
+        </main>
+        <Footer
+          fetchData={this.fetchData}
+          friendsData={this.state.friendsData}
+        />
+      </div>
     );
   }
 }

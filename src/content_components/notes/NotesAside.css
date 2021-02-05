@@ -1,6 +1,6 @@
 #NotesAside_main_page {
   max-width: 70%;
-  order: 3;
+  order: 5;
 }
 
 #NotesAside_main_container {
@@ -22,7 +22,7 @@
   box-shadow: 0 0 5px black;
 }
 
-#gpForm_post_NotesAside h2 {
+#form_notes_dashboard h2 {
   font-family: "Pacifico", cursive;
   font-weight: 300;
   padding: 10px;
@@ -49,38 +49,6 @@
   animation-duration: 1.5s;
 }
 
-#gpForm_post_NotesAside {
-  background-color: var(--blue);
-  gap: 8px;
-  justify-content: flex-start;
-  align-items: center;
-  box-shadow: 0 0 5px black;
-  flex-grow: 1;
-}
-
-#gpForm_post_NotesAside i {
-  font-size: 16pt;
-  color: var(--white);
-  padding: 20px;
-}
-
-#gpForm_post_NotesAside input,
-select,
-textarea {
-  border-radius: 8px;
-  outline-style: none;
-  border: none;
-  width: 250px;
-  font-size: 12pt;
-  padding: 10px;
-  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.226);
-  font-family: "Roboto", sans-serif;
-}
-
-#gpForm_post_NotesAside textarea {
-  flex-grow: 1;
-}
-
 .div_icons {
   order: 2;
   display: flex;
@@ -91,25 +59,6 @@ textarea {
   color: var(--blue);
 }
 
-#input_keyword_search {
-  outline-style: none;
-  border: none;
-  font-size: 10pt;
-  padding: 10px;
-  font-family: "Roboto", sans-serif;
-  flex-grow: 1;
-}
-
-#keyword_search_NotesAside {
-  background-color: var(--green);
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.226);
-}
-
-#label_search_NotesAside {
-  padding: 10px;
-}
 input[value=""]::-webkit-datetime-edit {
   color: transparent;
 }

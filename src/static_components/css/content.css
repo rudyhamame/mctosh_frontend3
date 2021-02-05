@@ -1,7 +1,8 @@
 /*....First Page Ever....*/
 #content_main_page {
-  order: 1;
-  flex-grow: 1;
+  order: 3;
+  flex-grow: 3.5;
+  flex-basis: 0;
   overflow: hidden;
   background-color: var(--blue);
   justify-content: start;
@@ -136,4 +137,97 @@
     font-family: "Roboto", sans-serif;
     font-size: 10pt !important;
   }
+}
+/*...................Home Content............*/
+#form_home_content_section {
+  border-radius: 5px;
+  padding: 40px;
+  padding-left: 0;
+  flex-grow: 3;
+}
+
+#form_home_content_section textarea {
+  height: 80px;
+}
+#form_notes_dashboard,
+#form_todo_dashboard {
+  align-items: center;
+  background-color: var(--blue);
+  display: none;
+  padding: 10px;
+  border-bottom: 5px solid rgb(255, 255, 255);
+  border-left: 5px solid rgb(255, 255, 255);
+  border-right: 5px solid rgb(255, 255, 255);
+  flex-grow: 1;
+  position: absolute;
+  gap: 10px;
+  justify-content: flex-start;
+}
+
+.input_container {
+  text-align: center;
+  width: 100%;
+  background-color: var(--white);
+  border-radius: 8px;
+}
+
+#form_notes_dashboard div label,
+#form_todo_dashboard div label {
+  color: var(--black);
+  font-weight: 900;
+}
+
+#form_home_content_buttons {
+  justify-content: flex-end;
+  align-items: start;
+  gap: 10px;
+  padding: 5px;
+  border-radius: 10px;
+}
+#form_home_content_buttons button {
+  border: white solid 4px;
+  background-color: var(--blue);
+  font-family: "Roboto", sans-serif;
+  border-radius: 10px;
+  flex-grow: 1;
+  color: white;
+  font-weight: 700;
+  font-size: 11pt;
+  height: 100%;
+}
+#form_home_content_buttons div {
+  /*div that contains the buttons!*/
+  flex-grow: 1;
+}
+
+#fetching_out_page {
+  font-family: "Roboto", sans-serif;
+  overflow: auto;
+  justify-content: center;
+  /* border-bottom: 5px solid rgb(255, 255, 255);
+  border-left: 5px solid rgb(255, 255, 255);
+  border-right: 5px solid rgb(255, 255, 255); */
+  padding: 10px 20px;
+  background-color: white;
+  color: white;
+  flex-grow: 1;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.075);
+}
+
+#control_greetingArticle {
+  text-align: center;
+  background-color: var(--white);
+  padding: 10px;
+}
+
+#control_greetingArticle i {
+  font-size: 16pt;
+  color: var(--blue);
+}
+
+#form_notes_dashboard i,
+#form_todo_dashboard i {
+  font-size: 18pt;
+  color: var(--white);
+  padding: 20px;
 }

@@ -1,6 +1,11 @@
 import React from "react";
+import NotesAside from "../content_components/notes/NotesAside";
 
 const TodoAside = (props) => {
+  let noteID = "6019fec6ff5c301e141c0b86";
+  let userID = "6019efc3431a04000469788e";
+  let params = "notes/" + userID;
+
   const opentodoAside = () => {
     let todouaside_main_container = document.getElementById(
       "todouaside_main_container"
@@ -18,9 +23,9 @@ const TodoAside = (props) => {
     }
   };
 
-  function postData() {
-    props.fetchData(null, "post", "", null, "Todo");
-  }
+  // function postData() {
+  //   props.fetchData(POSTmessenger);
+  // }
 
   function search_by_deadline_Data(search_deadline_value) {
     props.fetchData(
@@ -31,6 +36,8 @@ const TodoAside = (props) => {
       "Todo"
     );
   }
+
+  React.useEffect(() => {});
 
   return (
     <aside id="todoaside_main_page" className="fr">
@@ -57,7 +64,7 @@ const TodoAside = (props) => {
           }}
         ></ul>
 
-        <form id="form_post_todoaside" className="fc">
+        <section id="form_post_todoaside" className="fc">
           <input
             type="text"
             name="task_input"
@@ -70,12 +77,8 @@ const TodoAside = (props) => {
             id="input_deadline_todoaside"
             placeholder="deadline"
           />
-          <i
-            id="i_submit_todoAside"
-            onClick={postData}
-            class="fas fa-paper-plane"
-          ></i>
-        </form>
+          <i id="i_submit_todoAside" class="fas fa-paper-plane"></i>
+        </section>
       </section>
       <section
         onClick={opentodoAside}

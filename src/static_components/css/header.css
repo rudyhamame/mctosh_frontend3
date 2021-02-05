@@ -3,9 +3,10 @@
   z-index: 100;
   font-family: "Pacifico", cursive;
   background-color: var(--blue);
-  box-shadow: 0 -5px 10px black;
+  box-shadow: 0 -1px 10px rgba(0, 0, 0, 0.63);
   animation-name: header_blinker;
   animation-duration: 1s;
+  order: 1;
 }
 
 #header_app_content {
@@ -36,6 +37,33 @@
 
 #header_app i:hover {
   transform: scale(0.96);
+}
+
+/* Search */
+
+#input_keyword_search {
+  outline-style: none;
+  font-size: 10pt;
+  padding: 10px;
+  box-shadow: none !important;
+  border-radius: 0 !important ;
+  border-bottom-right-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+#keyword_search_NotesAside {
+  overflow: hidden;
+  align-items: center;
+  background-color: var(--green);
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.123);
+  border-radius: 10px;
+}
+
+#label_search_NotesAside {
+  border: none;
+  background-color: transparent;
+  border-radius: 0;
+  color: var(--white);
 }
 
 @keyframes header_blinker {

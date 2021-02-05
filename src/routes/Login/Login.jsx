@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Login.css";
 
 const Login = (props) => {
@@ -45,12 +45,13 @@ const Login = (props) => {
     firstname.style.display = "none";
     lastname.style.display = "none";
     this.setState({
-      signupSucceeded: null,
+      signup_ok: null,
     });
   };
 
   ////////////////////////////////////////////CHECK AND GET CREDENTIALS//////////////////////////////////////
   const checkandGet_Credentials = (event) => {
+    setSignup_ok(null);
     let username_try = document.getElementById("username_login_input");
     let password_try = document.getElementById("password_login_input");
     setIs_fetching(true);
@@ -69,24 +70,31 @@ const Login = (props) => {
       })
       .then((jsonData) => {
         if (
-          jsonData.credentials.password === password_try.value &&
-          jsonData.credentials.username === username_try.value
+          jsonData.password === password_try.value &&
+          jsonData.username === username_try.value
         ) {
+          let friends_list_ids = [];
+          jsonData.friends_list.forEach((friend) =>
+            friends_list_ids.push(friend.friend_id)
+          );
           authentication_report_sender({
-            user_name: jsonData.credentials.username,
+            username: jsonData.username,
             user_id: jsonData._id,
-            first_name: jsonData.id.first_name,
+            first_name: jsonData.first_name,
+            last_name: jsonData.last_name,
+            friends_list: friends_list_ids,
             is_authorized: true,
           });
+
           setIs_fetching(false);
           setLogin_ok(true);
         } else {
-          alert("Sdfxs");
           setIs_fetching(false);
           setLogin_ok(false);
         }
       })
       .catch((err) => {
+        setIs_fetching(false);
         if (err.message === "Cannot read property 'credentials' of null")
           setLogin_ok(false);
 
@@ -95,8 +103,8 @@ const Login = (props) => {
   };
 
   ////////////////////////////////////////////AUTHENTICATION REPORT SENDER//////////////////////////////////////
-  const authentication_report_sender = (authentication_report) => {
-    props.authentication_report_receiver(authentication_report);
+  const authentication_report_sender = (auth) => {
+    props.auth_report_receiver(auth);
   };
 
   ////////////////////////////////////////////SIGN UP//////////////////////////////////////
@@ -113,18 +121,18 @@ const Login = (props) => {
     let login_button = document.getElementById("submit_login_input");
     let login_title = document.getElementById("login_form_button");
 
-    const url = "https://backendstep1.herokuapp.com/api/user/credentials";
+    const url = "https://backendstep1.herokuapp.com/user/new";
     const options = {
       method: "POST",
       mode: "cors",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        "credentials.username": username.value,
-        "credentials.password": password.value,
-        "id.first_name": firstname.value,
-        "id.last_name": lastname.value,
-        "id.email": email.value,
-        "id.dob": dob.value,
+        username: username.value,
+        password: password.value,
+        first_name: firstname.value,
+        last_name: lastname.value,
+        email: email.value,
+        dob: dob.value,
       }),
     };
     let req = new Request(url, options);
@@ -149,6 +157,7 @@ const Login = (props) => {
         }
       })
       .catch((err) => {
+        setIs_fetching(false);
         console.log("error:", err.message);
       })
       .finally(() => {
@@ -165,7 +174,7 @@ const Login = (props) => {
 
   return (
     <div id="login_page" className="fc">
-      {is_fetching && (login_ok || signup_ok) && (
+      {is_fetching === true && (
         <div
           style={{
             fontSize: "20pt",

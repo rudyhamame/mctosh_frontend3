@@ -41,6 +41,7 @@
 /*......todoAside.....*/
 #todoaside_main_page {
   max-width: 70%;
+  order: 1;
 }
 #todouaside_main_container {
   animation-name: width;

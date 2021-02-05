@@ -4,6 +4,7 @@
   overflow: hidden;
   width: 100%;
   background-color: var(--blue);
+  order: 2;
 }
 
 @media screen and (max-width: 600px) {

@@ -1,5 +1,6 @@
 import React from "react";
 import Greeting from "../content_components/greeting/Greeting";
+import { Link } from "react-router-dom";
 const Nav = (props) => {
   const loggingOUT = () => {
     props.logOut();
@@ -28,13 +29,9 @@ const Nav = (props) => {
   };
   return (
     <nav id="app_nav" className="fr">
-      <i
-        class="fas fa-home"
-        id="i_nav_home"
-        onClick={() =>
-          props.rendered_page_switcher(<Greeting username={props.username} />)
-        }
-      ></i>
+      <Link to="/">
+        <i class="fas fa-home" id="i_nav_home"></i>
+      </Link>
       <i onClick={loggingOUT} class="fas fa-sign-out-alt" id="i_nav_logout"></i>
       <i
         id="i_nav_menu"

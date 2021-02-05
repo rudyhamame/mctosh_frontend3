@@ -1,20 +1,19 @@
 #footer_app {
-  padding: 10px 30px;
   font-family: "Roboto", sans-serif;
   background-color: var(--blue);
-  box-shadow: 0 10px 20px black;
+  box-shadow: 0 15px 20px black;
   z-index: 100;
   animation-name: footer_blinker;
   animation-duration: 1s;
   animation-delay: 0.8s;
+  order: 4;
 }
 
 #footer_app_container {
   max-width: 1300px;
   margin: 0 auto;
-  display: flex;
-  flex-direction: row;
   justify-content: space-between;
+  width: 100%;
   align-items: center;
 }
 
