@@ -26,11 +26,11 @@
   background-color: var(--black);
   height: 0;
   box-shadow: 0 0 20px var(--black);
-  gap: 10px;
 }
 
 #chat ul {
   padding: 10px;
+  gap: 10px;
 }
 
 #users li {
