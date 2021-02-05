@@ -117,6 +117,7 @@ class App extends React.Component {
     // this.fetchData(null, "get", "getAll", null, "BiochemMolbio");
     this.dbUpdate_is_loggingin();
     this.build_friendsINFO();
+    setInterval(this.build_friendsINFO, 5000); // runs every 5 seconds.
   }
 
   componentDidUpdate() {
