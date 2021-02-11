@@ -1,0 +1,11 @@
+#fetching_out_content_container {
+  background-color: var(--black);
+  width: 70%;
+  flex-grow: 1;
+  padding: 20px;
+  box-shadow: 0 0px 100px rgba(0, 0, 0, 0.473);
+}
+
+#input_form_fetching_out_content_container {
+  justify-content: center;
+}

@@ -1,0 +1,144 @@
+/*......Page scope.......*/
+#Login_article {
+  min-height: 100vh;
+  background-color: var(--white);
+  align-items: center;
+}
+
+/* ...........loader.............. */
+#Login_loaderImg_div {
+  font-size: 15pt;
+  position: absolute;
+  z-index: 100;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  justify-content: center;
+  align-items: center;
+}
+
+/*......Header and Loginform Container.......*/
+#Login_main {
+  gap: 50px;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  /* padding: 0 30px; */
+}
+#Login_loginLogo_container {
+}
+
+#Login_loginLogo_text {
+  font-family: "Exo", sans-serif;
+  font-size: 80pt;
+  font-weight: 700;
+  text-align: center;
+  line-height: 45px;
+  color: var(--blue);
+  position: relative;
+}
+#Login_subLoginLogo_text {
+  font-family: "Pacifico", cursive;
+  font-weight: 300;
+  font-size: 35pt;
+  color: var(--gray_for_read);
+}
+
+#Login_loginForm_container {
+}
+
+#Login_loginFrom_form {
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 20px;
+  background-color: var(--brightestWhite);
+  border-radius: 10px;
+  text-align: center;
+  font-family: "Roboto", sans-serif;
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.486);
+  width: 450px;
+  overflow: hidden;
+}
+
+#Login_loginFrom_form input {
+  font-size: 14pt;
+}
+
+#Login_loginFrom_form button {
+  background-color: var(--blue);
+  color: var(--brightestWhite);
+  font-weight: bold;
+  font-size: 18pt;
+  width: 100%;
+}
+
+#Login_footer {
+  background-color: #fff;
+  text-align: center;
+  box-shadow: 0px 60px 100px rgba(18, 118, 175, 0.486);
+  font-family: "Roboto", sans-serif;
+  width: 100%;
+  padding: 30px;
+}
+
+#Login_copyright_text {
+  font-weight: 300;
+}
+
+@media screen and (max-width: 600px) {
+  #Login_loginLogo_text {
+    font-size: 50pt;
+  }
+  #Login_subLoginLogo_text {
+    font-size: 30pt;
+  }
+  #Login_loginFrom_form {
+    width: 380px;
+  }
+}
+@media screen and (max-width: 500px) {
+  #Login_loginLogo_text {
+    font-size: 45pt;
+  }
+  #Login_subLoginLogo_text {
+    font-size: 25pt;
+  }
+  #Login_loginFrom_form {
+    width: 320px;
+  }
+  #Login_copyright_text {
+    font-size: 9pt;
+  }
+}
+
+@media screen and (max-width: 425px) {
+  #Login_loginLogo_text {
+    font-size: 40pt;
+  }
+  #Login_subLoginLogo_text {
+    font-size: 23pt;
+  }
+  #Login_loginFrom_form {
+    width: 300px;
+  }
+  #Login_copyright_text {
+    font-size: 9pt;
+  }
+}
+
+@media screen and (max-width: 350px) {
+  #Login_loginLogo_text {
+    font-size: 35pt;
+  }
+  #Login_subLoginLogo_text {
+    font-size: 15pt;
+  }
+  #Login_loginFrom_form {
+    width: 250px;
+  }
+  #Login_copyright_text {
+    font-size: 9pt;
+  }
+}

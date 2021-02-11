@@ -1,0 +1,180 @@
+#NotesAside_main_page {
+  order: 5;
+}
+
+#NotesAside_main_container {
+  animation-name: width;
+  animation-duration: 1s;
+  order: 2;
+  width: 0;
+  overflow: hidden;
+}
+#h3_title_NotesAside {
+  font-family: "Pacifico", cursive;
+  font-weight: 300;
+  padding: 10px;
+  background-color: var(--orange);
+  text-align: center;
+  color: var(--white);
+  font-size: 14pt;
+  z-index: 1;
+  box-shadow: 0 0 5px black;
+}
+
+#form_notes_dashboard h2 {
+  font-family: "Pacifico", cursive;
+  font-weight: 300;
+  padding: 10px;
+  background-color: var(--orange);
+  text-align: center;
+  color: var(--white);
+  font-size: 14pt;
+  width: 100%;
+}
+
+#control_NotesAside {
+  background-color: var(--blue);
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.479);
+  z-index: 1;
+  order: 1;
+}
+#control_NotesAside i {
+  color: var(--white);
+  font-size: 20pt;
+  padding: 10px;
+  animation-name: arrow_control_color;
+  animation-duration: 1.5s;
+}
+
+.div_icons {
+  order: 2;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 20px;
+  padding: 10px 10px;
+  color: var(--blue);
+}
+
+input[value=""]::-webkit-datetime-edit {
+  color: transparent;
+}
+
+#piano_for_study {
+  box-shadow: 0 0 2px black;
+}
+
+@media screen and (max-width: 600px) {
+  #menuaside_main_container li {
+    font-size: 7pt;
+  }
+  #menuaside_main_container {
+    font-size: 7pt;
+  }
+  #NotesAside_main_page {
+    display: none;
+  }
+}
+
+@keyframes width {
+  0% {
+    width: 0;
+  }
+  20% {
+    width: 40px;
+  }
+}
+
+#control_onlinefriends_window {
+  text-align: center;
+  background-color: var(--blue);
+  padding: 10px;
+  color: var(--white);
+}
+
+/* Chat Fiends */
+#online_page {
+  text-align: center;
+  color: white;
+  font-size: 12pt;
+  font-weight: 300;
+  background-color: var(--black);
+  overflow: auto;
+  height: 100%;
+}
+#control_onlinefriends_window {
+  font-size: 16pt;
+}
+#close_onlinelist {
+  display: none;
+}
+#chat_page {
+  text-align: center;
+  color: white;
+  font-size: 12pt;
+  font-weight: 300;
+  background-color: var(--black);
+  flex-grow: 4;
+  flex-basis: 0;
+  overflow: hidden;
+  height: 0;
+}
+#fetching_conversation {
+}
+#fetching_conversation {
+  overflow: auto;
+  flex-grow: 1;
+  flex-basis: 0;
+  padding: 5px;
+}
+#sending_chat_form {
+  padding: 20px;
+  box-shadow: 0 10px 400px rgba(255, 255, 255, 0.226);
+  background-color: var(--blue);
+}
+
+#sending_chat_form textarea {
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+}
+
+#sending_chat_form i {
+  font-size: 20pt;
+  justify-content: center;
+  padding: 10px;
+}
+#chat_history {
+  gap: 20px;
+  flex-grow: 1;
+  padding: 20px;
+}
+#chat_history li {
+  border-radius: 10px;
+}
+#chat_history p {
+  font-size: 14pt;
+  font-family: "Roboto", sans-serif;
+  padding: 5px 10px;
+  text-align: left;
+}
+#chat_container {
+  flex-grow: 1;
+}
+
+#users {
+  background-color: var(--black);
+  gap: 20px;
+}
+
+#users div {
+  background-color: var(--black2);
+  color: var(--white);
+  font-size: 16pt;
+  padding: 20px 30px;
+  font-family: "Raleway", sans-serif;
+  cursor: pointer;
+  justify-content: space-between;
+  align-items: center;
+}

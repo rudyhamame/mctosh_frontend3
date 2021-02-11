@@ -1,0 +1,95 @@
+/*header page*/
+#header_app_page {
+  z-index: 2;
+  font-family: "Pacifico", cursive;
+  background-color: var(--blue);
+  box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.63);
+  animation-name: header_blinker;
+  animation-duration: 1s;
+  order: 1;
+}
+
+#header_app_content {
+  padding: 10px 30px;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+/*Logo*/
+#header_app_content h2 {
+  color: var(--white);
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+/*Nav*/
+#header_app_content i {
+  font-size: 18pt;
+  color: var(--white);
+  cursor: pointer;
+}
+
+#app_nav {
+  gap: 30px;
+}
+
+#header_app i:hover {
+  transform: scale(0.96);
+}
+
+/* Search */
+
+#input_keyword_search {
+  outline-style: none;
+  font-size: 10pt;
+  padding: 10px;
+  box-shadow: none !important;
+  border-radius: 0 !important ;
+  border-bottom-right-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+#keyword_search_NotesAside {
+  overflow: hidden;
+  align-items: center;
+  background-color: var(--green);
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.123);
+  border-radius: 10px;
+}
+
+#label_search_NotesAside {
+  border: none;
+  background-color: transparent;
+  border-radius: 0;
+  color: var(--white);
+}
+
+@keyframes header_blinker {
+  20% {
+    background-color: var(--orange);
+  }
+  30% {
+    background-color: var(--blue);
+  }
+
+  50% {
+    background-color: var(--orange);
+  }
+  100% {
+    background-color: var(--blue);
+  }
+}
+
+@media screen and (max-width: 600px) {
+  #header_app_content h2 {
+    font-size: 10pt;
+  }
+  #header_app_content i {
+    font-size: 10pt;
+  }
+  #app_nav {
+    gap: 25px;
+  }
+}
