@@ -112,13 +112,13 @@ class App extends React.Component {
       method: "POST",
       mode: "cors",
       headers: {
-        Authorization: "Bearer" + " " + this.state.info.token,
+        Authorization: "Bearer " + this.state.info.token,
         "Content-Type": "application/json",
       },
     };
     let req = new Request(url, options);
     fetch(req).then((response) => {
-      if (response.status == 201) {
+      if (response.status === 201) {
         document.getElementById(friend.id).style.backgroundColor =
           "var(--black)";
         this.setState({
@@ -133,7 +133,7 @@ class App extends React.Component {
           method: "PUT",
           mode: "cors",
           headers: {
-            Authorization: "Bearer" + " " + this.state.info.token,
+            Authorization: "Bearer " + this.state.info.token,
             "Content-Type": "application/json",
           },
         };
@@ -161,7 +161,7 @@ class App extends React.Component {
       method: "PUT",
       mode: "cors",
       headers: {
-        Authorization: "Bearer" + " " + this.state.info.token,
+        Authorization: "Bearer " + this.state.info.token,
         "Content-Type": "application/json",
       },
     };
@@ -178,7 +178,7 @@ class App extends React.Component {
       method: "POST",
       mode: "cors",
       headers: {
-        Authorization: "Bearer" + " " + this.state.info.token,
+        Authorization: "Bearer " + this.state.info.token,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -280,7 +280,7 @@ class App extends React.Component {
       this.friends = [];
       this.online_friends = [];
 
-      for (var i = 0; i < this.state.friends.length; i++) {
+      for (i = 0; i < this.state.friends.length; i++) {
         if (
           this.friends[i] !== this.state.friends[i]._id &&
           this.online_friends[i] !== this.state.friends[i]._id
@@ -325,7 +325,7 @@ class App extends React.Component {
       method: "GET",
       mode: "cors",
       headers: {
-        Authorization: "Bearer" + " " + this.state.info.token,
+        Authorization: "Bearer " + this.state.info.token,
       },
     });
     fetch(req)

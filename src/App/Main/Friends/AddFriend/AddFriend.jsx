@@ -1,4 +1,3 @@
-import { get } from "mongoose";
 import React from "react";
 import Search from "../../../Header/Search/Search";
 

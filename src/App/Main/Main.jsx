@@ -1,7 +1,6 @@
 import React from "react";
 import Posts from "./Posts/Posts";
 import Friends from "./Friends/Friends";
-import Aside from "./Friends/AddFriend/AddFriend";
 
 const Main = (props) => {
   return (

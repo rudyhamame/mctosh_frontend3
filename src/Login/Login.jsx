@@ -12,7 +12,7 @@ const Login = () => {
 
   React.useEffect(() => {
     if (login_ok && authReport) login_listener();
-  }, [authReport]);
+  });
   // //.................................Declaration......................//
 
   //.........................formControl & formControl (functions)..........................//

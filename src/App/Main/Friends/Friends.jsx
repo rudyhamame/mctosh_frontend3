@@ -19,7 +19,7 @@ const Friends = (props) => {
     }
   };
   ////////////////////////////////////////////Build Chat2/////////////
-  let chat_input = document.getElementById("chat_input");
+  // let chat_input = document.getElementById("chat_input");
   // function sending_message() {
   //   const url_send =
   //     "http://localhost:4000/api/chat/" + props.state.friend_target;
