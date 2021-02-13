@@ -1,0 +1,14 @@
+/*Nav*/
+#Nav_article i {
+  font-size: 18pt;
+  color: var(--white);
+  cursor: pointer;
+}
+
+#Nav_article {
+  gap: 30px;
+}
+
+#Nav_article i:hover {
+  transform: scale(0.96);
+}

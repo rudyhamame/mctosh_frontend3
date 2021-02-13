@@ -1,5 +1,6 @@
 #NotesAside_main_page {
   order: 5;
+  overflow: hidden;
 }
 
 #NotesAside_main_container {
@@ -33,7 +34,7 @@
 }
 
 #control_NotesAside {
-  background-color: var(--blue);
+  background-color: var(--special_black);
   justify-content: center;
   align-items: center;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.479);
@@ -95,15 +96,7 @@ input[value=""]::-webkit-datetime-edit {
 }
 
 /* Chat Fiends */
-#online_page {
-  text-align: center;
-  color: white;
-  font-size: 12pt;
-  font-weight: 300;
-  background-color: var(--black);
-  overflow: auto;
-  height: 100%;
-}
+
 #control_onlinefriends_window {
   font-size: 16pt;
 }
@@ -116,10 +109,10 @@ input[value=""]::-webkit-datetime-edit {
   font-size: 12pt;
   font-weight: 300;
   background-color: var(--black);
-  flex-grow: 4;
   flex-basis: 0;
   overflow: hidden;
   height: 0;
+  order: 3;
 }
 #fetching_conversation {
 }
@@ -158,23 +151,4 @@ input[value=""]::-webkit-datetime-edit {
   font-family: "Roboto", sans-serif;
   padding: 5px 10px;
   text-align: left;
-}
-#chat_container {
-  flex-grow: 1;
-}
-
-#users {
-  background-color: var(--black);
-  gap: 20px;
-}
-
-#users div {
-  background-color: var(--black2);
-  color: var(--white);
-  font-size: 16pt;
-  padding: 20px 30px;
-  font-family: "Raleway", sans-serif;
-  cursor: pointer;
-  justify-content: space-between;
-  align-items: center;
 }

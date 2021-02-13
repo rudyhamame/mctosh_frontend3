@@ -2,9 +2,9 @@ import React from "react";
 
 const Logo = () => {
   return (
-    <div>
-      <h2 id="h2_logo">Med Study Planner</h2>
-    </div>
+    <section id="Logo_section">
+      <h2 id="Logo_text">Med Study Planner</h2>
+    </section>
   );
 };
 

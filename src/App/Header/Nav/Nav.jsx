@@ -1,5 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Logout from "./Logout/Logout";
+import Menu from "./Menu/Menu";
+import Notifications from "./Notifications/Notifications";
 const Nav = (props) => {
   const loggingOUT = () => {
     props.logOut();
@@ -18,37 +21,22 @@ const Nav = (props) => {
         "var(--black)";
     }
   };
-  const clickMenu = () => {
-    let menuaside_main_page = document.getElementById("menuaside_main_page");
-    let i_nav_menu = document.getElementById("i_nav_menu");
 
-    if (i_nav_menu.title === "unclicked") {
-      i_nav_menu.title = "clicked";
-      menuaside_main_page.style.display = "inline";
-    } else {
-      i_nav_menu.title = "unclicked";
-      menuaside_main_page.style.display = "none";
-    }
-  };
   return (
-    <nav id="app_nav" className="fr">
+    <nav id="Nav_article" className="fr">
       <Link to="/">
         <i class="fas fa-home" id="i_nav_home"></i>
       </Link>
-      <i onClick={loggingOUT} class="fas fa-sign-out-alt" id="i_nav_logout"></i>
+      <Menu />
+
+      <Logout logOut={loggingOUT} />
       <i
-        id="i_nav_menu"
-        title="unclicked"
-        onClick={clickMenu}
-        class="fas fa-bars"
-      ></i>
-      <i
-        id="i_dim_menu"
+        id="Nav_dim_i"
         class="fas fa-adjust"
         title="unclicked"
         onClick={dim}
       ></i>
-      <i id="i_bell" class="fas fa-bell" title="unclicked"></i>
+      <Notifications state={props.state} acceptFriend={props.acceptFriend} />
     </nav>
   );
 };

@@ -1,6 +1,6 @@
 #Footer_article {
   font-family: "Roboto", sans-serif;
-  background-color: var(--blue);
+  background-color: var(--special_black);
   box-shadow: 0 15px 20px black;
   z-index: 100;
   animation-name: footer_blinker;
@@ -25,17 +25,17 @@
 }
 
 @keyframes footer_blinker {
-  20% {
+  0% {
     background-color: var(--orange);
   }
   30% {
-    background-color: var(--blue);
+    background-color: var(--special_black);
   }
 
-  50% {
+  60% {
     background-color: var(--orange);
   }
   100% {
-    background-color: var(--blue);
+    background-color: var(--special_black);
   }
 }

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import AppRouter from "../AppRouter";
 import "../Login/login.css";
 import ReactDOM from "react-dom";
-import "../index.css";
 
 const Login = () => {
   //.........................STATE.....................................//
@@ -87,17 +86,17 @@ const Login = () => {
       .then((userdata) => {
         if (userdata.message === "Login successful") {
           setAuthReport({
-            id: userdata.user._id,
-            username: userdata.user.username,
-            firstname: userdata.user.firstname,
-            lastname: userdata.user.lastname,
-            dob: userdata.user.dob,
-            friendsID: userdata.user.friendsID,
+            my_id: userdata.user._id,
+            username: userdata.user.info.username,
+            firstname: userdata.user.info.firstname,
+            lastname: userdata.user.info.lastname,
+            dob: userdata.user.info.dob,
             token: userdata.token,
             isConnected: true,
             notes: userdata.user.notes,
             friends: userdata.user.friends,
             friend_requests: userdata.user.friend_requests,
+            notifications: userdata.user.notifications,
           });
           setLogin_ok(true);
         } else {
@@ -128,7 +127,7 @@ const Login = () => {
       }, 5000);
     }
   };
-
+  //.............................................................................................................
   ////////////////////////////////////////////SIGN UP AS USER AND PROFILE//////////////////////////////////////
   const signup = (event) => {
     event.preventDefault();

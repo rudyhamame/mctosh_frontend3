@@ -1,14 +1,13 @@
-#main_app_page {
+#Main_article {
   flex-grow: 1;
   box-shadow: 0px -0px 100px rgba(0, 0, 0, 0.363);
-  overflow: hidden;
   width: 100%;
   background-color: var(--blue);
   order: 2;
 }
 
 @media screen and (max-width: 600px) {
-  #main_app_page {
+  #Main_article {
     flex-direction: column;
     overflow: auto;
   }

@@ -1,0 +1,21 @@
+#Menu_content_container {
+  height: 50%;
+  width: 300px;
+  background-color: var(--black);
+  position: absolute;
+  display: none;
+  box-shadow: 0 4px 5px black;
+}
+#Menu_content_container li {
+  font-family: "Roboto", sans-serif;
+  color: white;
+  font-size: 16pt;
+  text-align: center;
+  background-color: var(--black2);
+  margin: 10px 0;
+  padding: 10px;
+  cursor: pointer;
+}
+#Menu_i_close {
+  display: none;
+}

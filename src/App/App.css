@@ -27,15 +27,31 @@
   --gray_for_read: #696969;
   --pacifico: "Pacifico", cursive;
   --orange: #f04e1f;
-  --green: rgb(50, 187, 50);
+  --green: rgba(93, 126, 77, 0.883);
   --black: #18191a;
   --black2: #3a3b3c;
   --black3: #242526;
   --black_for_appform: black;
+  --special_black: #282828;
+  --red: rgb(212, 48, 48);
 }
 #app_page {
   height: 100vh;
-  background-color: var(--blue);
+  background-color: var(--black);
+}
+#server_answer {
+  position: absolute;
+  bottom: 50px;
+  left: 0px;
+  width: 0;
+  overflow: hidden;
+  background: var(--white);
+  padding: 0px;
+  white-space: nowrap;
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+  font-size: 10pt;
+  color: var(--black);
 }
 
 ::-webkit-scrollbar {
@@ -79,7 +95,6 @@ input,
 textarea,
 select {
   font-weight: 300;
-  border-radius: 8px;
   outline-style: none;
   border: none;
   font-size: 12pt;

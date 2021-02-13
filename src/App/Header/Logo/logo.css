@@ -1,0 +1,6 @@
+/*Logo*/
+#Logo_text {
+  color: var(--white);
+  text-align: center;
+  letter-spacing: 1px;
+}
