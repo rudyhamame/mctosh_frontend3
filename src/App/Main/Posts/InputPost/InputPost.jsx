@@ -20,6 +20,9 @@ const InputForm = (props) => {
   return (
     <article id="InputPost_article" className="fc">
       <section className="fr" id="InputPost_textarea_container">
+        <section id="InputPost_greeting_container" className="fc">
+          <h1 id="InputPost_greeting_text">Hello {props.state.firstname}</h1>
+        </section>
         <textarea
           id="InputPost_textarea"
           placeholder="Wants to post something?"

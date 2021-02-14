@@ -2,9 +2,9 @@ import React from "react";
 
 const Notifications = (props) => {
   function openNotifications() {
-    if (document.getElementById("Notifications_alert")) {
-      document.getElementById("Notifications_alert").style.display = "none";
-    }
+    // if (document.getElementById("Notifications_alert")) {
+    //   document.getElementById("Notifications_alert").style.display = "none";
+    // }
     let Notifications_dropMenu_container = document.getElementById(
       "Notifications_dropMenu_container"
     );
@@ -28,14 +28,7 @@ const Notifications = (props) => {
 
   return (
     <section id="Notifications_article">
-      <div>
-        {props.state.notifications.length > 0 && (
-          <i
-            class="fas fa-circle"
-            id="Notifications_alert"
-            style={{ color: "red" }}
-          ></i>
-        )}
+      <div id="Notification_icons_container">
         <i id="i_bell_open" onClick={openNotifications} class="fas fa-bell"></i>
         <i
           id="i_bell_close"

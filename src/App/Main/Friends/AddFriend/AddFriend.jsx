@@ -11,18 +11,6 @@ const AddFirend = (props) => {
           searchUsers={props.searchUsers}
           addFriend={props.addFriend}
         />
-        <div
-          style={{
-            textAlign: "center",
-            fontFamily: "'Roboto', sans-serif",
-            fontWeight: "500",
-            color: "white",
-          }}
-          id="server_answer"
-          onClick={() => {
-            document.getElementById("server_answer").style.display = "none";
-          }}
-        ></div>
       </section>
       <section id="AddFriend_addFriend" className="fc">
         <ul id="AddFriend_addFriend_results" className="fc"></ul>

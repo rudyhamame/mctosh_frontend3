@@ -7,7 +7,6 @@ const Header = (props) => {
   return (
     <header id="Header_article">
       <div id="Header_content_container" className="fr">
-        {props.state.info.firstname}
         <Logo />
         <Search />
         <Nav

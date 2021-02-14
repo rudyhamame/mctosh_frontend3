@@ -31,6 +31,21 @@
   font-family: "Pacifico", cursive;
 }
 
+#InputPost_greeting_container {
+  justify-content: center;
+  background-color: var(--green);
+  z-index: 1;
+}
+
+#InputPost_greeting_text {
+  font-family: "Pacifico", cursive;
+  font-size: 20pt;
+  white-space: nowrap;
+  padding: 20px;
+  color: var(--white);
+  text-align: center;
+}
+
 #InputPost_category,
 #InputPost_subject,
 #InputPost_resourse,

@@ -34,6 +34,10 @@
   --black_for_appform: black;
   --special_black: #282828;
   --red: rgb(212, 48, 48);
+  --background_menu: rgba(0, 0, 0, 0.459);
+}
+#root {
+  background-color: var(--black);
 }
 #app_page {
   height: 100vh;
@@ -43,15 +47,19 @@
   position: absolute;
   bottom: 50px;
   left: 0px;
-  width: 0;
   overflow: hidden;
   background: var(--white);
-  padding: 0px;
-  white-space: nowrap;
   font-family: "Roboto", sans-serif;
   font-weight: 300;
   font-size: 10pt;
+  width: 0;
   color: var(--black);
+}
+#server_answer_message {
+  white-space: nowrap;
+  padding: 20px;
+  font-size: 12pt;
+  min-width: fit-content;
 }
 
 ::-webkit-scrollbar {

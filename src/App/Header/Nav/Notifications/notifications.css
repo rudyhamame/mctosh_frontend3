@@ -1,14 +1,15 @@
 #Notifications_dropMenu_container {
   display: none;
-  position: absolute;
-  right: 330px;
-  background-color: black;
+  position: fixed;
+  background-color: var(--background_menu);
   height: 50%;
+  right: 0;
   width: 400px;
   overflow: auto;
   color: white;
   justify-content: flex-start;
   gap: 10px;
+  border-bottom: var(--red) 10px solid;
 }
 
 #Notifications_dropMenu_container li {
@@ -27,7 +28,7 @@
   padding-inline-end: 10px;
 }
 #Notifications_alert {
-  color: transparent;
+  color: red;
   position: absolute;
   font-size: 10px !important;
   z-index: 1;

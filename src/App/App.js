@@ -28,123 +28,107 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      info: {
-        my_id: this.props.authReport.my_id,
-        username: this.props.authReport.username,
-        firstname: this.props.authReport.firstname,
-        lastname: this.props.authReport.lastname,
-        dob: this.props.authReport.dob,
-        token: this.props.authReport.token,
-      },
-      status: {
-        isConnected: this.props.authReport.isConnected,
-      },
-      notes: this.props.authReport.notes,
-      friends: this.props.authReport.friends,
-      friend_requests: this.props.authReport.friend_requests,
+      my_id: JSON.parse(sessionStorage.getItem("state")).my_id,
+      username: JSON.parse(sessionStorage.getItem("state")).username,
+      firstname: JSON.parse(sessionStorage.getItem("state")).firstname,
+      lastname: JSON.parse(sessionStorage.getItem("state")).lastname,
+      dob: JSON.parse(sessionStorage.getItem("state")).dob,
+      token: JSON.parse(sessionStorage.getItem("state")).token,
+
+      isConnected: JSON.parse(sessionStorage.getItem("state")).isConnected,
+
+      notes: JSON.parse(sessionStorage.getItem("state")).notes,
+      friends: JSON.parse(sessionStorage.getItem("state")).friends,
+      friend_requests: JSON.parse(sessionStorage.getItem("state"))
+        .friend_requests,
       app_is_loading: false,
       friend_target: null,
-      notifications: this.props.authReport.notifications,
+      notifications: JSON.parse(sessionStorage.getItem("state")).notifications,
       server_answer: null,
     };
   }
   ////////////////////////////////////////Variables//////////////
   /////////////////////////////////////////////////////Lifecycle//////////////////////////
   componentDidMount() {
-    // this.dbUpdate_user_connected();
-    // this.updateUserInfo();
+    console.log(this.state);
+    this.dbUpdate_user_connected();
+
+    this.setState({
+      my_id: JSON.parse(sessionStorage.getItem("state")).my_id,
+      username: JSON.parse(sessionStorage.getItem("state")).username,
+      firstname: JSON.parse(sessionStorage.getItem("state")).firstname,
+      lastname: JSON.parse(sessionStorage.getItem("state")).lastname,
+      dob: JSON.parse(sessionStorage.getItem("state")).dob,
+      token: JSON.parse(sessionStorage.getItem("state")).token,
+      isConnected: JSON.parse(sessionStorage.getItem("state")).isConnected,
+      notes: JSON.parse(sessionStorage.getItem("state")).notes,
+      friends: JSON.parse(sessionStorage.getItem("state")).friends,
+      friend_requests: JSON.parse(sessionStorage.getItem("state"))
+        .friend_requests,
+      app_is_loading: false,
+      friend_target: null,
+      notifications: JSON.parse(sessionStorage.getItem("state")).notifications,
+    });
     setInterval(() => {
       this.updateUserInfo();
-    }, 3000);
-    // setInterval(() => {
-    //   this.update_time();
-    // }, 1000);
-    // if (this.state.friend_id !== null) {
-    // this.dbUpdate_friend_connected();
-    // this.setState({
-    //   friend_id: JSON.parse(sessionStorage.getItem("profile_report"))
-    //     .friend_id,
-    //   friend_username: JSON.parse(sessionStorage.getItem("profile_report"))
-    //     .friend_username,
-    //   friend_firstname: JSON.parse(sessionStorage.getItem("profile_report"))
-    //     .friend_firstname,
-    //   friend_lastname: JSON.parse(sessionStorage.getItem("profile_report"))
-    //     .friend_lastname,
-    //   friend_connected: JSON.parse(
-    //     sessionStorage.getItem("profile_report").friend_connected
-    //   ),
-    // });
-    // }
+    }, 1000);
   }
   componentDidUpdate() {
-    // this.fetchData(null, "get", "getAll", null, "Todo");
-    // this.fetchData(null, "get", "search_by_today", null, "Todo");
-    // this.fetchData(null, "get", "getAll", null, "BiochemMolbio");
-    // if (
-    //   this.state.user_connected === false &&
-    //   this.state.friend_connected === false
-    // ) {
-    //   this.dbUpdate_user_connected();
-    //   this.dbUpdate_friend_connected();
-    // }
-    // if (this.state.friends !== null) this.dbUpdate_friend_connected();
-    // this.build_online_friendsList();
     this.buildFriendsList();
-    // if (this.state.friends !== []) this.getting_specific_friend_messages();
-    // if (this.state.user_isTyping === true) {
-    //   this.updateFriendInfo();
-    // }
-    // if (this.state.friend_isTyping === true) {
-    //   this.getFriendProfile_info();
-    // }
-    // if (this.state.online_friend_selected !== null)
-    //   console.log("check: " + this.state.friend_chathistory.length);
+    if (this.state.isConnected === false) {
+      this.dbUpdate_user_connected();
+    }
   }
   ////////////////////////ACCEPT FRIEND/////////////////////////////////////////////
 
   acceptFriend = (friend) => {
+    document.getElementById(friend.id).style.backgroundColor = "var(--black)";
+    document.getElementById("server_answer_message").textContent = "Adding ...";
+    document.getElementById("server_answer").style.width = "20%";
     let url =
       "http://localhost:4000/api/user/acceptFriend/" +
-      this.state.info.my_id +
+      this.state.my_id +
       "/" +
       friend.id;
     let options = {
       method: "POST",
       mode: "cors",
       headers: {
-        Authorization: "Bearer " + this.state.info.token,
+        Authorization: "Bearer " + this.state.token,
         "Content-Type": "application/json",
       },
     };
     let req = new Request(url, options);
     fetch(req).then((response) => {
       if (response.status === 201) {
-        document.getElementById(friend.id).style.backgroundColor =
-          "var(--black)";
-        this.setState({
-          server_answer: response.json().message,
-        });
+        document.getElementById("server_answer_message").textContent =
+          "You're now friends!";
+
         let url =
           "http://localhost:4000/api/user/editUserInfo/" +
-          this.state.info.my_id +
+          this.state.my_id +
           "/" +
           friend.id;
         let options = {
           method: "PUT",
           mode: "cors",
           headers: {
-            Authorization: "Bearer " + this.state.info.token,
+            Authorization: "Bearer " + this.state.token,
             "Content-Type": "application/json",
           },
         };
         let req = new Request(url, options);
-        fetch(req)
-          .then((response) => {
-            console.log(response.json());
-          })
-          .then(() => {
-            this.makeNotificationsRead();
-          });
+        fetch(req).then((response) => {
+          if (response.ok) {
+            setTimeout(() => {
+              document.getElementById("server_answer").style.width = "0";
+              document.getElementById("server_answer_message").textContent = "";
+            }, 3000);
+            document.getElementById(friend.id).parentElement.style.display =
+              "none";
+          }
+          console.log(response.json());
+        });
       }
     });
   };
@@ -153,7 +137,7 @@ class App extends React.Component {
   makeNotificationsRead = (friend) => {
     let url =
       "http://localhost:4000/api/user/editUserInfo/" +
-      this.state.info.my_id +
+      this.state.my_id +
       "/" +
       friend.id;
 
@@ -161,13 +145,22 @@ class App extends React.Component {
       method: "PUT",
       mode: "cors",
       headers: {
-        Authorization: "Bearer " + this.state.info.token,
+        Authorization: "Bearer " + this.state.token,
         "Content-Type": "application/json",
       },
     };
     let req = new Request(url, options);
     fetch(req).then((response) => {
       document.getElementById(friend.id).style.backgroundColor = "var(--black)";
+      if (response.status === 200) {
+        document.getElementById(friend.id).parentElement.style.display = "none";
+        document.getElementById("server_answer").style.width = "20%";
+        document.getElementById("server_answer_message").textContent = "Done!";
+        setTimeout(() => {
+          document.getElementById("server_answer").style.width = "0";
+          document.getElementById("server_answer_message").textContent = "";
+        }, 3000);
+      }
     });
   };
   ////////////////////////ADD FRIEND/////////////////////////////////////////////
@@ -178,31 +171,40 @@ class App extends React.Component {
       method: "POST",
       mode: "cors",
       headers: {
-        Authorization: "Bearer " + this.state.info.token,
+        Authorization: "Bearer " + this.state.token,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        id: this.state.info.my_id,
+        id: this.state.my_id,
         message:
-          this.state.info.firstname +
+          this.state.firstname +
           " " +
-          this.state.info.lastname +
+          this.state.lastname +
           " wants to add you as a friend",
       }),
     };
     let req = new Request(url, options);
-    fetch(req)
-      .then((response) => {
-        return response.json();
-      })
-      .then((result) => {
-        document.getElementById("server_answer").style.width = "fit_content";
-        document.getElementById("server_answer").style.padding = "20px";
-
-        this.setState({
-          server_answer: result.message,
+    fetch(req).then((response) => {
+      if (response.status === 201) {
+        return response.json().then((result) => {
+          document.getElementById("server_answer").style.width = "20%";
+          document.getElementById("server_answer_message").textContent =
+            result.message;
+          setTimeout(() => {
+            document.getElementById("server_answer").style.width = "0";
+            document.getElementById("server_answer_message").textContent = "";
+          }, 3000);
         });
-      });
+      } else {
+        document.getElementById("server_answer").style.width = "20%";
+        document.getElementById("server_answer_message").textContent =
+          "Request failed";
+        setTimeout(() => {
+          document.getElementById("server_answer").style.width = "0";
+          document.getElementById("server_answer_message").textContent = "";
+        }, 3000);
+      }
+    });
   };
   ////////////////////////SEARCH USER
   searchUsers = (user_target) => {
@@ -258,6 +260,8 @@ class App extends React.Component {
         p.setAttribute("id", [i]);
         li.appendChild(p);
         li.setAttribute("id", this.state.friends[i]._id);
+        li.addEventListener("click", () => {});
+
         li.setAttribute("class", "fr");
         icon.setAttribute("class", "fas fa-circle");
         li.appendChild(icon);
@@ -320,12 +324,12 @@ class App extends React.Component {
 
   ////////////////////////////Update State//////////DONE/////////////////////
   updateUserInfo = () => {
-    let url = "http://localhost:4000/api/user/update/" + this.state.info.my_id;
+    let url = "http://localhost:4000/api/user/update/" + this.state.my_id;
     let req = new Request(url, {
       method: "GET",
       mode: "cors",
       headers: {
-        Authorization: "Bearer " + this.state.info.token,
+        Authorization: "Bearer " + this.state.token,
       },
     });
     fetch(req)
@@ -338,22 +342,11 @@ class App extends React.Component {
         }
       })
       .then((jsonData) => {
-        let notificaitons_array = [];
-        jsonData.notifications.forEach((notification) => {
-          if (
-            notification.status !== "read" &&
-            notification.message !== notificaitons_array.message
-          ) {
-            notificaitons_array.push(notification);
-          }
-        });
-        console.log(jsonData);
-
         this.setState({
           notes: jsonData.notes,
           friends: jsonData.friends,
           friend_requests: jsonData.friend_requests,
-          notifications: notificaitons_array,
+          notifications: jsonData.notifications,
         });
       })
       .then(() => {
@@ -367,36 +360,45 @@ class App extends React.Component {
 
   ////////////////////////////////////BUILD NOTIFICATIONS////////////////////////
   buildNotifications = () => {
+    let notificaitons_array = [];
     let ul = document.getElementById("Notifications_dropMenu_container");
-    ul.innerHTML = "";
+    this.state.notifications.forEach((notification) => {
+      if (notification.status !== "read") {
+        document.getElementById("i_bell_open").style.color = "yellow";
+        document.getElementById("i_bell_close").style.color = "yellow";
+        ul.innerHTML = "";
 
-    this.state.notifications.forEach((request) => {
-      let p = document.createElement("p");
-      let li = document.createElement("li");
-      let div = document.createElement("div");
-      let decline_icon = document.createElement("i");
-      let accept_icon = document.createElement("i");
+        let p = document.createElement("p");
+        let li = document.createElement("li");
+        let div = document.createElement("div");
+        let decline_icon = document.createElement("i");
+        let accept_icon = document.createElement("i");
 
-      accept_icon.addEventListener("click", () => {
-        this.acceptFriend(request);
-      });
-      decline_icon.addEventListener("click", () => {
-        this.makeNotificationsRead(request);
-      });
-      decline_icon.setAttribute("class", "fas fa-times");
-      accept_icon.setAttribute("class", "fas fa-user-check");
-      accept_icon.setAttribute("id", "accept_icon" + request.id);
-      decline_icon.setAttribute("id", "decline_icon" + request.id);
+        accept_icon.addEventListener("click", () => {
+          this.acceptFriend(notification);
+        });
+        decline_icon.addEventListener("click", () => {
+          this.makeNotificationsRead(notification);
+        });
+        decline_icon.setAttribute("class", "fas fa-times");
+        accept_icon.setAttribute("class", "fas fa-user-check");
+        accept_icon.setAttribute("id", "accept_icon" + notification.id);
+        decline_icon.setAttribute("id", "decline_icon" + notification.id);
 
-      p.textContent = request.message;
-      div.setAttribute("class", "fr");
-      div.style.justifyContent = "space-between";
-      li.setAttribute("id", request.id);
-      li.appendChild(p);
-      div.appendChild(li);
-      div.appendChild(decline_icon);
-      div.appendChild(accept_icon);
-      ul.appendChild(div);
+        p.textContent = notification.message;
+        div.setAttribute("class", "fr");
+        div.style.justifyContent = "space-between";
+        li.setAttribute("id", notification.id);
+        li.appendChild(p);
+        div.appendChild(li);
+        div.appendChild(decline_icon);
+        div.appendChild(accept_icon);
+        ul.appendChild(div);
+        notificaitons_array.push(notification);
+      } else {
+        document.getElementById("i_bell_open").style.color = "var(--white)";
+        document.getElementById("i_bell_close").style.color = "var(--white)";
+      }
     });
   };
 
@@ -554,7 +556,7 @@ class App extends React.Component {
 
   ////////////////////////////////////////////////////UPDATE isConnect on databae////////////////////////////////
   dbUpdate_user_connected = () => {
-    let url = "http://localhost:4000/api/user/connection/" + this.state.user_id;
+    let url = "http://localhost:4000/api/user/connection/" + this.state.my_id;
     let options = {
       method: "PUT",
       mode: "cors",
@@ -562,7 +564,7 @@ class App extends React.Component {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        user_connected: this.state.user_connected,
+        "status.isConnected": this.state.isConnected,
       }),
     };
 
@@ -570,42 +572,10 @@ class App extends React.Component {
     fetch(req)
       .then((response) => {
         if (response.ok) {
-          if (
-            this.state.user_connected === false &&
-            this.state.friend_connected === false
-          ) {
-            sessionStorage.removeItem("auth_report");
+          if (this.state.isConnected === false) {
+            sessionStorage.removeItem("state");
             window.location.reload();
           }
-          return response.json();
-        } else {
-          throw new Error("bad Http");
-        }
-      })
-      .catch((err) => {
-        console.log("error:", err.message);
-      });
-  };
-
-  //////////////////////////////////////////////////PROFILE ONLINE//////////////////////////////
-  dbUpdate_friend_connected = () => {
-    let url =
-      "http://localhost:4000/api/friend/connection/" + this.state.friend_id;
-    let options = {
-      method: "PUT",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        friend_connected: this.state.friend_connected,
-      }),
-    };
-
-    let req = new Request(url, options);
-    fetch(req)
-      .then((response) => {
-        if (response.ok) {
           return response.json();
         } else {
           throw new Error("bad Http");
@@ -638,6 +608,13 @@ class App extends React.Component {
     );
   };
 
+  /////////////////////////Log out//////////////////////
+  logOut = () => {
+    this.setState({
+      isConnected: false,
+    });
+  };
+
   //.....Reander Login HTML..........
   render() {
     return (
@@ -654,8 +631,13 @@ class App extends React.Component {
           state={this.state}
         />
         <Footer />
-        <div id="server_answer">
-          <h3>{this.state.server_answer}</h3>
+        <div
+          id="server_answer"
+          onClick={() => {
+            document.getElementById("server_answer").style.width = "0";
+          }}
+        >
+          <h3 id="server_answer_message"></h3>
         </div>
       </div>
     );

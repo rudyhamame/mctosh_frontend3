@@ -11,7 +11,10 @@ const Login = () => {
   const [authReport, setAuthReport] = useState(null);
 
   React.useEffect(() => {
-    if (login_ok && authReport) login_listener();
+    if (login_ok && authReport) {
+      login_listener();
+      sessionStorage.setItem("state", JSON.stringify(authReport));
+    }
   });
   // //.................................Declaration......................//
 
@@ -98,6 +101,7 @@ const Login = () => {
             friend_requests: userdata.user.friend_requests,
             notifications: userdata.user.notifications,
           });
+
           setLogin_ok(true);
         } else {
           setLogin_ok(false);
@@ -120,10 +124,7 @@ const Login = () => {
 
       setTimeout(() => {
         setIs_loading(false);
-        ReactDOM.render(
-          <AppRouter authReport={authReport} />,
-          document.getElementById("root")
-        );
+        ReactDOM.render(<AppRouter />, document.getElementById("root"));
       }, 5000);
     }
   };
