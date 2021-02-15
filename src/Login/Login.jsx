@@ -64,7 +64,7 @@ const Login = () => {
     let Login_username_input = document.getElementById("Login_username_input");
     let Login_password_input = document.getElementById("Login_password_input");
     setIs_loading(true);
-    let url = "http://localhost:4000/api/user/login/";
+    let url = "https://backendstep1.herokuapp.com/api/user/login/";
     let req = new Request(url, {
       method: "POST",
       mode: "cors",
@@ -142,7 +142,7 @@ const Login = () => {
     let Login_email_input = document.getElementById("Login_email_input");
     let Login_dob_input = document.getElementById("Login_dob_input");
     //................................user....................................................
-    const url = "http://localhost:4000/api/user/signup";
+    const url = "https://backendstep1.herokuapp.com/api/user/signup";
     const options = {
       method: "POST",
       mode: "cors",
