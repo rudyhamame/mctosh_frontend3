@@ -78,7 +78,7 @@ class App extends React.Component {
     });
     setInterval(() => {
       this.updateUserInfo();
-    }, 1000);
+    }, 3000);
   }
   componentDidUpdate() {
     console.log(this.state);
