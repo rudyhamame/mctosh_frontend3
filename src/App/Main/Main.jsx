@@ -10,6 +10,9 @@ const Main = (props) => {
         state={props.state}
         searchUsers={props.searchUsers}
         addFriend={props.addFriend}
+        RetrievingMySendingMessages={props.RetrievingMySendingMessages}
+        sendToMeMessage={props.sendToMeMessage}
+        sendToThemMessage={props.sendToThemMessage}
       />
     </main>
   );

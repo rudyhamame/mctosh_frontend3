@@ -10,10 +10,13 @@ const DropHorizontally = () => {
     let DropHorizontally_addFriend_icon = document.getElementById(
       "DropHorizontally_addFriend_icon"
     );
+    let Chat_article = document.getElementById("Chat_article");
     FriendsList_article.style.height = "100%";
     AddFriend_article.style.height = "0";
     DropHorizontally_friendsList_icon.style.color = "var(--white)";
     DropHorizontally_addFriend_icon.style.color = "var(--black)";
+    Chat_article.style.height = "0";
+    document.getElementById("Chat_goback_icon").style.display = "none";
   }
   function showAddFriend() {
     let FriendsList_article = document.getElementById("FriendsList_article");
@@ -30,31 +33,6 @@ const DropHorizontally = () => {
     DropHorizontally_friendsList_icon.style.color = "var(--black)";
   }
   return (
-    // <section
-    //       className="fr"
-    //       id="Friends"
-    //       title="unclicked"
-    //       style={{ order: "10" }}
-    //     >
-    //       <i
-    //         class="fas fa-arrow-up"
-    //         onClick={() => {
-    //           document.getElementById("AddFriend_article").style.height = "0";
-    //           document.getElementById("FriendsList_article").style.height =
-    //             "100%";
-    //           document.getElementById("FriendsList_article").style.height =
-    //             "100%";
-    //         }}
-    //       ></i>
-    //       <i
-    //         class="fas fa-arrow-up"
-    //         onClick={() => {
-    //           document.getElementById("AddFriend_article").style.height =
-    //             "100%";
-    //           document.getElementById("FriendsList_article").style.height = "0";
-    //         }}
-    //       ></i>
-    //     </section>
     <section
       id="DropHorizontally_article"
       style={{

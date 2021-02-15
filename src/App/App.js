@@ -21,7 +21,7 @@ import "./Main/Posts/InputPost/inputPosts.css";
 import "./Main/Posts/MountPosts/mount_posts.css";
 import "./Header/Nav/Menu/menu.css";
 import "./Main/Friends/FriendsList/friendslist.css";
-
+import "./Main/Friends/Chat/chat.css";
 //...........component..................
 class App extends React.Component {
   //..........states...........
@@ -34,10 +34,9 @@ class App extends React.Component {
       lastname: JSON.parse(sessionStorage.getItem("state")).lastname,
       dob: JSON.parse(sessionStorage.getItem("state")).dob,
       token: JSON.parse(sessionStorage.getItem("state")).token,
-
       isConnected: JSON.parse(sessionStorage.getItem("state")).isConnected,
-
       notes: JSON.parse(sessionStorage.getItem("state")).notes,
+      chat: null,
       friends: JSON.parse(sessionStorage.getItem("state")).friends,
       friend_requests: JSON.parse(sessionStorage.getItem("state"))
         .friend_requests,
@@ -45,14 +44,22 @@ class App extends React.Component {
       friend_target: null,
       notifications: JSON.parse(sessionStorage.getItem("state")).notifications,
       server_answer: null,
+      friendID_selected: null,
     };
   }
   ////////////////////////////////////////Variables//////////////
+  selected_friend_old_conversation = [];
+
   /////////////////////////////////////////////////////Lifecycle//////////////////////////
   componentDidMount() {
+    ///////////////////
+    // let source = new EventSource("URL");
+    // source.onmessage = function (event) {
+    //   event.data;
+    // };
+    /////////////////
     console.log(this.state);
     this.dbUpdate_user_connected();
-
     this.setState({
       my_id: JSON.parse(sessionStorage.getItem("state")).my_id,
       username: JSON.parse(sessionStorage.getItem("state")).username,
@@ -74,11 +81,110 @@ class App extends React.Component {
     }, 1000);
   }
   componentDidUpdate() {
-    this.buildFriendsList();
+    console.log(this.state);
+
     if (this.state.isConnected === false) {
       this.dbUpdate_user_connected();
     }
+    this.RetrievingMySendingMessages();
   }
+
+  //////////////////////////RECEIVE MESSAGE////////////////////////////////
+  messages = [];
+  RetrievingMySendingMessages = () => {
+    if (this.state.chat) {
+      let ul = document.getElementById("Chat_messages");
+      for (var i = 0; i < this.state.chat.conversation.length; i++) {
+        if (
+          this.state.chat.conversation[i]._id === this.state.friendID_selected
+        ) {
+          if (this.state.chat.conversation[i].message !== this.messages[i]) {
+            console.log(this.state.chat.conversation[i].message);
+            document
+              .getElementById("Chat_fetching_area")
+              .scrollBy(
+                0,
+                document.getElementById("Chat_fetching_area").scrollHeight
+              );
+
+            if (this.state.chat.conversation[i].destination === "sent") {
+              let p = document.createElement("p");
+              let li = document.createElement("li");
+              let div = document.createElement("div");
+              p.textContent = this.state.chat.conversation[i].message;
+              li.setAttribute("class", "sentMessagesLI");
+              li.appendChild(p);
+              div.setAttribute("class", "sentMessagesDIV fc");
+              div.appendChild(li);
+              ul.appendChild(div);
+            }
+            if (this.state.chat.conversation[i].destination === "received") {
+              let p = document.createElement("p");
+              let li = document.createElement("li");
+              let div = document.createElement("div");
+              p.textContent = this.state.chat.conversation[i].message;
+              li.setAttribute("class", "receivedMessagesLI");
+              li.appendChild(p);
+              div.setAttribute("class", "receivedMessagesDIV fc");
+              div.appendChild(li);
+              ul.appendChild(div);
+            }
+            this.messages[i] = this.state.chat.conversation[i].message;
+          }
+        }
+      }
+    }
+  };
+
+  //////////////////////////SEND MESSAGE TO FRIEND'S Chat////////////////////////////////
+  sendToMeMessage = () => {
+    let url =
+      "http://backendstep1.herokuapp.com/api/chat/sendToMe/" + this.state.my_id;
+    let options = {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        Authorization: "Bearer " + this.state.token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        _id: this.state.friendID_selected,
+        message: document.getElementById("Chat_textarea_input").value,
+        destination: "sent",
+      }),
+    };
+    let req = new Request(url, options);
+    fetch(req).then((result) => {
+      if (result.status === 201) {
+        document.getElementById("Chat_textarea_input").value = "";
+      }
+    });
+  };
+  //////////////////////////SEND MESSAGE TO FRIEND'S Chat////////////////////////////////
+  sendToThemMessage = () => {
+    let url =
+      "http://backendstep1.herokuapp.com/api/chat/sendToFriend/" +
+      this.state.friendID_selected;
+    let options = {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        Authorization: "Bearer " + this.state.token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        _id: this.state.my_id,
+        message: document.getElementById("Chat_textarea_input").value,
+        destination: "received",
+      }),
+    };
+    let req = new Request(url, options);
+    fetch(req).then((result) => {
+      if (result.status === 201) {
+        document.getElementById("Chat_textarea_input").value = "";
+      }
+    });
+  };
   ////////////////////////ACCEPT FRIEND/////////////////////////////////////////////
 
   acceptFriend = (friend) => {
@@ -86,7 +192,7 @@ class App extends React.Component {
     document.getElementById("server_answer_message").textContent = "Adding ...";
     document.getElementById("server_answer").style.width = "20%";
     let url =
-      "http://localhost:4000/api/user/acceptFriend/" +
+      "http://backendstep1.herokuapp.com/api/user/acceptFriend/" +
       this.state.my_id +
       "/" +
       friend.id;
@@ -105,7 +211,7 @@ class App extends React.Component {
           "You're now friends!";
 
         let url =
-          "http://localhost:4000/api/user/editUserInfo/" +
+          "http://backendstep1.herokuapp.com/api/user/editUserInfo/" +
           this.state.my_id +
           "/" +
           friend.id;
@@ -130,13 +236,22 @@ class App extends React.Component {
           console.log(response.json());
         });
       }
+      if (response.status === 409) {
+        document.getElementById("server_answer_message").textContent =
+          "You're already friends!";
+        setTimeout(() => {
+          document.getElementById("server_answer").style.width = "0";
+          document.getElementById("server_answer_message").textContent = "";
+        }, 3000);
+        document.getElementById(friend.id).parentElement.style.display = "none";
+      }
     });
   };
   ////////////////////////Decline Request/////////////////////////////////////////////
 
   makeNotificationsRead = (friend) => {
     let url =
-      "http://localhost:4000/api/user/editUserInfo/" +
+      "http://backendstep1.herokuapp.com/api/user/editUserInfo/" +
       this.state.my_id +
       "/" +
       friend.id;
@@ -166,7 +281,8 @@ class App extends React.Component {
   ////////////////////////ADD FRIEND/////////////////////////////////////////////
 
   addFriend = (friend_username) => {
-    let url = "http://localhost:4000/api/user/addFriend/" + friend_username;
+    let url =
+      "http://backendstep1.herokuapp.com/api/user/addFriend/" + friend_username;
     let options = {
       method: "POST",
       mode: "cors",
@@ -208,7 +324,8 @@ class App extends React.Component {
   };
   ////////////////////////SEARCH USER
   searchUsers = (user_target) => {
-    let url = "http://localhost:4000/api/user/searchUsers/" + user_target;
+    let url =
+      "http://backendstep1.herokuapp.com/api/user/searchUsers/" + user_target;
     let options = {
       method: "GET",
       mode: "cors",
@@ -220,38 +337,59 @@ class App extends React.Component {
       })
       .then((users) => {
         for (var i = 0; i < users.length; i++) {
-          let p = document.createElement("p");
-          let li = document.createElement("li");
-          let ul = document.getElementById("AddFriend_addFriend_results");
-          let icon = document.createElement("i");
-          p.textContent =
-            users[i].info.firstname + " " + users[i].info.lastname;
-          li.appendChild(p);
-          li.setAttribute("id", users[i].info.username);
-          li.setAttribute("class", "fr");
-          icon.setAttribute("class", " fas fa-user-plus");
-          icon.addEventListener("click", () => {
-            this.addFriend(li.id);
-          });
-          li.appendChild(icon);
-          ul.appendChild(li);
+          if (users[i]._id !== this.state.my_id) {
+            let p = document.createElement("p");
+            let li = document.createElement("li");
+            let ul = document.getElementById("AddFriend_addFriend_results");
+            let icon = document.createElement("i");
+            p.textContent =
+              users[i].info.firstname + " " + users[i].info.lastname;
+            li.appendChild(p);
+            li.setAttribute("id", users[i].info.username);
+            li.setAttribute("class", "fr");
+            if (this.state.friends > 0) {
+              this.state.friends.forEach((friend) => {
+                if (users[i]._id !== friend._id) {
+                  icon.setAttribute("class", " fas fa-user-plus");
+                  icon.addEventListener("click", () => {
+                    this.addFriend(li.id);
+                  });
+                  li.appendChild(icon);
+                }
+                if (users[i]._id === friend._id) {
+                  let p = document.createElement("p");
+                  p.textContent = "Already friends";
+                  p.style.fontSize = "11pt";
+                  li.appendChild(p);
+                }
+              });
+            } else {
+              icon.setAttribute("class", " fas fa-user-plus");
+              icon.addEventListener("click", () => {
+                this.addFriend(li.id);
+              });
+              li.appendChild(icon);
+            }
+            ul.appendChild(li);
+          }
         }
       });
   };
 
   //////////////////////////////BUILD FRIENDS LIST////////////////
-  friends = [];
-  online_friends = [];
+  app_friends = [];
+
   buildFriendsList = () => {
     for (var i = 0; i < this.state.friends.length; i++) {
-      if (
-        this.friends[i] !== this.state.friends[i]._id &&
-        this.online_friends[i] !== this.state.friends[i]._id
-      ) {
+      //For every friend
+      if (this.app_friends[i] !== this.state.friends[i]._id) {
+        //If a friend is new to the app add it to the friends list with respect to the online status and to the app memory
+        this.app_friends[i] = this.state.friends[i]._id;
         let p = document.createElement("p");
         let li = document.createElement("li");
         let ul = document.getElementById("FriendsList_friends_list");
         let icon = document.createElement("i");
+        console.log(this.app_friends.length);
 
         p.textContent =
           this.state.friends[i].info.firstname +
@@ -260,71 +398,52 @@ class App extends React.Component {
         p.setAttribute("id", [i]);
         li.appendChild(p);
         li.setAttribute("id", this.state.friends[i]._id);
-        li.addEventListener("click", () => {});
-
+        li.addEventListener("click", () => {
+          this.get_current_friend_chat_id(li.id);
+        });
         li.setAttribute("class", "fr");
+        li.setAttribute("title", this.state.friends[i].info.firstname);
+        icon.setAttribute("id", "online_icon" + this.state.friends[i]._id);
         icon.setAttribute("class", "fas fa-circle");
         li.appendChild(icon);
         ul.appendChild(li);
         if (this.state.friends[i].status.isConnected) {
-          this.online_friends[i] = this.state.friends[i]._id;
           icon.style.color = "#32cd32";
         } else {
-          this.friends[i] = this.state.friends[i]._id;
           icon.style.color = "var(--black)";
         }
       }
-    }
-    if (
-      this.friends.length + this.online_friends.length >
-      this.state.friends.length
-    ) {
-      let ul = document.getElementById("FriendsList_friends_list");
-      ul.innerHTML = "";
-      this.friends = [];
-      this.online_friends = [];
-
-      for (i = 0; i < this.state.friends.length; i++) {
-        if (
-          this.friends[i] !== this.state.friends[i]._id &&
-          this.online_friends[i] !== this.state.friends[i]._id
-        ) {
-          let p = document.createElement("p");
-          let li = document.createElement("li");
-          let icon = document.createElement("i");
-
-          p.textContent =
-            this.state.friends[i].info.firstname +
-            " " +
-            this.state.friends[i].info.lastname;
-          p.setAttribute("id", [i]);
-          li.appendChild(p);
-          li.setAttribute("id", this.state.friends[i]._id);
-          li.setAttribute("class", "fr");
-          icon.setAttribute("class", "fas fa-circle");
-          if (this.state.friends[i].status.isConnected === true) {
-            icon.style.color = "#32cd32";
-          } else {
-            icon.style.color = "var(--black)";
-          }
-          li.appendChild(icon);
-          ul.appendChild(li);
-          this.friends[i] = this.state.friends[i]._id;
-          if (this.state.friends[i].status.isConnected) {
-            this.online_friends[i] = this.state.friends[i]._id;
-            icon.style.color = "#32cd32";
-          } else {
-            this.friends[i] = this.state.friends[i]._id;
-            icon.style.color = "var(--black)";
-          }
+      if (this.app_friends[i] === this.state.friends[i]._id) {
+        // if we already have this friend in the memory app just check their online status and change it
+        if (this.state.friends[i].status.isConnected) {
+          document.getElementById(
+            "online_icon" + this.state.friends[i]._id
+          ).style.color = "#32cd32";
+        } else {
+          document.getElementById(
+            "online_icon" + this.state.friends[i]._id
+          ).style.color = "var(--black)";
         }
       }
     }
   };
 
+  ////////////////////////////Select friend id to chat //////////////////////////////////////////////////
+  get_current_friend_chat_id = (friendID) => {
+    this.setState({
+      friendID_selected: friendID,
+    });
+    document.getElementById("Chat_goback_icon").style.display = "inline";
+    document.getElementById("Chat_article").style.height = "100%";
+    document.getElementById("FriendsList_article").style.height = "0";
+    document.getElementById(
+      "Chat_title_text"
+    ).textContent = document.getElementById(friendID).title;
+  };
   ////////////////////////////Update State//////////DONE/////////////////////
   updateUserInfo = () => {
-    let url = "http://localhost:4000/api/user/update/" + this.state.my_id;
+    let url =
+      "http://backendstep1.herokuapp.com/api/user/update/" + this.state.my_id;
     let req = new Request(url, {
       method: "GET",
       mode: "cors",
@@ -336,9 +455,8 @@ class App extends React.Component {
       .then((response) => {
         if (response.status === 200) {
           return response.json(response);
-        }
-        if (response.status(304)) {
-          console.log("non");
+        } else {
+          alert("fd");
         }
       })
       .then((jsonData) => {
@@ -346,10 +464,12 @@ class App extends React.Component {
           notes: jsonData.notes,
           friends: jsonData.friends,
           friend_requests: jsonData.friend_requests,
+          chat: jsonData.chat,
           notifications: jsonData.notifications,
         });
       })
       .then(() => {
+        this.buildFriendsList();
         this.buildNotifications();
       })
       .catch((err) => {
@@ -402,161 +522,11 @@ class App extends React.Component {
     });
   };
 
-  /////////////////////////////////////BUILDING CHAT////////////////////////////////
-  // user_friends = [];
-  // already_online_friends = [];
-  // build_online_friendsList = () => {
-  //   if (this.state.friend_requests.length !== 0) {
-  //     let ul = document.getElementById("FriendsList_friends_list");
-  //     let online_page = document.getElementById("online_page");
-  //     let chat_page = document.getElementById("chat_page");
-
-  //     for (var i = 0; i < this.user_friends.length; i++) {
-  //       if (
-  //         // this.user_friends[i].friend_connected === true &&
-  //         this.already_online_friends[i] !== this.user_friends[i]._id
-  //         // this.already_online_friends[i] !== "offline"
-  //       ) {
-  //         this.already_online_friends[i] = this.user_friends[i]._id;
-  //         let p = document.createElement("p");
-  //         let li = document.createElement("li");
-  //         let div = document.createElement("div");
-  //         let icon = document.createElement("i");
-  //         p.textContent = this.user_friends[i].friend_firstname;
-  //         li.appendChild(p);
-  //         li.setAttribute("id", this.user_friends[i]._id);
-  //         li.setAttribute("title", this.user_friends[i].friend_firstname);
-  //         icon.setAttribute("class", "fas fa-circle");
-  //         icon.setAttribute("id", "friend_status" + [i]);
-  //         icon.style.color = "var(--green)";
-  //         div.setAttribute("class", "fr");
-  //         div.setAttribute("title", "unclicked");
-  //         div.appendChild(li);
-  //         div.appendChild(icon);
-  //         p.setAttribute("id", "onlineFriend" + [i]);
-  //         div.addEventListener("click", () => {
-  //           if (div.title === "unclicked") {
-  //             this.get_current_friend_chat_id(li.id);
-  //             online_page.style.height = 0;
-  //             chat_page.style.height = "100%";
-  //           } else {
-  //             this.get_current_friend_chat_id(null);
-  //             // li.style.backgroundColor = "rgba(59, 57, 57, 0.836)";
-  //           }
-  //         });
-  //         ul.appendChild(div);
-  //       }
-  //       if (
-  //         this.user_friends[i].friend_connected === false &&
-  //         this.already_online_friends[i] === this.user_friends[i]._id
-  //       ) {
-  //         let icon = document.getElementById("friend_status" + [i]);
-  //         icon.style.color = "var(--black)";
-  //         // document.getElementById("onlineFriend" + [i]).parentElement.remove();
-  //         // this.already_online_friends.splice([i], 1, "offline");
-  //       }
-  //       if (
-  //         this.user_friends[i].friend_connected === true &&
-  //         this.already_online_friends[i] === this.user_friends[i]._id
-  //         // && this.already_online_friends[i] === "offline"
-  //       ) {
-  //         // this.already_online_friends.splice([i], 1, this.user_friends[i]._id);
-  //         // let p = document.createElement("p");
-  //         // let li = document.createElement("li");
-  //         // let div = document.createElement("div");
-  //         // let i = document.createElement("i");
-  //         // p.textContent = this.user_friends[i].friend_firstname;
-  // li.appendChild(p);
-  // li.setAttribute("id", this.user_friends[i]._id);
-  // p.setAttribute("id", "onlineFriend" + [i]);
-  // i.setAttribute("class", "fas fa-circle");
-  // i.style.color = "var(--green)";
-  // div.setAttribute("class", "fr");
-  // div.appendChild(li);
-  // div.appendChild(i);
-  // ul.appendChild(div);
-  // let icon = document.getElementById("friend_status" + [i]);
-  // icon.style.color = "var(--green)";
-  //       }
-  //     }
-  //   }
-  // };
-  //////////////////////////////////////////////////////////////////////////////////////
-  get_current_friend_chat_id = (selected_online_friend) => {
-    this.setState({
-      online_friend_selected: selected_online_friend,
-    });
-  };
-
-  ///////////////////////////getting messages///////////////////////////
-  getting_specific_friend_messages = (friend) => {
-    // let selected_friend_new_conversation = [];
-    // let message_status = [];
-
-    // this.state.chat.forEach((friend) => {
-    //   if (friend.username === this.state.online_friend_selected) {
-    //     // console.log(
-    //     //   "my all new messages " + this.state.friend_chathistory.length
-    //     // );
-    //     selected_friend_new_conversation.push(friend.message);
-    //     message_status.push(friend.status);
-    //   }
-    // });
-    // // console.log(
-    // //   "my new message for selected friend " +
-    // //     selected_friend_new_conversation.length
-    // // );
-
-    // if (
-    //   this.selected_friend_old_conversation.length !==
-    //   selected_friend_new_conversation.length
-    // ) {
-    // ul.innerHTML = "";
-    let ul = document.getElementById("chat_history");
-    for (var i = 0; i < friend.chat.message.length; i++) {
-      // if (selected_friend_new_conversation[i])
-      if (friend.chat.status[i] === "sent:new") {
-        let p = document.createElement("p");
-        let li = document.createElement("li");
-        let div = document.createElement("div");
-        p.textContent = friend.chat.message[i];
-        li.appendChild(p);
-        div.appendChild(li);
-        div.setAttribute("class", "fr");
-        div.style.justifyContent = "flex-end";
-        li.style.backgroundColor = "var(--blue)";
-        li.style.width = "fit-content";
-        p.style.textAlign = "right";
-        ul.appendChild(div);
-        li.scrollIntoView(true); // to scroll down
-      }
-      if (friend.chat.status[i] === "received:new") {
-        let p = document.createElement("p");
-        let li = document.createElement("li");
-        let div = document.createElement("div");
-        p.textContent = friend.chat.message[i];
-        li.appendChild(p);
-        div.appendChild(li);
-        div.setAttribute("class", "fr");
-        div.style.justifyContent = "flex-start";
-        li.style.backgroundColor = "var(--green)";
-        li.style.width = "fit-content";
-        p.style.textAlign = "left";
-        ul.appendChild(div);
-        li.scrollIntoView(true); // to scroll down
-      }
-
-      // this.selected_friend_old_conversation = selected_friend_new_conversation;
-      // console.log(
-      //   "my old message for selected friend " +
-      //     this.selected_friend_old_conversation.length
-      // );
-    }
-  };
-
   ////////////////////////////////////////////////////UPDATE isConnect on databae////////////////////////////////
   dbUpdate_user_connected = () => {
-    let url = "http://localhost:4000/api/user/connection/" + this.state.my_id;
+    let url =
+      "http://backendstep1.herokuapp.com/api/user/connection/" +
+      this.state.my_id;
     let options = {
       method: "PUT",
       mode: "cors",
@@ -629,6 +599,9 @@ class App extends React.Component {
           addFriend={this.addFriend}
           acceptFriend={this.acceptFriend}
           state={this.state}
+          sendToMeMessage={this.sendToMeMessage}
+          sendToThemMessage={this.sendToThemMessage}
+          RetrievingMySendingMessages={this.RetrievingMySendingMessages}
         />
         <Footer />
         <div
