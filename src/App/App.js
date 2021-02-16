@@ -380,30 +380,22 @@ class App extends React.Component {
             li.appendChild(p);
             li.setAttribute("id", users[i].info.username);
             li.setAttribute("class", "fr");
-            if (this.state.friends.length > 0) {
-              this.state.friends.forEach((friend) => {
-                if (users[i]._id !== friend._id) {
-                  icon.setAttribute("class", " fas fa-user-plus");
-                  icon.addEventListener("click", () => {
-                    this.addFriend(li.id);
-                  });
-                  li.appendChild(icon);
-                }
-                if (users[i]._id === friend._id) {
-                  let p = document.createElement("p");
-                  p.textContent = "Already friends";
-                  p.style.fontSize = "11pt";
-                  li.appendChild(p);
-                }
-              });
-            } else {
-              icon.setAttribute("class", " fas fa-user-plus");
-              icon.addEventListener("click", () => {
-                this.addFriend(li.id);
-              });
-              li.appendChild(icon);
-            }
-            ul.appendChild(li);
+            this.state.friends.forEach((friend) => {
+              if (users[i]._id !== friend._id) {
+                icon.setAttribute("class", " fas fa-user-plus");
+                icon.addEventListener("click", () => {
+                  this.addFriend(li.id);
+                });
+                li.appendChild(icon);
+                ul.appendChild(li);
+              } else {
+                let p = document.createElement("p");
+                p.textContent = "Already friends";
+                p.style.fontSize = "11pt";
+                li.appendChild(p);
+                ul.appendChild(li);
+              }
+            });
           }
         }
       });
