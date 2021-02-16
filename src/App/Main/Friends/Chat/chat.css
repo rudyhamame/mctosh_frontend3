@@ -74,15 +74,16 @@
   border-radius: 10px;
   background-color: var(--black2);
   width: fit-content;
-  max-width: 70%;
 }
 .sentMessagesDIV {
   width: 100%;
   align-items: flex-end;
+  overflow: hidden;
 }
 .receivedMessagesDIV {
   width: 100%;
   align-items: flex-start;
+  overflow: hidden;
 }
 
 #Chat_messages p {

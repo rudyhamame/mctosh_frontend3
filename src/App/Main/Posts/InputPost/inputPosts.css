@@ -1,11 +1,10 @@
 #InputPost_article {
-  padding-top: 30px;
+  padding-top: 10px;
   padding-left: 15px;
   padding-right: 15px;
   padding-bottom: 15px;
   background-color: var(--special_black);
   box-shadow: 0 0px 10px rgba(0, 0, 0, 0.507);
-  z-index: 1;
 }
 
 #InputPost_textarea {
@@ -13,14 +12,14 @@
   line-height: 25pt;
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
-  box-shadow: 0 0px 10px rgba(0, 0, 0, 0.329);
+  box-shadow: 0;
   min-height: 100px;
   padding: 20px;
   background-color: var(--white);
 }
 
 #InputPost_post_button {
-  background-color: var(--black2);
+  background-color: #3a3b3c;
   color: white;
   font-weight: 300;
   box-shadow: 0 0px 30px rgba(0, 0, 0, 0.151);
@@ -57,4 +56,41 @@
 #InputPost_resourse::placeholder,
 #InputPost_page::placeholder {
   color: rgba(255, 255, 255, 0.486);
+}
+
+@media screen and (max-width: 700px) {
+  #InputPost_textarea {
+    font-size: 13pt;
+  }
+  #InputPost_greeting_text {
+    font-size: 13pt;
+    white-space: normal;
+  }
+  #InputPost_category,
+  #InputPost_subject,
+  #InputPost_resourse,
+  #InputPost_page {
+    font-size: 10pt;
+  }
+  #InputPost_post_button {
+    font-size: 12pt;
+  }
+}
+@media screen and (max-width: 600px) {
+  #InputPost_textarea {
+    font-size: 12pt;
+  }
+  #InputPost_greeting_text {
+    font-size: 12pt;
+    white-space: normal;
+  }
+  #InputPost_category,
+  #InputPost_subject,
+  #InputPost_resourse,
+  #InputPost_page {
+    font-size: 10pt;
+  }
+  #InputPost_post_button {
+    font-size: 10pt;
+  }
 }

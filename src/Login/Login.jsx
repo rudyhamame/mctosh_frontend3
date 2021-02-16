@@ -112,15 +112,37 @@ const Login = () => {
   //..............................................................................................
   /////////////////////////////////////////Login listener/////////////////////////////////////////
   const login_listener = () => {
+    let app_page_width = parseInt(
+      window.getComputedStyle(document.querySelector("#root")).width
+    );
     if (authReport) {
-      console.log(authReport);
       document.getElementById("Login_loginFrom_form").style.height = "0";
       document.getElementById("Login_loginFrom_form").style.padding = "0";
-      document.getElementById("Login_loginLogo_text").style.fontSize = "100pt";
-      document.getElementById("Login_loginLogo_container").style.marginBottom =
-        "150px";
-      document.getElementById("Login_subLoginLogo_text").style.fontSize =
-        "50pt";
+      if (app_page_width > 1000) {
+        document.getElementById("Login_loginLogo_text").style.fontSize =
+          "100pt";
+        document.getElementById(
+          "Login_loginLogo_container"
+        ).style.marginBottom = "150px";
+        document.getElementById("Login_subLoginLogo_text").style.fontSize =
+          "50pt";
+      }
+      if (1000 > app_page_width > 700) {
+        document.getElementById("Login_loginLogo_text").style.fontSize = "90pt";
+        document.getElementById(
+          "Login_loginLogo_container"
+        ).style.marginBottom = "140px";
+        document.getElementById("Login_subLoginLogo_text").style.fontSize =
+          "40pt";
+      }
+      if (app_page_width < 700) {
+        document.getElementById("Login_loginLogo_text").style.fontSize = "70pt";
+        document.getElementById(
+          "Login_loginLogo_container"
+        ).style.marginBottom = "130px";
+        document.getElementById("Login_subLoginLogo_text").style.fontSize =
+          "30pt";
+      }
 
       setTimeout(() => {
         setIs_loading(false);

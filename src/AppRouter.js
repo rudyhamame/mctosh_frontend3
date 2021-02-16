@@ -5,7 +5,10 @@ const AppRouter = (props) => {
   return (
     <Router>
       <Route exact path="/">
-        <App authReport={props.authReport} />
+        <App authReport={props.authReport} type="pc" />
+      </Route>
+      <Route path="/chat">
+        <App type="mobile" authReport={props.authReport} />
       </Route>
     </Router>
   );

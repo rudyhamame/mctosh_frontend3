@@ -4,13 +4,12 @@
   font-family: "Pacifico", cursive;
   background-color: var(--special_black);
   box-shadow: 0 0px 10px black;
-
   order: 1;
 }
 
 /*header content container*/
 #Header_content_container {
-  padding: 10px 30px;
+  padding: 20px;
   justify-content: space-between;
   align-items: center;
   max-width: 1300px;
@@ -34,13 +33,4 @@
 }
 
 @media screen and (max-width: 600px) {
-  #header_app_content h2 {
-    font-size: 10pt;
-  }
-  #header_app_content i {
-    font-size: 10pt;
-  }
-  #app_nav {
-    gap: 25px;
-  }
 }

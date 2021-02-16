@@ -1,25 +1,15 @@
-#NotesAside_main_page {
+#Friends_article {
   order: 5;
   overflow: hidden;
 }
 
-#NotesAside_main_container {
+#Friends_content_container {
   animation-name: width;
   animation-duration: 1s;
   order: 2;
   width: 0;
   overflow: hidden;
-}
-#h3_title_NotesAside {
-  font-family: "Pacifico", cursive;
-  font-weight: 300;
-  padding: 10px;
-  background-color: var(--orange);
-  text-align: center;
-  color: var(--white);
-  font-size: 14pt;
-  z-index: 1;
-  box-shadow: 0 0 5px black;
+  height: 100%;
 }
 
 #form_notes_dashboard h2 {
@@ -33,7 +23,7 @@
   width: 100%;
 }
 
-#control_NotesAside {
+#Friends_control_door {
   background-color: var(--special_black);
   justify-content: center;
   align-items: center;
@@ -41,7 +31,7 @@
   z-index: 1;
   order: 1;
 }
-#control_NotesAside i {
+#Friends_control_door i {
   color: var(--white);
   font-size: 20pt;
   padding: 10px;
@@ -49,33 +39,21 @@
   animation-duration: 1.5s;
 }
 
-.div_icons {
-  order: 2;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  gap: 20px;
-  padding: 10px 10px;
-  color: var(--blue);
-}
-
 input[value=""]::-webkit-datetime-edit {
   color: transparent;
 }
 
-#piano_for_study {
-  box-shadow: 0 0 2px black;
-}
-
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 1200px) {
+  #Friends_content_container {
+    height: 0;
+    background-color: var(--red);
+    width: 100% !important;
+  }
   #menuaside_main_container li {
     font-size: 7pt;
   }
   #menuaside_main_container {
     font-size: 7pt;
-  }
-  #NotesAside_main_page {
-    display: none;
   }
 }
 
@@ -87,10 +65,30 @@ input[value=""]::-webkit-datetime-edit {
     width: 40px;
   }
 }
-
-#control_onlinefriends_window {
-  text-align: center;
-  background-color: var(--blue);
-  padding: 10px;
-  color: var(--white);
+@media screen and (max-width: 1200px) {
+  #Friends_control_door {
+    background-color: var(--black2);
+  }
+  #Friends_control_door i {
+    font-size: 16pt;
+  }
+  #DropHorizontally_article i {
+    font-size: 16pt;
+  }
+  #Chat_goback_icon {
+    font-size: 16pt;
+  }
+  #Friends_content_container {
+    height: 0;
+  }
+}
+@media screen and (max-width: 1200px) {
+  #Friends_content_container {
+    height: 100% !important;
+    width: 100% !important;
+  }
+  #Friends_article {
+    height: 100% !important;
+    width: 100% !important;
+  }
 }

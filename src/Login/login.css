@@ -43,6 +43,7 @@
   font-weight: 300;
   font-size: 35pt;
   color: var(--gray_for_read);
+  text-align: center;
 }
 
 #Login_loginForm_container {

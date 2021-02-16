@@ -1,14 +1,27 @@
 /*Nav*/
 #Nav_article i {
-  font-size: 18pt;
+  font-size: 20pt;
   color: var(--white);
   cursor: pointer;
 }
 
 #Nav_article {
   gap: 30px;
+  align-items: center;
 }
 
 #Nav_article i:hover {
   transform: scale(0.96);
+}
+
+@media screen and (max-width: 600px) {
+  #Header_content_container h2 {
+    font-size: 20pt;
+  }
+  #Nav_article i {
+    font-size: 15pt;
+  }
+  #Nav_article {
+    gap: 17px;
+  }
 }

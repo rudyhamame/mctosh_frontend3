@@ -78,7 +78,7 @@ class App extends React.Component {
     });
     setInterval(() => {
       this.updateUserInfo();
-    }, 3000);
+    }, 1000);
   }
   componentDidUpdate() {
     console.log(this.state);
@@ -593,6 +593,7 @@ class App extends React.Component {
           state={this.state}
           logOut={this.logOut}
           acceptFriend={this.acceptFriend}
+          type={this.props.type}
         />
         <Main
           searchUsers={this.searchUsers}
@@ -602,6 +603,7 @@ class App extends React.Component {
           sendToMeMessage={this.sendToMeMessage}
           sendToThemMessage={this.sendToThemMessage}
           RetrievingMySendingMessages={this.RetrievingMySendingMessages}
+          type={this.props.type}
         />
         <Footer />
         <div

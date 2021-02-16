@@ -6,22 +6,40 @@ import FriendsList from "./FriendsList/FriendsList";
 
 const Friends = (props) => {
   const openNotesAside = () => {
-    let NotesAside_main_container = document.getElementById(
-      "NotesAside_main_container"
+    let Friends_content_container = document.getElementById(
+      "Friends_content_container"
     );
-    let control_NotesAside = document.getElementById("control_NotesAside");
-    if (control_NotesAside.title === "unclicked") {
-      NotesAside_main_container.style.width = "600px";
-      control_NotesAside.title = "clicked";
+    let Friends_article = document.getElementById("Friends_article");
+    let Friends_control_door = document.getElementById("Friends_control_door");
+    let app_page = document.querySelector("#app_page");
+    let app_page_css = window.getComputedStyle(app_page);
+    if (Friends_control_door.title === "unclicked") {
+      if (parseInt(app_page_css.width) >= 1500) {
+        Friends_content_container.style.width = "600px";
+      }
+      if (parseInt(app_page_css.width) < 1600) {
+        Friends_content_container.style.width = "500px";
+      }
+      if (parseInt(app_page_css.width) < 1200) {
+        Friends_article.style.height = "80vh";
+        Friends_content_container.style.height = "100%";
+      }
+
+      Friends_control_door.title = "clicked";
     } else {
-      NotesAside_main_container.style.width = "0";
-      control_NotesAside.title = "unclicked";
+      if (parseInt(app_page_css.width) < 1200) {
+        Friends_content_container.style.height = "0";
+        Friends_content_container.style.height = "initial";
+      } else {
+        Friends_content_container.style.width = "0";
+      }
+      Friends_control_door.title = "unclicked";
     }
   };
 
   return (
-    <aside id="NotesAside_main_page" className="fr">
-      <section id="NotesAside_main_container" className="fc">
+    <aside id="Friends_article" className="fr">
+      <section id="Friends_content_container" className="fc">
         <AddFirend
           state={props.state}
           searchUsers={props.searchUsers}
@@ -36,14 +54,16 @@ const Friends = (props) => {
         />
         <DropHorizontally />
       </section>
-      <section
-        onClick={openNotesAside}
-        className="fr"
-        id="control_NotesAside"
-        title="unclicked"
-      >
-        <i id="chat_icon" class="fas fa-users"></i>
-      </section>
+      {props.type === "pc" && (
+        <section
+          onClick={openNotesAside}
+          className="fr"
+          id="Friends_control_door"
+          title="unclicked"
+        >
+          <i id="chat_icon" class="fas fa-users"></i>
+        </section>
+      )}
     </aside>
   );
 };

@@ -16,6 +16,7 @@ const Header = (props) => {
           logOut={props.logOut}
           state={props.state}
           acceptFriend={props.acceptFriend}
+          type={props.type}
         />
       </div>
     </header>

@@ -39,3 +39,12 @@
     background-color: var(--special_black);
   }
 }
+
+@media screen and (max-width: 700px) {
+  #Footer_copyright {
+    font-size: 10pt;
+  }
+  #Nav_article i {
+    font-size: 16pt;
+  }
+}
