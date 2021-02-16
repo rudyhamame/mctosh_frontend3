@@ -380,7 +380,7 @@ class App extends React.Component {
             li.appendChild(p);
             li.setAttribute("id", users[i].info.username);
             li.setAttribute("class", "fr");
-            if (this.state.friends > 0) {
+            if (this.state.friends.length > 0) {
               this.state.friends.forEach((friend) => {
                 if (users[i]._id !== friend._id) {
                   icon.setAttribute("class", " fas fa-user-plus");
