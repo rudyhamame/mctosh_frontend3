@@ -149,6 +149,14 @@ class App extends React.Component {
         document.getElementById("InputPost_subject").value = "";
         document.getElementById("InputPost_resourse").value = "";
         document.getElementById("InputPost_page").value = "";
+        document.getElementById("server_answer_message").textContent =
+          "Posted successfully!";
+
+        document.getElementById("server_answer").style.width = "fit-content";
+        setTimeout(() => {
+          document.getElementById("server_answer").style.width = "0";
+          document.getElementById("server_answer_message").textContent = "";
+        }, 5000);
       } else {
         document.getElementById("server_answer_message").textContent =
           "Posting failed. Please make sure you select a category and/or a subject for your note";
