@@ -5,6 +5,11 @@
   text-align: center;
   letter-spacing: 1px;
   font-size: 30pt;
+  padding: 10px 40px;
+}
+#Logo_section {
+  padding: 10px;
+  justify-content: center;
 }
 
 @media screen and (max-width: 700px) {
@@ -15,7 +20,7 @@
 @media screen and (max-width: 600px) {
   #Logo_text {
     font-size: 15pt !important;
-    padding: 5px 10px;
+    padding: 10px;
     border-right: solid var(--white) 4px;
   }
 }

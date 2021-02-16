@@ -76,6 +76,7 @@ class App extends React.Component {
       friend_target: null,
       notifications: JSON.parse(sessionStorage.getItem("state")).notifications,
     });
+    this.prepareMyChat();
     setInterval(() => {
       this.updateUserInfo();
     }, 1000);
@@ -89,6 +90,22 @@ class App extends React.Component {
     this.RetrievingMySendingMessages();
   }
 
+  //////////////////////////PREPARE MY CHAT////////////////////////////////
+  prepareMyChat = () => {
+    let url =
+      "https://backendstep1.herokuapp.com/api/user/addNew/" + this.state.my_id;
+    let options = {
+      method: "PUT",
+      mode: "cors",
+      headers: {
+        Authorization: "Bearer " + this.state.token,
+        "Content-Type": "application/json",
+      },
+    };
+    let req = new Request(url, options);
+    fetch(req);
+  };
+
   //////////////////////////RECEIVE MESSAGE////////////////////////////////
   messages = [];
   RetrievingMySendingMessages = () => {
@@ -101,10 +118,10 @@ class App extends React.Component {
           if (this.state.chat.conversation[i].message !== this.messages[i]) {
             console.log(this.state.chat.conversation[i].message);
             document
-              .getElementById("Chat_fetching_area")
+              .getElementById("Chat_messages")
               .scrollBy(
                 0,
-                document.getElementById("Chat_fetching_area").scrollHeight
+                document.getElementById("Chat_messages").scrollHeight
               );
 
             if (this.state.chat.conversation[i].destination === "sent") {
@@ -402,6 +419,8 @@ class App extends React.Component {
         li.setAttribute("id", this.state.friends[i]._id);
         li.addEventListener("click", () => {
           this.get_current_friend_chat_id(li.id);
+          document.getElementById("DropHorizontally_article").style.display =
+            "none";
         });
         li.setAttribute("class", "fr");
         li.setAttribute("title", this.state.friends[i].info.firstname);

@@ -9,11 +9,11 @@
 
 /*header content container*/
 #Header_content_container {
-  padding: 20px;
   justify-content: space-between;
   align-items: center;
   max-width: 1300px;
   margin: 0 auto;
+  padding: 20px;
 }
 
 @keyframes header_blinker {

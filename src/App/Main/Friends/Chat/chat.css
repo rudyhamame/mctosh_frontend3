@@ -32,12 +32,6 @@
   padding: 10px;
 }
 
-#Chat_fetching_area {
-  overflow: auto;
-  flex-basis: 0;
-  padding: 5px;
-  flex-grow: 1;
-}
 #Chat_form {
   box-shadow: 0 10px 400px rgba(255, 255, 255, 0.226);
 }
@@ -58,32 +52,36 @@
   padding: 10px;
 }
 #Chat_messages {
-  gap: 20px;
-  padding: 20px;
-  align-items: flex-end;
-  overflow: hidden;
+  overflow: auto;
+  flex-basis: 0;
+  flex-grow: 1;
+  padding: 0 20px;
+  padding-bottom: 70px;
+  padding-top: 20px;
 }
 
 .sentMessagesLI {
   border-radius: 10px;
-  background-color: var(--green);
+  background-color: var(--black2);
   width: fit-content;
   max-width: 70%;
 }
 .receivedMessagesLI {
   border-radius: 10px;
-  background-color: var(--black2);
+  background-color: var(--green);
   width: fit-content;
 }
 .sentMessagesDIV {
   width: 100%;
   align-items: flex-end;
   overflow: hidden;
+  padding: 10px;
 }
 .receivedMessagesDIV {
   width: 100%;
   align-items: flex-start;
   overflow: hidden;
+  padding: 10px 0px;
 }
 
 #Chat_messages p {

@@ -33,15 +33,15 @@ const Chat = (props) => {
             document.getElementById("Chat_article").style.height = "0";
             document.getElementById("FriendsList_article").style.height =
               "100%";
+            document.getElementById("DropHorizontally_article").style.display =
+              "flex";
           }}
         ></i>
         <h1 id="Chat_title_text">
           {/* {props.state.friend === true && "Typing..."} */}
         </h1>
       </section>
-      <section id="Chat_fetching_area">
-        <ul className="fc" id="Chat_messages"></ul>
-      </section>
+      <ul id="Chat_messages"></ul>
       <section id="Chat_form" className="fr">
         <textarea
           id="Chat_textarea_input"

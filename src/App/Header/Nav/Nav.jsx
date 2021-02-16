@@ -14,7 +14,6 @@ const Nav = (props) => {
       <Link to="/">
         <i class="fas fa-home" id="Nav_home_i"></i>
       </Link>
-      <Dim />
       <Menu />
       <Logout logOut={props.logOut} />
       <Notifications state={props.state} acceptFriend={props.acceptFriend} />
