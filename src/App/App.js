@@ -58,7 +58,6 @@ class App extends React.Component {
     //   event.data;
     // };
     /////////////////
-    console.log(this.state);
     this.dbUpdate_user_connected();
     this.setState({
       my_id: JSON.parse(sessionStorage.getItem("state")).my_id,
@@ -77,6 +76,7 @@ class App extends React.Component {
       notifications: JSON.parse(sessionStorage.getItem("state")).notifications,
     });
     this.prepareMyChat();
+    this.createChatSpace();
     setInterval(() => {
       this.updateUserInfo();
     }, 1000);
@@ -96,6 +96,20 @@ class App extends React.Component {
       "https://backendstep1.herokuapp.com/api/user/addNew/" + this.state.my_id;
     let options = {
       method: "PUT",
+      mode: "cors",
+      headers: {
+        Authorization: "Bearer " + this.state.token,
+        "Content-Type": "application/json",
+      },
+    };
+    let req = new Request(url, options);
+    fetch(req);
+  };
+  createChatSpace = () => {
+    let url =
+      "https://backendstep1.herokuapp.com/api/chat/addNew/" + this.state.my_id;
+    let options = {
+      method: "POST",
       mode: "cors",
       headers: {
         Authorization: "Bearer " + this.state.token,
