@@ -74,28 +74,7 @@ const InputForm = (props) => {
         <button
           id="InputPost_post_button"
           value="unclicked"
-          onClick={() => {
-            props.fetchData({
-              url: "http://localhost:4000/api/user/notes/",
-              method: "POST",
-              body: {
-                text: document.getElementById("textarea_home_content").value,
-                category: document.getElementById("input_category_notes").value,
-                subject: document.getElementById("input_subject_notes").value,
-                textbook: document.getElementById("input_textbook_notes").value,
-                page: document.getElementById("input_page_notes").value,
-                state: "created",
-              },
-              isFetching: props.setIsFetching,
-            });
-            document.getElementById("form_notes_dashboard").style.display =
-              "none";
-            document.getElementById(
-              "button_note_dashboard"
-            ).style.backgroundColor = "var(--blue)";
-            document.getElementById("button_note_dashboard").value =
-              "unclicked";
-          }}
+          onClick={props.postingPost}
         >
           post
         </button>

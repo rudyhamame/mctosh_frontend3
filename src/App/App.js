@@ -37,6 +37,7 @@ class App extends React.Component {
       isConnected: JSON.parse(sessionStorage.getItem("state")).isConnected,
       notes: JSON.parse(sessionStorage.getItem("state")).notes,
       chat: null,
+      posts: null,
       friends: JSON.parse(sessionStorage.getItem("state")).friends,
       friend_requests: JSON.parse(sessionStorage.getItem("state"))
         .friend_requests,
@@ -88,6 +89,7 @@ class App extends React.Component {
       this.dbUpdate_user_connected();
     }
     this.RetrievingMySendingMessages();
+    this.RetrievingMyPosts();
   }
 
   //////////////////////////PREPARE MY CHAT////////////////////////////////
@@ -118,6 +120,60 @@ class App extends React.Component {
     };
     let req = new Request(url, options);
     fetch(req);
+  };
+
+  //////////////////////////Posting POSTS////////////////////////////////
+  postingPost = () => {
+    let url =
+      "https://backendstep1.herokuapp.com/api/user/posts/" + this.state.my_id;
+    let options = {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        Authorization: "Bearer " + this.state.token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        note: document.getElementById("InputPost_textarea").value,
+        category: document.getElementById("InputPost_category").value,
+        subject: document.getElementById("InputPost_subject").value,
+        reference: document.getElementById("InputPost_resourse").value,
+        page_num: document.getElementById("InputPost_page").value,
+      }),
+    };
+    let req = new Request(url, options);
+    fetch(req).then((result) => {
+      if (result.status === 201) {
+        document.getElementById("InputPost_textarea").value = "";
+        document.getElementById("InputPost_category").value = "";
+        document.getElementById("InputPost_subject").value = "";
+        document.getElementById("InputPost_resourse").value = "";
+        document.getElementById("InputPost_page").value = "";
+      } else {
+        this.setState({
+          server_answer: "Please define a category and an area for this note",
+        });
+        document.getElementById("server_answer").style.width = "20%";
+      }
+    });
+  };
+
+  ////////////////////////// RetrievingMyPosts////////////////////////////////
+  posts_ID = [];
+  RetrievingMyPosts = () => {
+    if (this.state.posts) {
+      let ul = document.getElementById("MountPosts_content_container");
+      for (var i = 0; i < this.state.posts.length; i++) {
+        if (this.state.posts[i]._id !== this.posts_ID[i]) {
+          let p = document.createElement("p");
+          let li = document.createElement("li");
+          p.textContent = this.state.posts[i].note;
+          li.appendChild(p);
+          ul.appendChild(li);
+        }
+        this.posts_ID[i] = this.state.posts[i]._id;
+      }
+    }
   };
 
   //////////////////////////RECEIVE MESSAGE////////////////////////////////
@@ -355,7 +411,7 @@ class App extends React.Component {
       }
     });
   };
-  ////////////////////////SEARCH USER
+  ////////////////////////SEARCH USER/////////////////////////
   searchUsers = (user_target) => {
     let url =
       "https://backendstep1.herokuapp.com/api/user/searchUsers/" + user_target;
@@ -370,32 +426,65 @@ class App extends React.Component {
       })
       .then((users) => {
         for (var i = 0; i < users.length; i++) {
-          if (users[i]._id !== this.state.my_id) {
-            let p = document.createElement("p");
-            let li = document.createElement("li");
-            let ul = document.getElementById("AddFriend_addFriend_results");
-            let icon = document.createElement("i");
-            p.textContent =
-              users[i].info.firstname + " " + users[i].info.lastname;
-            li.appendChild(p);
-            li.setAttribute("id", users[i].info.username);
-            li.setAttribute("class", "fr");
-            this.state.friends.forEach((friend) => {
-              if (users[i]._id !== friend._id) {
-                icon.setAttribute("class", " fas fa-user-plus");
-                icon.addEventListener("click", () => {
-                  this.addFriend(li.id);
-                });
-                li.appendChild(icon);
-                ul.appendChild(li);
-              } else {
-                let p = document.createElement("p");
-                p.textContent = "Already friends";
-                p.style.fontSize = "11pt";
-                li.appendChild(p);
-                ul.appendChild(li);
+          if (this.state.friends.length > 0) {
+            for (var j = 0; j < this.state.friends.length; j++) {
+              if (users[i]._id !== this.state.my_id) {
+                if (users[i]._id !== this.state.friends[j]._id) {
+                  let p = document.createElement("p");
+                  let li = document.createElement("li");
+                  let ul = document.getElementById(
+                    "AddFriend_addFriend_results"
+                  );
+                  let icon = document.createElement("i");
+                  p.textContent =
+                    users[i].info.firstname + " " + users[i].info.lastname;
+                  li.appendChild(p);
+                  li.setAttribute("id", users[i].info.username);
+                  li.setAttribute("class", "fr");
+
+                  icon.setAttribute("class", " fas fa-user-plus");
+                  icon.addEventListener("click", () => {
+                    this.addFriend(li.id);
+                  });
+                  li.appendChild(icon);
+                  ul.appendChild(li);
+                } else {
+                  let p = document.createElement("p");
+                  let p2 = document.createElement("p");
+                  let li = document.createElement("li");
+                  let ul = document.getElementById(
+                    "AddFriend_addFriend_results"
+                  );
+                  p.textContent =
+                    users[i].info.firstname + " " + users[i].info.lastname;
+                  p2.textContent = "already friends";
+                  li.appendChild(p);
+                  li.appendChild(p2);
+                  li.setAttribute("id", users[i].info.username);
+                  li.setAttribute("class", "fr");
+                  ul.appendChild(li);
+                }
               }
-            });
+            }
+          } else {
+            if (users[i]._id !== this.state.my_id) {
+              let p = document.createElement("p");
+              let li = document.createElement("li");
+              let ul = document.getElementById("AddFriend_addFriend_results");
+              let icon = document.createElement("i");
+              p.textContent =
+                users[i].info.firstname + " " + users[i].info.lastname;
+              li.appendChild(p);
+              li.setAttribute("id", users[i].info.username);
+              li.setAttribute("class", "fr");
+
+              icon.setAttribute("class", " fas fa-user-plus");
+              icon.addEventListener("click", () => {
+                this.addFriend(li.id);
+              });
+              li.appendChild(icon);
+              ul.appendChild(li);
+            }
           }
         }
       });
@@ -490,6 +579,7 @@ class App extends React.Component {
           friends: jsonData.friends,
           friend_requests: jsonData.friend_requests,
           chat: jsonData.chat,
+          posts: jsonData.posts,
           notifications: jsonData.notifications,
         });
       })
@@ -629,6 +719,7 @@ class App extends React.Component {
           sendToThemMessage={this.sendToThemMessage}
           RetrievingMySendingMessages={this.RetrievingMySendingMessages}
           type={this.props.type}
+          postingPost={this.postingPost}
         />
         <Footer />
         <div
