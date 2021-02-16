@@ -41,7 +41,7 @@ const InputForm = (props) => {
 
         <select id="InputPost_subject" name="subject">
           <option value="" disabled selected hidden>
-            Area
+            Subject
           </option>
           <option value="Pathology">Pathology</option>
           <option value="Physiology">Physiology</option>

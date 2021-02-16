@@ -150,10 +150,14 @@ class App extends React.Component {
         document.getElementById("InputPost_resourse").value = "";
         document.getElementById("InputPost_page").value = "";
       } else {
-        this.setState({
-          server_answer: "Please define a category and an area for this note",
-        });
-        document.getElementById("server_answer").style.width = "20%";
+        document.getElementById("server_answer_message").textContent =
+          "Posting failed. Please make sure you select a category and/or a subject for your note";
+
+        document.getElementById("server_answer").style.width = "fit-content";
+        setTimeout(() => {
+          document.getElementById("server_answer").style.width = "0";
+          document.getElementById("server_answer_message").textContent = "";
+        }, 5000);
       }
     });
   };
@@ -278,7 +282,7 @@ class App extends React.Component {
   acceptFriend = (friend) => {
     document.getElementById(friend.id).style.backgroundColor = "var(--black)";
     document.getElementById("server_answer_message").textContent = "Adding ...";
-    document.getElementById("server_answer").style.width = "20%";
+    document.getElementById("server_answer").style.width = "fit-content";
     let url =
       "https://backendstep1.herokuapp.com/api/user/acceptFriend/" +
       this.state.my_id +
@@ -317,7 +321,7 @@ class App extends React.Component {
             setTimeout(() => {
               document.getElementById("server_answer").style.width = "0";
               document.getElementById("server_answer_message").textContent = "";
-            }, 3000);
+            }, 5000);
             document.getElementById(friend.id).parentElement.style.display =
               "none";
           }
@@ -330,7 +334,7 @@ class App extends React.Component {
         setTimeout(() => {
           document.getElementById("server_answer").style.width = "0";
           document.getElementById("server_answer_message").textContent = "";
-        }, 3000);
+        }, 5000);
         document.getElementById(friend.id).parentElement.style.display = "none";
       }
     });
@@ -357,12 +361,12 @@ class App extends React.Component {
       document.getElementById(friend.id).style.backgroundColor = "var(--black)";
       if (response.status === 200) {
         document.getElementById(friend.id).parentElement.style.display = "none";
-        document.getElementById("server_answer").style.width = "20%";
+        document.getElementById("server_answer").style.width = "fit-content";
         document.getElementById("server_answer_message").textContent = "Done!";
         setTimeout(() => {
           document.getElementById("server_answer").style.width = "0";
           document.getElementById("server_answer_message").textContent = "";
-        }, 3000);
+        }, 5000);
       }
     });
   };
@@ -392,22 +396,22 @@ class App extends React.Component {
     fetch(req).then((response) => {
       if (response.status === 201) {
         return response.json().then((result) => {
-          document.getElementById("server_answer").style.width = "20%";
+          document.getElementById("server_answer").style.width = "fit-content";
           document.getElementById("server_answer_message").textContent =
             result.message;
           setTimeout(() => {
             document.getElementById("server_answer").style.width = "0";
             document.getElementById("server_answer_message").textContent = "";
-          }, 3000);
+          }, 5000);
         });
       } else {
-        document.getElementById("server_answer").style.width = "20%";
+        document.getElementById("server_answer").style.width = "fit-content";
         document.getElementById("server_answer_message").textContent =
           "Request failed";
         setTimeout(() => {
           document.getElementById("server_answer").style.width = "0";
           document.getElementById("server_answer_message").textContent = "";
-        }, 3000);
+        }, 5000);
       }
     });
   };
