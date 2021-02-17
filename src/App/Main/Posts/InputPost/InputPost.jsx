@@ -1,4 +1,5 @@
 import React from "react";
+import Search from "../../../Header/Search/Search";
 
 const InputForm = (props) => {
   ////////////////////////////////AUTO RESIZE TEXTAREA///////////////////////////////////
@@ -79,6 +80,10 @@ const InputForm = (props) => {
           post
         </button>
       </section>
+      <Search
+        searchPosts={props.searchPosts}
+        RetrievingMyPosts={props.RetrievingMyPosts}
+      />
     </article>
   );
 };

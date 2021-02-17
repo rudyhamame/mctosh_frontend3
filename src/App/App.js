@@ -35,22 +35,18 @@ class App extends React.Component {
       dob: JSON.parse(sessionStorage.getItem("state")).dob,
       token: JSON.parse(sessionStorage.getItem("state")).token,
       isConnected: JSON.parse(sessionStorage.getItem("state")).isConnected,
-      notes: JSON.parse(sessionStorage.getItem("state")).notes,
-      chat: null,
-      posts: null,
-      friends: JSON.parse(sessionStorage.getItem("state")).friends,
-      friend_requests: JSON.parse(sessionStorage.getItem("state"))
-        .friend_requests,
+      posts: [],
+      friends: [],
+      chat: [],
       app_is_loading: false,
       friend_target: null,
-      notifications: JSON.parse(sessionStorage.getItem("state")).notifications,
       server_answer: null,
       friendID_selected: null,
+      searching_on: false,
     };
   }
   ////////////////////////////////////////Variables//////////////
   selected_friend_old_conversation = [];
-
   /////////////////////////////////////////////////////Lifecycle//////////////////////////
   componentDidMount() {
     ///////////////////
@@ -68,16 +64,10 @@ class App extends React.Component {
       dob: JSON.parse(sessionStorage.getItem("state")).dob,
       token: JSON.parse(sessionStorage.getItem("state")).token,
       isConnected: JSON.parse(sessionStorage.getItem("state")).isConnected,
-      notes: JSON.parse(sessionStorage.getItem("state")).notes,
-      friends: JSON.parse(sessionStorage.getItem("state")).friends,
-      friend_requests: JSON.parse(sessionStorage.getItem("state"))
-        .friend_requests,
-      app_is_loading: false,
-      friend_target: null,
-      notifications: JSON.parse(sessionStorage.getItem("state")).notifications,
     });
     this.prepareMyChat();
     this.createChatSpace();
+
     setInterval(() => {
       this.updateUserInfo();
     }, 1000);
@@ -88,6 +78,7 @@ class App extends React.Component {
     if (this.state.isConnected === false) {
       this.dbUpdate_user_connected();
     }
+
     this.RetrievingMySendingMessages();
     this.RetrievingMyPosts();
   }
@@ -124,6 +115,9 @@ class App extends React.Component {
 
   //////////////////////////Posting POSTS////////////////////////////////
   postingPost = () => {
+    this.setState({
+      app_is_loading: true,
+    });
     let url =
       "https://backendstep1.herokuapp.com/api/user/posts/" + this.state.my_id;
     let options = {
@@ -139,59 +133,161 @@ class App extends React.Component {
         subject: document.getElementById("InputPost_subject").value,
         reference: document.getElementById("InputPost_resourse").value,
         page_num: document.getElementById("InputPost_page").value,
+        date: new Date(),
       }),
     };
     let req = new Request(url, options);
-    fetch(req).then((result) => {
-      if (result.status === 201) {
-        document.getElementById("InputPost_textarea").value = "";
-        document.getElementById("InputPost_category").value = "";
-        document.getElementById("InputPost_subject").value = "";
-        document.getElementById("InputPost_resourse").value = "";
-        document.getElementById("InputPost_page").value = "";
-        document.getElementById("server_answer_message").textContent =
-          "Posted successfully!";
+    fetch(req)
+      .then((result) => {
+        if (result.status === 201) {
+          document.getElementById("InputPost_textarea").value = "";
+          document.getElementById("InputPost_category").value = "";
+          document.getElementById("InputPost_subject").value = "";
+          document.getElementById("InputPost_resourse").value = "";
+          document.getElementById("InputPost_page").value = "";
+          document.getElementById("server_answer_message").textContent =
+            "Posted successfully!";
 
-        document.getElementById("server_answer").style.width = "fit-content";
-        setTimeout(() => {
-          document.getElementById("server_answer").style.width = "0";
-          document.getElementById("server_answer_message").textContent = "";
-        }, 5000);
-      } else {
-        document.getElementById("server_answer_message").textContent =
-          "Posting failed. Please make sure you select a category and/or a subject for your note";
+          document.getElementById("server_answer").style.width = "fit-content";
+          setTimeout(() => {
+            document.getElementById("server_answer").style.width = "0";
+            document.getElementById("server_answer_message").textContent = "";
+          }, 5000);
+        } else {
+          document.getElementById("server_answer_message").textContent =
+            "Posting failed. Please make sure you select a category and/or a subject for your note";
 
-        document.getElementById("server_answer").style.width = "fit-content";
-        setTimeout(() => {
-          document.getElementById("server_answer").style.width = "0";
-          document.getElementById("server_answer_message").textContent = "";
-        }, 5000);
-      }
-    });
+          document.getElementById("server_answer").style.width = "fit-content";
+          setTimeout(() => {
+            document.getElementById("server_answer").style.width = "0";
+            document.getElementById("server_answer_message").textContent = "";
+          }, 5000);
+        }
+        return result.json();
+      })
+      .then((result) => {
+        if (this.state.posts.length <= 1 && this.posts_ID.length === 0) {
+          this.RetrievingMyPosts(result);
+        } else {
+          this.RetrievingNewPost(result);
+        }
+        this.setState({
+          app_is_loading: false,
+        });
+      });
   };
 
   ////////////////////////// RetrievingMyPosts////////////////////////////////
-  posts_ID = [];
   RetrievingMyPosts = () => {
-    if (this.state.posts) {
+    let posts_ID = [];
+
+    if (this.state.posts && this.state.searching_on === false) {
       let ul = document.getElementById("MountPosts_content_container");
+      ul.innerHTML = "";
       for (var i = 0; i < this.state.posts.length; i++) {
-        if (this.state.posts[i]._id !== this.posts_ID[i]) {
-          let p = document.createElement("p");
+        if (posts_ID[i] !== this.state.posts[i]._id) {
+          let p1 = document.createElement("p");
+          let p2 = document.createElement("p");
+          let p3 = document.createElement("p");
+          let p4 = document.createElement("p");
+          let p5 = document.createElement("p");
+          let p6 = document.createElement("p");
           let li = document.createElement("li");
-          p.textContent = this.state.posts[i].note;
-          li.appendChild(p);
-          ul.appendChild(li);
+          let div = document.createElement("div");
+
+          //............date.................................
+          let date = this.state.posts[i].date;
+          let date_timezone = new Date(date);
+          let date_string = date_timezone.toDateString();
+          let time_string = date_timezone.toLocaleTimeString();
+          //.............................................
+          li.className = "fr";
+          p1.textContent = this.state.posts[i].note;
+          p2.textContent =
+            "Posted on: " + date_string + ", " + "at: " + time_string;
+          p3.textContent = "Category: " + this.state.posts[i].category;
+          p4.textContent = "Subject: " + this.state.posts[i].subject;
+          p5.textContent = "Reference: " + this.state.posts[i].reference;
+          p6.textContent = "Page #: " + this.state.posts[i].page_num;
+
+          p1.className = "MountPosts_note";
+          p2.className = "MountPosts_date";
+          p3.className = "MountPosts_date";
+          p4.className = "MountPosts_date";
+          p5.className = "MountPosts_date";
+          p6.className = "MountPosts_date";
+
+          div.appendChild(p2);
+          div.appendChild(p3);
+          div.appendChild(p4);
+          if (
+            !(
+              this.state.posts[i].reference === "" &&
+              this.state.posts[i].page_num !== null
+            )
+          ) {
+            if (this.state.posts[i].reference !== "") div.appendChild(p5);
+            if (this.state.posts[i].page_num !== null) div.appendChild(p6);
+          }
+          li.appendChild(p1);
+          li.appendChild(div);
+          ul.prepend(li);
         }
-        this.posts_ID[i] = this.state.posts[i]._id;
+        posts_ID[i] = this.state.posts[i]._id;
       }
     }
+  };
+  ////////////////////////// RetrievingNewPost////////////////////////////////
+  RetrievingNewPost = (result) => {
+    console.log(result);
+    let ul = document.getElementById("MountPosts_content_container");
+    let p1 = document.createElement("p");
+    let p2 = document.createElement("p");
+    let p3 = document.createElement("p");
+    let p4 = document.createElement("p");
+    let p5 = document.createElement("p");
+    let p6 = document.createElement("p");
+    let li = document.createElement("li");
+    let div = document.createElement("div");
+
+    //.............................................
+    let date = result.date;
+    let date_timezone = new Date(date);
+    let date_string = date_timezone.toDateString();
+    let time_string = date_timezone.toLocaleTimeString();
+    p2.textContent = "Posted on: " + date_string + ", " + "at: " + time_string;
+    //.............................................
+    li.className = "fr";
+    p1.textContent = result.note;
+    p2.textContent = "Posted on: " + date_string + ", " + "at: " + time_string;
+    p3.textContent = "Category: " + result.category;
+    p4.textContent = "Subject: " + result.subject;
+    p5.textContent = "Reference: " + result.reference;
+    p6.textContent = "Page #: " + result.page_num;
+
+    p1.className = "MountPosts_note";
+    p2.className = "MountPosts_date";
+    p3.className = "MountPosts_date";
+    p4.className = "MountPosts_date";
+    p5.className = "MountPosts_date";
+    p6.className = "MountPosts_date";
+
+    div.appendChild(p2);
+    div.appendChild(p3);
+    div.appendChild(p4);
+    if (!(result.reference === "" && result.page_num !== null)) {
+      if (result.reference !== "") div.appendChild(p5);
+      if (result.page_num !== null) div.appendChild(p6);
+    }
+    li.appendChild(p1);
+    li.appendChild(div);
+    ul.prepend(li);
   };
 
   //////////////////////////RECEIVE MESSAGE////////////////////////////////
   messages = [];
   RetrievingMySendingMessages = () => {
-    if (this.state.chat) {
+    if (this.state.chat.conversation) {
       let ul = document.getElementById("Chat_messages");
       for (var i = 0; i < this.state.chat.conversation.length; i++) {
         if (
@@ -423,6 +519,7 @@ class App extends React.Component {
       }
     });
   };
+
   ////////////////////////SEARCH USER/////////////////////////
   searchUsers = (user_target) => {
     let url =
@@ -587,9 +684,7 @@ class App extends React.Component {
       })
       .then((jsonData) => {
         this.setState({
-          notes: jsonData.notes,
           friends: jsonData.friends,
-          friend_requests: jsonData.friend_requests,
           chat: jsonData.chat,
           posts: jsonData.posts,
           notifications: jsonData.notifications,
@@ -712,10 +807,104 @@ class App extends React.Component {
     });
   };
 
+  ///////////////////////Searching in posts////////////////////
+  searchPosts = (flag) => {
+    if (flag !== "turn_off") {
+      this.setState({
+        searching_on: true,
+      });
+      let url =
+        "https://backendstep1.herokuapp.com/api/user/searchPosts/" +
+        document.getElementById("Search_input").value +
+        "/" +
+        this.state.my_id;
+      let req = new Request(url, {
+        method: "GET",
+        mode: "cors",
+        headers: {
+          Authorization: "Bearer " + this.state.token,
+        },
+      });
+      fetch(req)
+        .then((response) => {
+          if (response.status === 200) {
+            return response.json(response);
+          }
+        })
+        .then((jsonData) => {
+          if (jsonData) {
+            let ul = document.getElementById("MountPosts_content_container");
+            ul.innerHTML = "";
+          }
+          let array_associate = [];
+          let ul = document.getElementById("MountPosts_content_container");
+          for (var i = 0; i < jsonData.array.length; i++) {
+            if (array_associate[i] !== jsonData.array[i]._id) {
+              let p1 = document.createElement("p");
+              let p2 = document.createElement("p");
+              let p3 = document.createElement("p");
+              let p4 = document.createElement("p");
+              let p5 = document.createElement("p");
+              let p6 = document.createElement("p");
+              let li = document.createElement("li");
+              let div = document.createElement("div");
+
+              //............date.................................
+              let date = jsonData.array[i].date;
+              let date_timezone = new Date(date);
+              let date_string = date_timezone.toDateString();
+              let time_string = date_timezone.toLocaleTimeString();
+              //.............................................
+              li.className = "fr";
+              p1.textContent = jsonData.array[i].note;
+              p2.textContent =
+                "Posted on: " + date_string + ", " + "at: " + time_string;
+              p3.textContent = "Category: " + jsonData.array[i].category;
+              p4.textContent = "Subject: " + jsonData.array[i].subject;
+              p5.textContent = "Reference: " + jsonData.array[i].reference;
+              p6.textContent = "Page #: " + jsonData.array[i].page_num;
+
+              p1.className = "MountPosts_note";
+              p2.className = "MountPosts_date";
+              p3.className = "MountPosts_date";
+              p4.className = "MountPosts_date";
+              p5.className = "MountPosts_date";
+              p6.className = "MountPosts_date";
+
+              div.appendChild(p2);
+              div.appendChild(p3);
+              div.appendChild(p4);
+              if (
+                !(
+                  jsonData.array[i].reference === "" &&
+                  jsonData.array[i].page_num !== null
+                )
+              ) {
+                if (jsonData.array[i].reference !== "") div.appendChild(p5);
+                if (jsonData.array[i].page_num !== null) div.appendChild(p6);
+              }
+              li.appendChild(p1);
+              li.appendChild(div);
+              ul.prepend(li);
+            }
+            array_associate[i] = jsonData.array[i]._id;
+          }
+        })
+
+        .catch((err) => {
+          if (err.message === "Cannot read property 'credentials' of null")
+            console.log("Error", err.message);
+        });
+    } else {
+      this.setState({
+        searching_on: false,
+      });
+    }
+  };
   //.....Reander Login HTML..........
   render() {
     return (
-      <div id="app_page" className="fc">
+      <article id="app_page" className="fc">
         <Header
           state={this.state}
           logOut={this.logOut}
@@ -732,6 +921,8 @@ class App extends React.Component {
           RetrievingMySendingMessages={this.RetrievingMySendingMessages}
           type={this.props.type}
           postingPost={this.postingPost}
+          RetrievingMyPosts={this.RetrievingMyPosts}
+          searchPosts={this.searchPosts}
         />
         <Footer />
         <div
@@ -742,7 +933,33 @@ class App extends React.Component {
         >
           <h3 id="server_answer_message"></h3>
         </div>
-      </div>
+        {this.state.app_is_loading && (
+          <div
+            style={{
+              fontSize: "20pt",
+              display: "flex",
+              position: "fixed",
+              top: "0",
+              bottom: "0",
+              right: "0",
+              left: "0",
+              justifyContent: "center",
+              alignContent: "center",
+              flexDirection: "column",
+              zIndex: "100",
+            }}
+          >
+            <img
+              src="/img/loader.gif"
+              alt=""
+              width="70px"
+              style={{
+                margin: "auto",
+              }}
+            />
+          </div>
+        )}
+      </article>
     );
   }
 }

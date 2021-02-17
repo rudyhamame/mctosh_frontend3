@@ -7,7 +7,12 @@ const Main = (props) => {
   if (props.type === "pc") {
     return (
       <main id="Main_article" className="fr">
-        <Posts state={props.state} postingPost={props.postingPost} />
+        <Posts
+          state={props.state}
+          postingPost={props.postingPost}
+          RetrievingMyPosts={props.RetrievingMyPosts}
+          searchPosts={props.searchPosts}
+        />
         {parseInt(
           window.getComputedStyle(document.querySelector("#root")).width
         ) > 1200 && (

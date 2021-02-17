@@ -5,7 +5,12 @@ const Content = (props) => {
   return (
     <article id="Posts_article" className="fc">
       <section id="Posts_content_container" className="fc">
-        <InputPost state={props.state} postingPost={props.postingPost} />
+        <InputPost
+          state={props.state}
+          postingPost={props.postingPost}
+          RetrievingMyPosts={props.RetrievingMyPosts}
+          searchPosts={props.searchPosts}
+        />
         <MountPosts />
       </section>
     </article>

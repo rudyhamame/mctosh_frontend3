@@ -8,7 +8,7 @@
 }
 
 #InputPost_textarea {
-  font-size: 16pt;
+  font-size: 14pt;
   line-height: 25pt;
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
@@ -24,7 +24,7 @@
   font-weight: 300;
   box-shadow: 0 0px 30px rgba(0, 0, 0, 0.151);
   border: 0;
-  font-size: 20pt;
+  font-size: 16pt;
   padding: 10px 30px;
   border-radius: 0px;
   font-family: "Pacifico", cursive;
@@ -50,7 +50,7 @@
 #InputPost_resourse,
 #InputPost_page {
   color: white;
-  font-size: 14pt;
+  font-size: 12pt;
   background-color: rgb(46, 44, 44);
 }
 #InputPost_resourse::placeholder,
@@ -60,10 +60,10 @@
 
 @media screen and (max-width: 700px) {
   #InputPost_textarea {
-    font-size: 13pt;
+    font-size: 10pt;
   }
   #InputPost_greeting_text {
-    font-size: 13pt;
+    font-size: 10pt;
     white-space: normal;
   }
   #InputPost_category,

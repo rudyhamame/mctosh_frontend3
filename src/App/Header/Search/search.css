@@ -3,9 +3,8 @@
 #Search_section {
   overflow: hidden;
   align-items: center;
-  background-color: var(--black2);
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.123);
-  border-radius: 10px;
+  margin-top: 20px;
+  justify-content: center;
 }
 #Search_input {
   outline-style: none;
@@ -16,11 +15,14 @@
   border-bottom-right-radius: 10px;
   border-top-right-radius: 10px;
   background-color: var(--white);
+  width: 30%;
 }
 
 #Search_button {
   border: none;
-  background-color: transparent;
+  background-color: var(--green);
   border-radius: 0;
   color: var(--white);
+  font-size: 12pt;
+  height: 100%;
 }

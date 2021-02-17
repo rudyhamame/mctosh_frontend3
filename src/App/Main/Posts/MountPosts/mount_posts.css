@@ -11,9 +11,11 @@
   padding: 20px;
   height: fit-content;
   border-radius: 10px;
+  gap: 20px;
+  justify-content: space-between;
 }
-#MountPosts_content_container p {
-  font-size: 16pt;
+.MountPosts_note {
+  font-size: 14pt;
   font-family: "Roboto", sans-serif;
 }
 
@@ -22,4 +24,17 @@
   overflow: auto;
   box-shadow: 0 10px 10px rgba(0, 0, 0, 0.075);
   flex-grow: 1;
+}
+.MountPosts_date {
+  font-family: "Roboto", sans-serif;
+  font-size: 11pt;
+  text-align: right;
+}
+
+#MountPosts_content_container div p {
+  padding: 5px;
+  white-space: nowrap;
+}
+#MountPosts_content_container li p {
+  padding: 5px;
 }

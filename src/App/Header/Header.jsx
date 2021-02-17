@@ -7,7 +7,6 @@ const Header = (props) => {
   return (
     <header id="Header_article">
       <div id="Header_content_container" className="fr">
-        <Search />
         <Nav
           rendered_page_switcher={props.rendered_page_switcher}
           username={props.username}
