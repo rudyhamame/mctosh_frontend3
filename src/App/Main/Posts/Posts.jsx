@@ -4,7 +4,6 @@ import InputPost from "./InputPost/InputPost";
 import Footer from "../../Footer/Footer";
 import SearchPosts from "./InputPost/SearchPosts/SearchPosts";
 import Header from "../../Header/Header";
-import { Link } from "react-router-dom";
 const Posts = (props) => {
   return (
     <article id="Posts_article" className="fc">

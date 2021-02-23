@@ -21,12 +21,11 @@ import "./Main/Friends/FriendsList/friendslist.css";
 import "./Main/Friends/Chat/chat.css";
 import "./Main/Terminology/terminology.css";
 import "./Main/Greeting/greeting.css";
-import { Link, Route } from "react-router-dom";
+import { Route } from "react-router-dom";
 import Terminology from "./Main/Terminology/Terminology";
 import Posts from "./Main/Posts/Posts";
 import Friends from "./Main/Friends/Friends";
 import Greeting from "./Main/Greeting/Greeting";
-import { get } from "mongoose";
 //...........component..................
 class App extends React.Component {
   //..........states...........
@@ -209,7 +208,7 @@ class App extends React.Component {
             //...............................note..................................
             let note_p = document.createElement("p");
             note_p.textContent = this.state.posts[i].note;
-            note_p.className = "note_p";
+            note_p.setAttribute("class", "note_p");
             note_options_div.setAttribute("class", "fr note_options_div");
             note_options_div.setAttribute("id", "note_options_div" + i);
             note_options_div.appendChild(note_p);
@@ -396,14 +395,14 @@ class App extends React.Component {
         secs_totalInworking = total_secs;
         mins_totalInworking = total_mins;
       }
-      for (var i = 0; secs_totalInworking >= 60; i++) {
+      for (i = 0; secs_totalInworking >= 60; i++) {
         secs_totalInworking--;
         if (secs_totalInworking % 60 === 0) {
           total_mins++;
           total_secs = total_secs - 60;
         }
       }
-      for (var i = 0; mins_totalInworking >= 60; i++) {
+      for (i = 0; mins_totalInworking >= 60; i++) {
         mins_totalInworking--;
         if (mins_totalInworking % 60 === 0) {
           total_hours++;
@@ -1136,7 +1135,7 @@ class App extends React.Component {
     if (this.app_friends.length > this.state.friends.length) {
       this.serverReply("A friend has unfollowed you");
       ul.innerHTML = "";
-      for (var i = 0; i < this.state.friends.length; i++) {
+      for (i = 0; i < this.state.friends.length; i++) {
         this.app_friends[i] = this.state.friends[i]._id;
         let p = document.createElement("p");
         let li = document.createElement("li");
@@ -1517,7 +1516,7 @@ class App extends React.Component {
           array.push(post);
         }
       }
-      if (keyword == "$" && subject !== "$" && category !== "$") {
+      if (keyword === "$" && subject !== "$" && category !== "$") {
         if (post.subject === subject && post.category === category) {
           array.push(post);
         }
@@ -1537,7 +1536,6 @@ class App extends React.Component {
         }
       }
     });
-    let search_prostsArray = [];
     let array_associate = [];
     for (var i = 0; i < this.posts_array.length; i++) {
       if (array_associate[i] !== this.posts_array[i]._id) {

@@ -111,3 +111,16 @@
     font-size: 10pt;
   }
 }
+@media screen and (max-width: 1650px) {
+  #InputPost_textarea_container,
+  #InputPost_inputs_container {
+    width: 75%;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  #InputPost_textarea_container,
+  #InputPost_inputs_container {
+    width: 100%;
+  }
+}
