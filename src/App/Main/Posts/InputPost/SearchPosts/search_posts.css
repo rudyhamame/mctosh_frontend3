@@ -1,0 +1,79 @@
+/* Search */
+
+#SearchPosts_article {
+  gap: 30px;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0;
+  display: none;
+  order: 3;
+  width: 100%;
+  border-top: solid rgba(0, 0, 0, 0.096) 2px;
+
+  background-color: var(--special_black);
+}
+
+#SearchPosts_keyword_container {
+}
+#SearchPosts_subject_container {
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+}
+#SearchPosts_category_container {
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+}
+#SearchPosts_keyword {
+  outline-style: none;
+  font-size: 12pt;
+  padding: 10px;
+  box-shadow: none !important;
+  border-radius: 0 !important ;
+  border-bottom-right-radius: 10px;
+  border-top-right-radius: 10px;
+  background-color: var(--white);
+}
+#SearchPosts_category {
+  outline-style: none;
+  font-size: 12pt;
+  padding: 10px;
+  box-shadow: none !important;
+  border-radius: 0 !important ;
+  border-bottom-right-radius: 10px;
+  border-top-right-radius: 10px;
+  background-color: var(--white);
+}
+
+#SearchPosts_subject {
+  outline-style: none;
+  font-size: 12pt;
+  padding: 10px;
+  box-shadow: none !important;
+  border-radius: 0 !important ;
+  border-bottom-right-radius: 10px;
+  border-top-right-radius: 10px;
+  background-color: var(--white);
+}
+
+#SearchPosts_Buttons_container {
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+#SearchPosts_searchButton {
+  border: none;
+  background-color: var(--green);
+  border-radius: 0;
+  color: var(--white);
+  font-size: 12pt;
+}
+#SearchPosts_clearButton {
+  border: none;
+  background-color: var(--red);
+  border-radius: 0;
+  color: var(--white);
+  font-size: 12pt;
+}

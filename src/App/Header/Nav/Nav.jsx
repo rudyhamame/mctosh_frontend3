@@ -18,6 +18,7 @@ const Nav = (props) => {
       <Logout logOut={props.logOut} />
       <Notifications state={props.state} acceptFriend={props.acceptFriend} />
       {parseInt(width) < 1200 && <MessengerIcon />}
+      <Dim />
     </nav>
   );
 };

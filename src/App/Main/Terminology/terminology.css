@@ -1,0 +1,106 @@
+#Terminology_article {
+  order: 1;
+}
+#Terminology_title {
+  background-color: var(--red);
+  color: var(--white);
+  font-size: 14pt;
+  padding: 18px;
+  text-align: center;
+  font-weight: 200;
+}
+#Terminology_container {
+  order: 1;
+  width: 0;
+  overflow: hidden;
+  height: 100%;
+}
+#Terminology_content_container {
+  padding-top: 10px;
+  flex-grow: 1;
+  color: white;
+  overflow: auto;
+  background-color: var(--black);
+  gap: 10px;
+}
+#Terminology_content_container li {
+  padding: 10px 20px;
+  background-color: var(--special_black);
+  line-height: 30pt;
+}
+#Terminology_content_container i {
+  color: var(--white);
+  font-size: 20pt;
+  padding: 10px;
+  background-color: var(--special_black);
+}
+#Terminology_control_door {
+  background-color: var(--special_black);
+  justify-content: center;
+  align-items: center;
+  order: 1;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.24);
+  z-index: 1;
+}
+#Terminology_control_door i {
+  color: var(--white);
+  font-size: 18pt;
+  padding: 10px;
+  animation-name: arrow_control_color;
+  animation-duration: 1.5s;
+}
+#Terminology_inputs_container {
+  background-color: var(--red);
+  gap: 10px;
+  padding: 10px 40px;
+  padding-bottom: 50px;
+  align-items: center;
+  box-shadow: 0 -10px 100px rgba(66, 64, 64, 0.514);
+  display: none;
+}
+#Terminology_category,
+#Terminology_meaning,
+#Terminology_subject,
+#Terminology_term,
+#Terminology_post_button {
+  border-radius: 10px;
+  width: 100%;
+  font-size: 11pt;
+}
+#Terminology_post_button {
+  color: var(--white);
+  background-color: var(--special_black);
+  font-size: 12pt;
+}
+#Terminology_control_icon_open {
+  background-color: var(--red);
+  color: var(--white);
+  font-size: 18pt;
+  padding: 10px;
+  transform: none;
+  z-index: 1;
+  border-bottom: rgba(0, 0, 0, 0.068) solid 2px;
+  height: 50px;
+  text-align: center;
+}
+#Terminology_control_icon_close {
+  background-color: var(--red);
+  color: var(--white);
+  font-size: 18pt;
+  padding: 10px;
+  transform: none;
+  z-index: 1;
+  border-bottom: rgba(0, 0, 0, 0.068) solid 2px;
+  height: 50px;
+  display: none;
+  text-align: center;
+}
+
+#Terminology_control_icon {
+  display: none;
+}
+@media screen and (max-width: 1200px) {
+  #Terminology_content_container {
+    width: 100%;
+  }
+}

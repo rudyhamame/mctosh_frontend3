@@ -12,10 +12,11 @@
 }
 #Chat_title_container {
   padding: 10px;
-  background-color: var(--red);
+  background-color: var(--black);
   font-family: "Roboto", sans-serif;
   overflow: hidden;
   align-items: center;
+  border-bottom: 2px rgba(255, 255, 255, 0.082) solid;
 }
 
 #Chat_title_text {

@@ -1,5 +1,4 @@
 import React from "react";
-import Search from "../../../Header/Search/Search";
 
 const InputForm = (props) => {
   ////////////////////////////////AUTO RESIZE TEXTAREA///////////////////////////////////
@@ -21,17 +20,17 @@ const InputForm = (props) => {
   return (
     <article id="InputPost_article" className="fc">
       <section className="fr" id="InputPost_textarea_container">
-        <section id="InputPost_greeting_container" className="fc">
+        {/* <section id="InputPost_greeting_container" className="fc">
           <h1 id="InputPost_greeting_text">Hello {props.state.firstname}</h1>
-        </section>
+        </section> */}
         <textarea
           id="InputPost_textarea"
-          placeholder="Wants to post something?"
+          placeholder="Want to post a note?"
           onKeyDown={(event) => auto_grow(event)}
           onChange={(event) => minimizeHeight(event)}
         ></textarea>
       </section>
-      <section className="InputPost_inputs_container" className="fr">
+      <section id="InputPost_inputs_container" className="fr">
         <select id="InputPost_category" title="dsf">
           <option value="" disabled selected hidden>
             Category
@@ -80,10 +79,6 @@ const InputForm = (props) => {
           post
         </button>
       </section>
-      <Search
-        searchPosts={props.searchPosts}
-        RetrievingMyPosts={props.RetrievingMyPosts}
-      />
     </article>
   );
 };

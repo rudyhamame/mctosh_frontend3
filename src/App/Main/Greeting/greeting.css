@@ -1,0 +1,63 @@
+#Greeting_studysessions_article {
+  order: 2;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+}
+
+#timer_container {
+  order: 3;
+  font-size: 14pt;
+  padding: 10px;
+}
+
+#Greeting_studySessions_area {
+  color: var(--black);
+  overflow: auto;
+  height: 300px;
+}
+#Greeting_preStart_reportDiv {
+  padding: 20px;
+}
+#Greeting_studySessions_area div {
+  padding: 10px;
+  text-align: center;
+}
+
+#Greeting_preStart {
+  border-radius: 100px;
+  padding: 20px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-grow: 1;
+}
+#Greeting_preStart h1 {
+  font-family: "Raleway", sans-serif;
+  text-align: center;
+  font-size: 45pt;
+  padding: 10px;
+  background-color: white;
+}
+#Greeting_preStart h2 {
+  font-family: "Raleway", sans-serif;
+  padding: 10px;
+  text-align: center;
+  font-size: 30pt;
+  background-color: white;
+}
+#Greeting_preStart_button {
+  justify-content: center;
+  align-content: center;
+  gap: 10px;
+  font-family: "Roboto", sans-serif;
+  padding: 10px 20px;
+  text-align: center;
+  font-size: 16pt;
+  width: 40%;
+  background-color: var(--red);
+  color: var(--white);
+  border-radius: 40px;
+  margin-top: 30px;
+}

@@ -14,8 +14,9 @@ const Friends = (props) => {
     let app_page = document.querySelector("#app_page");
     let app_page_css = window.getComputedStyle(app_page);
     if (Friends_control_door.title === "unclicked") {
+      props.dbUpdate_user_connected(true);
       if (parseInt(app_page_css.width) >= 1500) {
-        Friends_content_container.style.width = "600px";
+        Friends_content_container.style.width = "400px";
       }
       if (parseInt(app_page_css.width) < 1600) {
         Friends_content_container.style.width = "500px";
@@ -27,6 +28,7 @@ const Friends = (props) => {
 
       Friends_control_door.title = "clicked";
     } else {
+      props.dbUpdate_user_connected(false);
       if (parseInt(app_page_css.width) < 1200) {
         Friends_content_container.style.height = "0";
         Friends_content_container.style.height = "initial";
@@ -45,7 +47,7 @@ const Friends = (props) => {
           searchUsers={props.searchUsers}
           addFriend={props.addFriend}
         />
-        <FriendsList />
+        <FriendsList state={props.state} />
         <Chat
           state={props.state}
           RetrievingMySendingMessages={props.RetrievingMySendingMessages}
@@ -54,16 +56,23 @@ const Friends = (props) => {
         />
         <DropHorizontally />
       </section>
-      {props.type === "pc" && (
-        <section
-          onClick={openNotesAside}
-          className="fr"
-          id="Friends_control_door"
-          title="unclicked"
-        >
+      <section
+        onClick={openNotesAside}
+        className="fr"
+        id="Friends_control_door"
+        title="unclicked"
+      >
+        {props.state.isOnline === true && (
+          <i
+            id="chat_icon"
+            style={{ color: "#ffeb2d" }}
+            class="fas fa-users"
+          ></i>
+        )}
+        {props.state.isOnline === false && (
           <i id="chat_icon" class="fas fa-users"></i>
-        </section>
-      )}
+        )}
+      </section>
     </aside>
   );
 };

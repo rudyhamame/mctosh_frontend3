@@ -1,4 +1,7 @@
 /*......Page scope.......*/
+* {
+  font-family: "Raleway", sans-serif;
+}
 #Login_article {
   min-height: 100vh;
   background-color: var(--white);
@@ -35,14 +38,14 @@
   font-weight: 700;
   text-align: center;
   line-height: 45px;
-  color: var(--blue);
+  color: var(--red);
   position: relative;
 }
 #Login_subLoginLogo_text {
   font-family: "Pacifico", cursive;
   font-weight: 300;
   font-size: 35pt;
-  color: var(--gray_for_read);
+  color: var(black);
   text-align: center;
 }
 
@@ -57,21 +60,20 @@
   background-color: var(--brightestWhite);
   border-radius: 10px;
   text-align: center;
-  font-family: "Roboto", sans-serif;
   box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.486);
   width: 450px;
   overflow: hidden;
 }
 
 #Login_loginFrom_form input {
-  font-size: 14pt;
+  font-size: 12pt;
 }
 
 #Login_loginFrom_form button {
-  background-color: var(--blue);
+  background-color: var(--red);
   color: var(--brightestWhite);
   font-weight: bold;
-  font-size: 18pt;
+  font-size: 14pt;
   width: 100%;
 }
 
@@ -79,7 +81,6 @@
   background-color: #fff;
   text-align: center;
   box-shadow: 0px 60px 100px rgba(18, 118, 175, 0.486);
-  font-family: "Roboto", sans-serif;
   width: 100%;
   padding: 30px;
 }

@@ -1,6 +1,6 @@
 /*Nav*/
 #Nav_article i {
-  font-size: 18pt;
+  font-size: 15pt;
   color: var(--white);
   cursor: pointer;
 }
@@ -8,7 +8,7 @@
 #Nav_article {
   gap: 30px;
   align-items: center;
-  padding: 0 40px;
+  padding: 14px;
 }
 
 #Nav_article i:hover {

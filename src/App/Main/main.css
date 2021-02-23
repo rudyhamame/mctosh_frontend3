@@ -1,8 +1,6 @@
 #Main_article {
   flex-grow: 1;
-  box-shadow: 0px -0px 100px rgba(0, 0, 0, 0.363);
   width: 100%;
-  background-color: var(--blue);
   order: 2;
   overflow: hidden;
 }

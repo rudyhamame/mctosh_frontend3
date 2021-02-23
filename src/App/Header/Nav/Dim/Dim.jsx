@@ -5,12 +5,26 @@ const Dim = () => {
     let i_dim_menu = document.getElementById("Nav_dim_i");
     if (i_dim_menu.title === "unclicked") {
       i_dim_menu.title = "clicked";
-      document.documentElement.style.setProperty("--special_black", "#1877f2");
-      document.documentElement.style.setProperty("--black2", "var(--white)");
+      document.getElementById(
+        "MountPosts_content_container"
+      ).style.backgroundColor = "var(--special_black)";
+      document.getElementById(
+        "InputPost_textarea_container"
+      ).style.backgroundColor = "var(--special_black)";
+      document.getElementById(
+        "InputPost_inputs_container"
+      ).style.backgroundColor = "var(--special_black)";
     } else {
       i_dim_menu.title = "unclicked";
-      document.documentElement.style.setProperty("--special_black", "#282828");
-      document.documentElement.style.setProperty("--black2", "#3a3b3c");
+      document.getElementById(
+        "MountPosts_content_container"
+      ).style.backgroundColor = "var(--red)";
+      document.getElementById(
+        "InputPost_textarea_container"
+      ).style.backgroundColor = "var(--red)";
+      document.getElementById(
+        "InputPost_inputs_container"
+      ).style.backgroundColor = "var(--red)";
     }
   };
   return (

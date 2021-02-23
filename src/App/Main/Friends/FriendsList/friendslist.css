@@ -6,7 +6,7 @@
   background-color: var(--black);
   overflow: auto;
   order: 3;
-  height: 0;
+  height: 100%;
 }
 
 #FriendsList_i {

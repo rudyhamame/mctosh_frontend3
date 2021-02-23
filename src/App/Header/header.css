@@ -1,19 +1,18 @@
 /*header page*/
 #Header_article {
-  z-index: 2;
+  z-index: 100;
   font-family: "Pacifico", cursive;
+  order: 4;
   background-color: var(--special_black);
-  box-shadow: 0 0px 10px black;
-  order: 1;
+  margin: center;
+  border-bottom: solid rgba(0, 0, 0, 0.096) 1px;
+  width: 100%;
 }
 
 /*header content container*/
 #Header_content_container {
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
-  max-width: 1300px;
-  margin: 0 auto;
-  padding: 20px;
 }
 
 @keyframes header_blinker {

@@ -4,8 +4,19 @@ const FriendsList = (props) => {
   return (
     <section id="FriendsList_article" className="fc">
       <section id="FriendsList_content_container" className="fc">
-        <i class="fas fa-user-friends" id="FriendsList_i"></i>
-        <ul className="fc" id="FriendsList_friends_list"></ul>
+        <ul className="fc" id="FriendsList_friends_list">
+          {props.state.friends.length === 0 && (
+            <h1
+              style={{
+                fontSize: "12pt",
+                fontWeight: "300",
+                whiteSpace: "nowrap",
+              }}
+            >
+              You have no friends to show
+            </h1>
+          )}
+        </ul>
       </section>
     </section>
   );

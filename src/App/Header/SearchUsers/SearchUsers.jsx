@@ -1,15 +1,16 @@
 import React from "react";
 
-const Search = (props) => {
-  let Search_input = document.getElementById("Search_input");
+const SearchUsers = (props) => {
+  let SearchUsers_input = document.getElementById("SearchUsers_input");
   let AddFriend_addFriend_results = document.getElementById(
     "AddFriend_addFriend_results"
   );
   ///////////////////////////SEATCH FOR USERS TO BE FRIENDS///////////////
 
   function send_by_enter(event) {
-    if (event.which === 13 && Search_input) {
-      props.searchPosts();
+    if (event.which === 13) {
+      AddFriend_addFriend_results.innerHTML = "";
+      props.searchUsers(SearchUsers_input.value);
     }
   }
 
@@ -19,13 +20,14 @@ const Search = (props) => {
         Search
       </button>
       <input
-        id="Search_input"
+        id="SearchUsers_input"
         type="text"
         placeholder="Enter a keyword"
         onChange={() => {
-          props.searchPosts();
-          if (document.getElementById("Search_input").value === "")
-            props.searchPosts("turn_off");
+          if (SearchUsers_input.value === "") {
+            AddFriend_addFriend_results.innerHTML = "";
+          }
+          props.searchUsers(SearchUsers_input.value);
         }}
         onKeyPress={(event) => {
           send_by_enter(event);
@@ -35,4 +37,4 @@ const Search = (props) => {
   );
 };
 
-export default Search;
+export default SearchUsers;

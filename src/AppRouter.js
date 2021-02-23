@@ -1,14 +1,14 @@
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Redirect, Route } from "react-router-dom";
 import App from "./App/App";
 
 const AppRouter = (props) => {
   return (
     <Router>
       <Route exact path="/">
-        <App authReport={props.authReport} type="pc" />
+        <App authReport={props.authReport} path="/" />
       </Route>
-      <Route path="/chat">
-        <App type="mobile" authReport={props.authReport} />
+      <Route exact path="/study">
+        <App authReport={props.authReport} path="/study" />
       </Route>
     </Router>
   );

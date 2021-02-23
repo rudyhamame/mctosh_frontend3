@@ -1,11 +1,8 @@
 #Friends_article {
   order: 5;
-  overflow: hidden;
 }
 
 #Friends_content_container {
-  animation-name: width;
-  animation-duration: 1s;
   order: 2;
   width: 0;
   overflow: hidden;
@@ -27,13 +24,12 @@
   background-color: var(--special_black);
   justify-content: center;
   align-items: center;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.479);
-  z-index: 1;
   order: 1;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.24);
 }
 #Friends_control_door i {
   color: var(--white);
-  font-size: 20pt;
+  font-size: 18pt;
   padding: 10px;
   animation-name: arrow_control_color;
   animation-duration: 1.5s;

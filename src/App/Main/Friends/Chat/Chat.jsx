@@ -1,8 +1,9 @@
 import React from "react";
 
 const Chat = (props) => {
+  let textarea = document.getElementById("Chat_textarea_input");
+
   function auto_grow(event) {
-    let textarea = document.getElementById("Chat_textarea_input");
     textarea.style.height = textarea.scrollHeight + "px";
 
     if (event.which === 8) {
@@ -10,16 +11,11 @@ const Chat = (props) => {
     }
   }
   function minimizeHeight() {
-    let textarea = document.getElementById("Chat_textarea_input");
-
-    if (textarea.value === "") {
-      textarea.style.height = "70px";
-    }
+    textarea.style.height = "70px";
   }
   function send_by_enter(event) {
     if (event.which === 13) {
-      props.sendToMeMessage();
-      props.sendToThemMessage();
+      props.sendToThemMessage(textarea.value);
     }
   }
   return (
@@ -45,8 +41,6 @@ const Chat = (props) => {
       <section id="Chat_form" className="fr">
         <textarea
           id="Chat_textarea_input"
-          // onChange={props.postProfile_info}
-          // onKeyDown={(event) => send_by_enter(event)}
           onKeyDown={(event) => {
             auto_grow(event);
             send_by_enter(event);
@@ -57,8 +51,7 @@ const Chat = (props) => {
           <i
             class="fc far fa-paper-plane"
             onClick={() => {
-              props.sendToMeMessage();
-              props.sendToThemMessage();
+              props.sendToThemMessage(textarea.value);
             }}
           ></i>
         </button>

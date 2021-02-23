@@ -1,19 +1,19 @@
 #Menu_content_container {
+  display: none;
+  position: absolute;
+  background-color: var(--background_menu);
   height: 50%;
   width: 300px;
-  background-color: var(--black);
-  position: absolute;
-  display: none;
-  box-shadow: 0 4px 5px black;
+  overflow: auto;
+  color: white;
+  justify-content: flex-start;
+  gap: 10px;
+  border-bottom: var(--red) 10px solid;
 }
 #Menu_content_container li {
   font-family: "Roboto", sans-serif;
-  color: white;
-  font-size: 16pt;
-  text-align: center;
-  background-color: var(--black2);
-  margin: 10px 0;
-  padding: 10px;
+  background-color: rgb(212, 48, 48);
+  padding: 20px;
   cursor: pointer;
 }
 

@@ -6,7 +6,7 @@
   margin-top: 20px;
   justify-content: center;
 }
-#Search_input {
+#SearchUsers_input {
   outline-style: none;
   font-size: 12pt;
   padding: 10px;
@@ -15,7 +15,6 @@
   border-bottom-right-radius: 10px;
   border-top-right-radius: 10px;
   background-color: var(--white);
-  width: 30%;
 }
 
 #Search_button {

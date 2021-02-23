@@ -1,12 +1,12 @@
 import React from "react";
-import Search from "../../../Header/Search/Search";
+import SearchUsers from "../../../Header/SearchUsers/SearchUsers";
 
 const AddFirend = (props) => {
   return (
     <section id="AddFriend_article" className="fc">
       <section id="AddFriend_content_container" className="fc">
-        <i id="AddFriend_i" class="fas fa-user-plus"></i>
-        <Search
+        <SearchUsers
+          type="users_search"
           component="AddFriend"
           searchUsers={props.searchUsers}
           addFriend={props.addFriend}
