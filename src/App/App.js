@@ -118,7 +118,9 @@ class App extends React.Component {
   }
   //...........................................Preperation..................................................
   preparingChat = () => {
-    let url = "http://localhost:4000/api/chat/prepareChat/" + this.state.my_id;
+    let url =
+      "https://backendstep1.herokuapp.com/api/chat/prepareChat/" +
+      this.state.my_id;
     let options = {
       method: "POST",
       mode: "cors",
@@ -658,7 +660,7 @@ class App extends React.Component {
   ////////////////////////////Delete terminology////////////////////////////
   deleteTerminology = (term_id) => {
     let url =
-      "http://localhost:4000/api/user/deleteTerminology/" +
+      "https://backendstep1.herokuapp.com/api/user/deleteTerminology/" +
       term_id +
       "/" +
       this.state.my_id;
@@ -730,7 +732,8 @@ class App extends React.Component {
       app_is_loading: true,
     });
     let url =
-      "http://localhost:4000/api/user/newTerminology/" + this.state.my_id;
+      "https://backendstep1.herokuapp.com/api/user/newTerminology/" +
+      this.state.my_id;
     let options = {
       method: "POST",
       mode: "cors",
@@ -828,7 +831,7 @@ class App extends React.Component {
     this.setState({
       app_is_loading: true,
     });
-    let url = "http://localhost:4000/api/posts/addNew";
+    let url = "https://backendstep1.herokuapp.com/api/posts/addNew";
     let options = {
       method: "POST",
       mode: "cors",
@@ -866,7 +869,7 @@ class App extends React.Component {
           //.........................................
           this.state.friends.forEach((friend) => {
             let url_2 =
-              "http://localhost:4000/api/posts/postAdd/" +
+              "https://backendstep1.herokuapp.com/api/posts/postAdd/" +
               friend._id +
               "/" +
               result._id;
@@ -893,7 +896,7 @@ class App extends React.Component {
       .then((result) => {
         if (posting_check === 0) {
           let url_2 =
-            "http://localhost:4000/api/posts/postAdd/" +
+            "https://backendstep1.herokuapp.com/api/posts/postAdd/" +
             this.state.my_id +
             "/" +
             result._id;
@@ -934,7 +937,8 @@ class App extends React.Component {
   };
   ////////////////////////////////Deleting Post///////////////////////////////////////////
   deletePost = (post_id) => {
-    let url = "http://localhost:4000/api/posts/deletePost/" + post_id;
+    let url =
+      "https://backendstep1.herokuapp.com/api/posts/deletePost/" + post_id;
     let options = {
       method: "DELETE",
       mode: "cors",
@@ -955,7 +959,8 @@ class App extends React.Component {
   };
   ////////////////////////////////Edit Post///////////////////////////////////////////
   editPost = (post_id) => {
-    let url = "http://localhost:4000/api/posts/updatePost/" + post_id;
+    let url =
+      "https://backendstep1.herokuapp.com/api/posts/updatePost/" + post_id;
     let options = {
       method: "PUT",
       mode: "cors",
@@ -994,7 +999,7 @@ class App extends React.Component {
   postComment = (event, post_id, input_id) => {
     if (event.which === 13) {
       let url =
-        "http://localhost:4000/api/posts/commentPost/" +
+        "https://backendstep1.herokuapp.com/api/posts/commentPost/" +
         post_id.slice(10, post_id.length) +
         "/" +
         document.getElementById(input_id).value;
@@ -1021,7 +1026,7 @@ class App extends React.Component {
   sendToThemMessage = (message) => {
     if (message && message.trim() !== "") {
       let url =
-        "http://localhost:4000/api/chat/sendMessage/" +
+        "https://backendstep1.herokuapp.com/api/chat/sendMessage/" +
         this.state.friendID_selected +
         "/" +
         this.state.my_id;
@@ -1087,7 +1092,7 @@ class App extends React.Component {
     document.getElementById("server_answer_message").textContent = "Adding ...";
     document.getElementById("server_answer").style.width = "fit-content";
     let url =
-      "http://localhost:4000/api/user/acceptFriend/" +
+      "https://backendstep1.herokuapp.com/api/user/acceptFriend/" +
       this.state.my_id +
       "/" +
       friend.id;
@@ -1106,7 +1111,7 @@ class App extends React.Component {
           "You're now friends!";
 
         let url =
-          "http://localhost:4000/api/user/editUserInfo/" +
+          "https://backendstep1.herokuapp.com/api/user/editUserInfo/" +
           this.state.my_id +
           "/" +
           friend.id;
@@ -1145,7 +1150,7 @@ class App extends React.Component {
 
   makeNotificationsRead = (friend) => {
     let url =
-      "http://localhost:4000/api/user/editUserInfo/" +
+      "https://backendstep1.herokuapp.com/api/user/editUserInfo/" +
       this.state.my_id +
       "/" +
       friend.id;
@@ -1175,7 +1180,9 @@ class App extends React.Component {
   ////////////////////////ADD FRIEND/////////////////////////////////////////////
 
   addFriend = (friend_username) => {
-    let url = "http://localhost:4000/api/user/addFriend/" + friend_username;
+    let url =
+      "https://backendstep1.herokuapp.com/api/user/addFriend/" +
+      friend_username;
     let options = {
       method: "POST",
       mode: "cors",
@@ -1219,7 +1226,8 @@ class App extends React.Component {
   ////////////////////////SEARCH USER/////////////////////////
   searchUsers = (target) => {
     let ul = document.getElementById("AddFriend_addFriend_results");
-    let url = "http://localhost:4000/api/user/searchUsers/" + target;
+    let url =
+      "https://backendstep1.herokuapp.com/api/user/searchUsers/" + target;
     let options = {
       method: "GET",
       mode: "cors",
@@ -1411,7 +1419,8 @@ class App extends React.Component {
   };
   ////////////////////////////Update State//////////DONE/////////////////////
   updateUserInfo = () => {
-    let url = "http://localhost:4000/api/user/update/" + this.state.my_id;
+    let url =
+      "https://backendstep1.herokuapp.com/api/user/update/" + this.state.my_id;
     let req = new Request(url, {
       method: "GET",
       mode: "cors",
@@ -1532,7 +1541,9 @@ class App extends React.Component {
 
   ////////////////////////////////////////////////////UPDATE isConnect on databae////////////////////////////////
   dbUpdate_user_connected = (isConnected) => {
-    let url = "http://localhost:4000/api/user/isOnline/" + this.state.my_id;
+    let url =
+      "https://backendstep1.herokuapp.com/api/user/isOnline/" +
+      this.state.my_id;
     let options = {
       method: "PUT",
       mode: "cors",
@@ -1561,7 +1572,8 @@ class App extends React.Component {
 
   updateBeforeLeave = () => {
     let url =
-      "http://localhost:4000/api/user/updateBeforeLeave/" + this.state.my_id;
+      "https://backendstep1.herokuapp.com/api/user/updateBeforeLeave/" +
+      this.state.my_id;
     let options = {
       method: "PUT",
       mode: "cors",
