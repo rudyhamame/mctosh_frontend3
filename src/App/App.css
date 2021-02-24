@@ -49,6 +49,7 @@
 #app_page {
   height: 100vh;
   overflow: hidden;
+  min-width: 1200px;
 }
 #server_answer {
   position: absolute;

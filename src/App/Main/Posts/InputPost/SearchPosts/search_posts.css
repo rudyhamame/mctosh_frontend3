@@ -8,7 +8,7 @@
   order: 3;
   width: 100%;
   border-top: solid rgba(0, 0, 0, 0.096) 2px;
-  background-color: var(--special_black);
+  background-color: var(--red);
 }
 #SearchPosts_control_section {
   color: var(--white);
@@ -68,14 +68,14 @@
 }
 #SearchPosts_searchButton {
   border: none;
-  background-color: var(--green);
+  background-color: var(--special_black);
   border-radius: 0;
   color: var(--white);
   font-size: 12pt;
 }
 #SearchPosts_clearButton {
   border: none;
-  background-color: var(--red);
+  background-color: var(--special_black);
   border-radius: 0;
   color: var(--white);
   font-size: 12pt;

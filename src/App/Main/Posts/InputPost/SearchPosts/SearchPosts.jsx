@@ -71,13 +71,10 @@ const SearchPosts = (props) => {
         <button
           id="SearchPosts_clearButton"
           onClick={() => {
-            SearchPosts_keyword.value = "";
-            SearchPosts_subject.value = "";
-            SearchPosts_category.value = "";
-            props.BuildingPosts();
+            window.location.reload();
           }}
         >
-          clear
+          Reset
         </button>
       </section>
     </article>

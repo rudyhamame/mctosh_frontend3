@@ -2,8 +2,7 @@ import React from "react";
 import MountPosts from "./MountPosts/MountPosts";
 import InputPost from "./InputPost/InputPost";
 import Footer from "../../Footer/Footer";
-import SearchPosts from "./InputPost/SearchPosts/SearchPosts";
-import Header from "../../Header/Header";
+
 const Posts = (props) => {
   return (
     <article id="Posts_article" className="fc">
@@ -18,10 +17,10 @@ const Posts = (props) => {
         <MountPosts
           app_posts_sorted={props.app_posts_sorted}
           state={props.state}
+          profilePosts={props.profilePosts}
         />
       </section>
-
-      <Footer />
+      {props.path === "/" && <Footer />}
     </article>
   );
 };

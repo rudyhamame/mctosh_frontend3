@@ -61,6 +61,7 @@ class App extends React.Component {
         secs: 0,
       },
       study_session: null,
+      profile: false,
     };
   }
   ////////////////////////////////////////Variables//////////////
@@ -88,20 +89,7 @@ class App extends React.Component {
     if (this.state.timer && this.state.isConnected)
       sessionStorage.setItem("timer", JSON.stringify(this.state.timer));
 
-    // if (
-    //   // If I have posts and for only one time!
-    //   // this.state.retrievingMyPosts_DONE === false &&
-    //   this.props.path === "/study"  > 0
-    // )
-    //   this.RetrievingMyPosts();
-    // if (
-    //   // If I have posts and for only one time!
-    //   // this.state.retrievingMyPosts_DONE === false &&
-    //   this.props.path === "/study"  > 0
-    // )
-    //   this.RetrievingFriendsPosts();
     if (
-      // If I have terminology and for only one time!
       this.state.terminology.length > 0 &&
       this.state.retrievingTerminology_DONE === false &&
       this.props.path === "/study"
@@ -112,7 +100,10 @@ class App extends React.Component {
       this.props.path === "/"
     )
       this.RetrievingMyStudySessions();
-    if (this.props.path === "/study") this.BuildingPosts();
+    if (this.state.profile === false && this.props.path === "/study")
+      this.BuildingPosts();
+    if (this.state.profile === true && this.props.path === "/study")
+      this.BuildingPostsProfile();
   }
   componentWillUnmount() {
     if (this.props.path === "/study") {
@@ -127,9 +118,7 @@ class App extends React.Component {
   }
   //...........................................Preperation..................................................
   preparingChat = () => {
-    let url =
-      "https://backendstep1.herokuapp.com/api/chat/prepareChat/" +
-      this.state.my_id;
+    let url = "http://localhost:4000/api/chat/prepareChat/" + this.state.my_id;
     let options = {
       method: "POST",
       mode: "cors",
@@ -222,6 +211,7 @@ class App extends React.Component {
             postername_p.setAttribute("class", "postername_p");
             details_div.appendChild(postername_p);
             //..................................
+
             if (this.state.posts[i].id === this.state.my_id) {
               postername_p.textContent = "Mine";
               let p_delete = document.createElement("p");
@@ -333,6 +323,194 @@ class App extends React.Component {
         this.posts_alreadyBuilt = [];
         ul.innerHTML = "";
       }
+    }
+  };
+  //////////////////////////// Profile///////////////////////////////////////////////
+  profilePosts = [];
+  BuildingPostsProfile = () => {
+    let ul = document.getElementById("MountPosts_content_container");
+    for (var i = 0; i < this.state.posts.length; i++) {
+      if (this.state.posts[i].id === this.state.my_id) {
+        if (this.state.posts.length >= this.profilePosts.length) {
+          if (this.state.posts[i]._id !== this.profilePosts[i]) {
+            if (
+              this.state.posts[i]._id === this.profilePosts[i] &&
+              this.state.posts[i].comments.length !== this.posts_comments[i]
+            ) {
+              let commentlist_ul = document.getElementById(
+                "commentlist_ul" + this.state.posts[i]._id
+              );
+              if (this.state.posts[i].comments.length === 1) {
+                let commentlist_ul = document.createElement("ul");
+                commentlist_ul.setAttribute(
+                  "id",
+                  "commentlist_ul" + this.state.posts[i]._id
+                );
+                commentlist_ul.setAttribute("class", "fc commentlist_ul");
+                let comments_div = document.getElementById(
+                  "commentDiv" + this.state.posts[i]._id
+                );
+                let li = document.createElement("li");
+                li.setAttribute("class", "comment_li");
+                li.textContent = this.state.posts[i].comments[
+                  this.state.posts[i].comments.length - 1
+                ];
+                commentlist_ul.prepend(li);
+                comments_div.appendChild(commentlist_ul);
+                this.posts_comments[i] = this.state.posts[i].comments.length;
+              } else {
+                let li = document.createElement("li");
+                li.setAttribute("class", "comment_li");
+                li.textContent = this.state.posts[i].comments[
+                  this.state.posts[i].comments.length - 1
+                ];
+                commentlist_ul.prepend(li);
+                this.posts_comments[i] = this.state.posts[i].comments.length;
+              }
+            } else {
+              this.setState({
+                app_is_loading: true,
+              });
+              let date_p = document.createElement("p");
+              let category_p = document.createElement("p");
+              let subject_p = document.createElement("p");
+              let reference_p = document.createElement("p");
+              let page_p = document.createElement("p");
+              let li = document.createElement("li");
+              let details_div = document.createElement("div");
+              let note_options_div = document.createElement("div");
+              //.............................comments.......................
+
+              //............date.................................
+              let date = this.state.posts[i].date;
+              let date_timezone = new Date(date);
+              let date_string = date_timezone.toDateString();
+              let time_string = date_timezone.toLocaleTimeString();
+              //.............................................
+              //...............................note..................................
+              let note_p = document.createElement("p");
+              note_p.textContent = this.state.posts[i].note;
+              note_p.setAttribute("class", "note_p");
+              note_options_div.setAttribute("class", "fr note_options_div");
+              note_options_div.setAttribute("id", "note_options_div" + i);
+              note_options_div.appendChild(note_p);
+              //.......................Options....................................
+              let options_div = document.createElement("div");
+              options_div.setAttribute("class", "options_div");
+              //............................Poster name.......................
+              let postername_p = document.createElement("p");
+              postername_p.setAttribute("class", "postername_p");
+              details_div.appendChild(postername_p);
+              //..................................
+
+              postername_p.textContent = "Mine";
+              let p_delete = document.createElement("p");
+              let p_edit = document.createElement("p");
+              p_delete.style.cursor = "pointer";
+              p_edit.style.cursor = "pointer";
+              p_delete.textContent = "Delete";
+              p_edit.textContent = "Edit";
+              options_div.appendChild(p_delete);
+              options_div.appendChild(p_edit);
+              p_delete.addEventListener("click", () =>
+                this.deletePost(options_div.id)
+              );
+              p_edit.addEventListener("click", () =>
+                this.editPost(options_div.id)
+              );
+              note_options_div.appendChild(options_div);
+              options_div.setAttribute(
+                "class",
+                "fc MountPosts_postOptionsContainer"
+              );
+              options_div.setAttribute("id", this.state.posts[i]._id);
+
+              //........................................................................
+
+              //.....................................................................
+              li.className = "fc";
+
+              date_p.innerHTML =
+                "<i class='far fa-clock'></i>" +
+                "  " +
+                date_string +
+                ", " +
+                time_string;
+              category_p.textContent =
+                "Category: " + this.state.posts[i].category;
+              subject_p.textContent = "Subject: " + this.state.posts[i].subject;
+              reference_p.textContent =
+                "Reference: " + this.state.posts[i].reference;
+              page_p.textContent = "Page #: " + this.state.posts[i].page_num;
+              date_p.className = "MountPosts_date";
+              details_div.appendChild(date_p);
+              details_div.appendChild(category_p);
+              details_div.appendChild(subject_p);
+              details_div.setAttribute("class", "fr details_div");
+              //...................comments...............
+              let comments_div = document.createElement("div");
+              let comment_input = document.createElement("input");
+              let commentlist_ul = document.createElement("ul");
+              comments_div.appendChild(comment_input);
+              comments_div.setAttribute("class", "fc comments_div");
+              comments_div.setAttribute(
+                "id",
+                "commentDiv" + this.state.posts[i]._id
+              );
+              comment_input.setAttribute(
+                "id",
+                "comment_input" + this.state.posts[i]._id
+              );
+              comment_input.setAttribute("class", "comment_input");
+              commentlist_ul.setAttribute(
+                "id",
+                "commentlist_ul" + this.state.posts[i]._id
+              );
+              comment_input.setAttribute("placeholder", "Enter a comment");
+              comment_input.addEventListener("keypress", (event) => {
+                this.postComment(event, comments_div.id, comment_input.id);
+              });
+              this.state.posts[i].comments.forEach((comment) => {
+                let comment_li = document.createElement("li");
+                comment_li.textContent = comment;
+                comment_li.setAttribute("class", "comment_li");
+                commentlist_ul.setAttribute("class", "fc commentlist_ul");
+                commentlist_ul.prepend(comment_li);
+                comments_div.appendChild(commentlist_ul);
+              });
+              //.....................................................
+
+              if (
+                !(
+                  this.state.posts[i].reference === "" &&
+                  this.state.posts[i].page_num !== null
+                )
+              ) {
+                if (this.state.posts[i].reference !== "")
+                  details_div.appendChild(reference_p);
+                if (this.state.posts[i].page_num !== null)
+                  details_div.appendChild(page_p);
+              }
+              li.setAttribute("id", "li" + this.state.posts[i]._id);
+              li.appendChild(details_div);
+              li.appendChild(note_options_div);
+              li.appendChild(comments_div);
+              ul.prepend(li);
+              this.profilePosts[i] = this.state.posts[i]._id;
+              // this.posts_comments[i] = this.state.posts[i].comments.length;
+              this.setState({
+                app_is_loading: false,
+              });
+            }
+          }
+        }
+        // if (this.state.posts.length < this.posts_alreadyBuilt.length) {
+        //   this.posts_alreadyBuilt = [];
+        //   ul.innerHTML = "";
+        // }
+      }
+    }
+    if (this.profilePosts.length === 0) {
     }
   };
   ////////////////////////// RetrievingMyStudySessions////////////////////////////////
@@ -480,7 +658,7 @@ class App extends React.Component {
   ////////////////////////////Delete terminology////////////////////////////
   deleteTerminology = (term_id) => {
     let url =
-      "https://backendstep1.herokuapp.com/api/user/deleteTerminology/" +
+      "http://localhost:4000/api/user/deleteTerminology/" +
       term_id +
       "/" +
       this.state.my_id;
@@ -552,8 +730,7 @@ class App extends React.Component {
       app_is_loading: true,
     });
     let url =
-      "https://backendstep1.herokuapp.com/api/user/newTerminology/" +
-      this.state.my_id;
+      "http://localhost:4000/api/user/newTerminology/" + this.state.my_id;
     let options = {
       method: "POST",
       mode: "cors",
@@ -651,7 +828,7 @@ class App extends React.Component {
     this.setState({
       app_is_loading: true,
     });
-    let url = "https://backendstep1.herokuapp.com/api/posts/addNew";
+    let url = "http://localhost:4000/api/posts/addNew";
     let options = {
       method: "POST",
       mode: "cors",
@@ -689,7 +866,7 @@ class App extends React.Component {
           //.........................................
           this.state.friends.forEach((friend) => {
             let url_2 =
-              "https://backendstep1.herokuapp.com/api/posts/postAdd/" +
+              "http://localhost:4000/api/posts/postAdd/" +
               friend._id +
               "/" +
               result._id;
@@ -716,7 +893,7 @@ class App extends React.Component {
       .then((result) => {
         if (posting_check === 0) {
           let url_2 =
-            "https://backendstep1.herokuapp.com/api/posts/postAdd/" +
+            "http://localhost:4000/api/posts/postAdd/" +
             this.state.my_id +
             "/" +
             result._id;
@@ -757,8 +934,7 @@ class App extends React.Component {
   };
   ////////////////////////////////Deleting Post///////////////////////////////////////////
   deletePost = (post_id) => {
-    let url =
-      "https://backendstep1.herokuapp.com/api/posts/deletePost/" + post_id;
+    let url = "http://localhost:4000/api/posts/deletePost/" + post_id;
     let options = {
       method: "DELETE",
       mode: "cors",
@@ -779,8 +955,7 @@ class App extends React.Component {
   };
   ////////////////////////////////Edit Post///////////////////////////////////////////
   editPost = (post_id) => {
-    let url =
-      "https://backendstep1.herokuapp.com/api/posts/updatePost/" + post_id;
+    let url = "http://localhost:4000/api/posts/updatePost/" + post_id;
     let options = {
       method: "PUT",
       mode: "cors",
@@ -819,7 +994,7 @@ class App extends React.Component {
   postComment = (event, post_id, input_id) => {
     if (event.which === 13) {
       let url =
-        "https://backendstep1.herokuapp.com/api/posts/commentPost/" +
+        "http://localhost:4000/api/posts/commentPost/" +
         post_id.slice(10, post_id.length) +
         "/" +
         document.getElementById(input_id).value;
@@ -846,7 +1021,7 @@ class App extends React.Component {
   sendToThemMessage = (message) => {
     if (message && message.trim() !== "") {
       let url =
-        "https://backendstep1.herokuapp.com/api/chat/sendMessage/" +
+        "http://localhost:4000/api/chat/sendMessage/" +
         this.state.friendID_selected +
         "/" +
         this.state.my_id;
@@ -912,7 +1087,7 @@ class App extends React.Component {
     document.getElementById("server_answer_message").textContent = "Adding ...";
     document.getElementById("server_answer").style.width = "fit-content";
     let url =
-      "https://backendstep1.herokuapp.com/api/user/acceptFriend/" +
+      "http://localhost:4000/api/user/acceptFriend/" +
       this.state.my_id +
       "/" +
       friend.id;
@@ -931,7 +1106,7 @@ class App extends React.Component {
           "You're now friends!";
 
         let url =
-          "https://backendstep1.herokuapp.com/api/user/editUserInfo/" +
+          "http://localhost:4000/api/user/editUserInfo/" +
           this.state.my_id +
           "/" +
           friend.id;
@@ -970,7 +1145,7 @@ class App extends React.Component {
 
   makeNotificationsRead = (friend) => {
     let url =
-      "https://backendstep1.herokuapp.com/api/user/editUserInfo/" +
+      "http://localhost:4000/api/user/editUserInfo/" +
       this.state.my_id +
       "/" +
       friend.id;
@@ -1000,9 +1175,7 @@ class App extends React.Component {
   ////////////////////////ADD FRIEND/////////////////////////////////////////////
 
   addFriend = (friend_username) => {
-    let url =
-      "https://backendstep1.herokuapp.com/api/user/addFriend/" +
-      friend_username;
+    let url = "http://localhost:4000/api/user/addFriend/" + friend_username;
     let options = {
       method: "POST",
       mode: "cors",
@@ -1046,8 +1219,7 @@ class App extends React.Component {
   ////////////////////////SEARCH USER/////////////////////////
   searchUsers = (target) => {
     let ul = document.getElementById("AddFriend_addFriend_results");
-    let url =
-      "https://backendstep1.herokuapp.com/api/user/searchUsers/" + target;
+    let url = "http://localhost:4000/api/user/searchUsers/" + target;
     let options = {
       method: "GET",
       mode: "cors",
@@ -1096,6 +1268,7 @@ class App extends React.Component {
                     " " +
                     users.array[i].info.lastname;
                   p2.textContent = "already friends";
+                  p2.style.fontSize = "10pt";
                   li.appendChild(p);
                   li.appendChild(p2);
                   li.setAttribute("id", users.array[i].info.username);
@@ -1238,8 +1411,7 @@ class App extends React.Component {
   };
   ////////////////////////////Update State//////////DONE/////////////////////
   updateUserInfo = () => {
-    let url =
-      "https://backendstep1.herokuapp.com/api/user/update/" + this.state.my_id;
+    let url = "http://localhost:4000/api/user/update/" + this.state.my_id;
     let req = new Request(url, {
       method: "GET",
       mode: "cors",
@@ -1325,7 +1497,7 @@ class App extends React.Component {
     let mins;
     let hours;
     document.getElementById("Posts_content_container").style.height = "100%";
-    document.getElementById("Footer_article").style.display = "none";
+    // document.getElementById("Footer_article").style.display = "none";
     // document.getElementById("SearchPosts_article").style.display = "flex";
     // document.getElementById("timer").style.display = "inline";
     if (JSON.parse(sessionStorage.getItem("timer"))) {
@@ -1360,9 +1532,7 @@ class App extends React.Component {
 
   ////////////////////////////////////////////////////UPDATE isConnect on databae////////////////////////////////
   dbUpdate_user_connected = (isConnected) => {
-    let url =
-      "https://backendstep1.herokuapp.com/api/user/isOnline/" +
-      this.state.my_id;
+    let url = "http://localhost:4000/api/user/isOnline/" + this.state.my_id;
     let options = {
       method: "PUT",
       mode: "cors",
@@ -1382,8 +1552,6 @@ class App extends React.Component {
           sessionStorage.removeItem("state");
           window.location.reload();
           return response.json();
-        } else {
-          throw new Error("bad Http");
         }
       })
       .catch((err) => {
@@ -1393,8 +1561,7 @@ class App extends React.Component {
 
   updateBeforeLeave = () => {
     let url =
-      "https://backendstep1.herokuapp.com/api/user/updateBeforeLeave/" +
-      this.state.my_id;
+      "http://localhost:4000/api/user/updateBeforeLeave/" + this.state.my_id;
     let options = {
       method: "PUT",
       mode: "cors",
@@ -1434,7 +1601,7 @@ class App extends React.Component {
     setTimeout(() => {
       document.getElementById("server_answer").style.width = "0";
       document.getElementById("server_answer_message").textContent = "";
-    }, 5000);
+    }, 8000);
   };
 
   //.....loader function..........
@@ -1502,158 +1669,301 @@ class App extends React.Component {
     this.searchPosts(keyword, subject, category);
   };
   searchPosts = (keyword, subject, category) => {
-    this.setState({
-      searching_on: true,
-    });
-    let url =
-      "https://backendstep1.herokuapp.com/api/user/searchPosts/" +
-      keyword +
-      "/" +
-      subject +
-      "/" +
-      category +
-      "/" +
-      this.state.my_id;
-    let req = new Request(url, {
-      method: "GET",
-      mode: "cors",
-      headers: {
-        Authorization: "Bearer " + this.state.token,
-      },
-    });
-    fetch(req)
-      .then((response) => {
-        if (response.status === 200) {
-          return response.json(response);
+    let ul = document.getElementById("MountPosts_content_container");
+    let ul_term = document.getElementById("Terminology_content_container");
+    let array = [];
+    let array_term = [];
+    ul.innerHTML = "";
+    ul_term.innerHTML = "";
+    //..................................
+    this.state.posts.forEach((post) => {
+      if (keyword !== "$" && subject === "$" && category === "$") {
+        if (
+          String(post.note).toLowerCase() === keyword.toLowerCase() ||
+          String(post.note).toLowerCase().includes(keyword.toLowerCase())
+        ) {
+          array.push(post);
         }
-      })
-      .then((jsonData) => {
-        if (jsonData) {
-          let ul = document.getElementById("MountPosts_content_container");
-          let array;
-          ul.innerHTML = "";
-          this.app_posts.forEach((post) => {
-            if (keyword !== "$" && subject === "$" && category === "$") {
-              if (
-                String(post.note).toLowerCase() === keyword.toLowerCase() ||
-                String(post.note).toLowerCase().includes(keyword.toLowerCase())
-              ) {
-                array.push(post);
-              }
-            }
-            if (keyword === "$" && subject !== "$" && category === "$") {
-              if (post.subject === subject) {
-                array.push(post);
-              }
-            }
-            if (keyword === "$" && subject === "$" && category !== "$") {
-              if (post.category === category) {
-                array.push(post);
-              }
-            }
-            if (keyword !== "$" && subject !== "$" && category === "$") {
-              if (
-                String(post.note).toLowerCase() === keyword.toLowerCase() ||
-                String(post.note)
-                  .toLowerCase()
-                  .includes(keyword.toLowerCase() && post.subject === subject)
-              ) {
-                array.push(post);
-              }
-            }
-            if (keyword !== "$" && subject === "$" && category !== "$") {
-              if (
-                String(post.note).toLowerCase() === keyword.toLowerCase() ||
-                String(post.note)
-                  .toLowerCase()
-                  .includes(keyword.toLowerCase() && post.category === category)
-              ) {
-                array.push(post);
-              }
-            }
-            if (keyword === "$" && subject !== "$" && category !== "$") {
-              if (post.subject === subject && post.category === category) {
-                array.push(post);
-              }
-            }
-            if (keyword !== "$" && subject !== "$" && category !== "$") {
-              if (
-                String(post.note).toLowerCase() === keyword.toLowerCase() ||
-                String(post.note)
-                  .toLowerCase()
-                  .includes(
-                    keyword.toLowerCase() &&
-                      post.subject === subject &&
-                      post.category === category
-                  )
-              ) {
-                array.push(post);
-              }
-            }
-          });
-          let array_associate = [];
-          for (var i = 0; i < this.posts_array.length; i++) {
-            if (array_associate[i] !== this.posts_array[i]._id) {
-              let p1 = document.createElement("p");
-              let p2 = document.createElement("p");
-              let p3 = document.createElement("p");
-              let p4 = document.createElement("p");
-              let p5 = document.createElement("p");
-              let p6 = document.createElement("p");
-              let li = document.createElement("li");
-              let div = document.createElement("div");
+      }
+      if (keyword === "$" && subject !== "$" && category === "$") {
+        if (post.subject === subject) {
+          array.push(post);
+        }
+      }
+      if (keyword === "$" && subject === "$" && category !== "$") {
+        if (post.category === category) {
+          array.push(post);
+        }
+      }
+      if (keyword !== "$" && subject !== "$" && category === "$") {
+        if (
+          String(post.note).toLowerCase() === keyword.toLowerCase() ||
+          String(post.note)
+            .toLowerCase()
+            .includes(keyword.toLowerCase() && post.subject === subject)
+        ) {
+          array.push(post);
+        }
+      }
+      if (keyword !== "$" && subject === "$" && category !== "$") {
+        if (
+          String(post.note).toLowerCase() === keyword.toLowerCase() ||
+          String(post.note)
+            .toLowerCase()
+            .includes(keyword.toLowerCase() && post.category === category)
+        ) {
+          array.push(post);
+        }
+      }
+      if (keyword === "$" && subject !== "$" && category !== "$") {
+        if (post.subject === subject && post.category === category) {
+          array.push(post);
+        }
+      }
+      if (keyword !== "$" && subject !== "$" && category !== "$") {
+        if (
+          String(post.note).toLowerCase() === keyword.toLowerCase() ||
+          String(post.note)
+            .toLowerCase()
+            .includes(
+              keyword.toLowerCase() &&
+                post.subject === subject &&
+                post.category === category
+            )
+        ) {
+          array.push(post);
+        }
+      }
+    });
+    //..............................................
+    this.state.terminology.forEach((term) => {
+      if (keyword !== "$" && subject === "$" && category === "$") {
+        if (
+          String(term.term).toLowerCase() === keyword.toLowerCase() ||
+          String(term.term).toLowerCase().includes(keyword.toLowerCase())
+        ) {
+          array_term.push(term);
+        }
+      }
+      if (keyword === "$" && subject !== "$" && category === "$") {
+        if (term.subject === subject) {
+          array_term.push(term);
+        }
+      }
+      if (keyword === "$" && subject === "$" && category !== "$") {
+        if (term.category === category) {
+          array_term.push(term);
+        }
+      }
+      if (keyword !== "$" && subject !== "$" && category === "$") {
+        if (
+          String(term.note).toLowerCase() === keyword.toLowerCase() ||
+          String(term.note)
+            .toLowerCase()
+            .includes(keyword.toLowerCase() && term.subject === subject)
+        ) {
+          array_term.push(term);
+        }
+      }
+      if (keyword !== "$" && subject === "$" && category !== "$") {
+        if (
+          String(term.note).toLowerCase() === keyword.toLowerCase() ||
+          String(term.note)
+            .toLowerCase()
+            .includes(keyword.toLowerCase() && term.category === category)
+        ) {
+          array_term.push(term);
+        }
+      }
+      if (keyword === "$" && subject !== "$" && category !== "$") {
+        if (term.subject === subject && term.category === category) {
+          array_term.push(term);
+        }
+      }
+      if (keyword !== "$" && subject !== "$" && category !== "$") {
+        if (
+          String(term.note).toLowerCase() === keyword.toLowerCase() ||
+          String(term.note)
+            .toLowerCase()
+            .includes(
+              keyword.toLowerCase() &&
+                term.subject === subject &&
+                term.category === category
+            )
+        ) {
+          array_term.push(term);
+        }
+      }
+    });
+    //.......................................
+    this.searchTerminology(array_term);
+    //.............................................
+    let array_associate = [];
+    for (var i = 0; i < array.length; i++) {
+      if (array_associate[i] !== array[i]._id) {
+        let date_p = document.createElement("p");
+        let category_p = document.createElement("p");
+        let subject_p = document.createElement("p");
+        let reference_p = document.createElement("p");
+        let page_p = document.createElement("p");
+        let li = document.createElement("li");
+        let details_div = document.createElement("div");
+        let note_options_div = document.createElement("div");
+        //.............................comments.......................
 
-              //............date.................................
-              let date = this.posts_array[i].date;
-              let date_timezone = new Date(date);
-              let date_string = date_timezone.toDateString();
-              let time_string = date_timezone.toLocaleTimeString();
-              //.............................................
-              li.className = "fr";
-              p1.textContent = this.posts_array[i].note;
-              p2.textContent =
-                "Posted on: " + date_string + ", " + "at: " + time_string;
-              p3.textContent = "Category: " + this.posts_array[i].category;
-              p4.textContent = "Subject: " + this.posts_array[i].subject;
-              p5.textContent = "Reference: " + this.posts_array[i].reference;
-              p6.textContent = "Page #: " + this.posts_array[i].page_num;
-
-              p1.className = "MountPosts_note";
-              p2.className = "MountPosts_date";
-              p3.className = "MountPosts_date";
-              p4.className = "MountPosts_date";
-              p5.className = "MountPosts_date";
-              p6.className = "MountPosts_date";
-
-              div.appendChild(p2);
-              div.appendChild(p3);
-              div.appendChild(p4);
-              if (
-                !(
-                  this.posts_array[i].reference === "" &&
-                  this.posts_array[i].page_num !== null
-                )
-              ) {
-                if (this.posts_array[i].reference !== "") div.appendChild(p5);
-                if (this.posts_array[i].page_num !== null) div.appendChild(p6);
-              }
-              li.appendChild(p1);
-              li.appendChild(div);
-              ul.prepend(li);
-            } else {
-              // this.RetrievingMyPosts();
-            }
-            array_associate[i] = this.posts_array[i]._id;
-          }
+        //............date.................................
+        let date = array[i].date;
+        let date_timezone = new Date(date);
+        let date_string = date_timezone.toDateString();
+        let time_string = date_timezone.toLocaleTimeString();
+        //.............................................
+        //...............................note..................................
+        let note_p = document.createElement("p");
+        note_p.textContent = array[i].note;
+        note_p.setAttribute("class", "note_p");
+        note_options_div.setAttribute("class", "fr note_options_div");
+        note_options_div.setAttribute("id", "note_options_div" + i);
+        note_options_div.appendChild(note_p);
+        //.......................Options....................................
+        let options_div = document.createElement("div");
+        options_div.setAttribute("class", "options_div");
+        //............................Poster name.......................
+        let postername_p = document.createElement("p");
+        postername_p.setAttribute("class", "postername_p");
+        details_div.appendChild(postername_p);
+        //..................................
+        if (array[i].id === this.state.my_id) {
+          postername_p.textContent = "Mine";
+          let p_delete = document.createElement("p");
+          let p_edit = document.createElement("p");
+          p_delete.style.cursor = "pointer";
+          p_edit.style.cursor = "pointer";
+          p_delete.textContent = "Delete";
+          p_edit.textContent = "Edit";
+          options_div.appendChild(p_delete);
+          options_div.appendChild(p_edit);
+          p_delete.addEventListener("click", () =>
+            this.deletePost(options_div.id)
+          );
+          p_edit.addEventListener("click", () => this.editPost(options_div.id));
+          note_options_div.appendChild(options_div);
+          options_div.setAttribute(
+            "class",
+            "fc MountPosts_postOptionsContainer"
+          );
+          options_div.setAttribute("id", array[i]._id);
         } else {
-          this.RetrievingMyPosts();
+          postername_p.textContent =
+            array[i].firstname + " " + array[i].lastname;
         }
-      })
+        //........................................................................
 
-      .catch((err) => {
-        if (err.message === "Cannot read property 'credentials' of null")
-          console.log("Error", err.message);
+        //.....................................................................
+        li.className = "fc";
+
+        date_p.innerHTML =
+          "<i class='far fa-clock'></i>" +
+          "  " +
+          date_string +
+          ", " +
+          time_string;
+        category_p.textContent = "Category: " + array[i].category;
+        subject_p.textContent = "Subject: " + array[i].subject;
+        reference_p.textContent = "Reference: " + array[i].reference;
+        page_p.textContent = "Page #: " + array[i].page_num;
+        date_p.className = "MountPosts_date";
+        details_div.appendChild(date_p);
+        details_div.appendChild(category_p);
+        details_div.appendChild(subject_p);
+        details_div.setAttribute("class", "fr details_div");
+        //...................comments...............
+        let comments_div = document.createElement("div");
+        let comment_input = document.createElement("input");
+        let commentlist_ul = document.createElement("ul");
+        comments_div.appendChild(comment_input);
+        comments_div.setAttribute("class", "fc comments_div");
+        comments_div.setAttribute("id", "commentDiv" + array[i]._id);
+        comment_input.setAttribute("id", "comment_input" + array[i]._id);
+        comment_input.setAttribute("class", "comment_input");
+        commentlist_ul.setAttribute("id", "commentlist_ul" + array[i]._id);
+        comment_input.setAttribute("placeholder", "Enter a comment");
+        comment_input.addEventListener("keypress", (event) => {
+          this.postComment(event, comments_div.id, comment_input.id);
+        });
+        array[i].comments.forEach((comment) => {
+          let comment_li = document.createElement("li");
+          comment_li.textContent = comment;
+          comment_li.setAttribute("class", "comment_li");
+          commentlist_ul.setAttribute("class", "fc commentlist_ul");
+          commentlist_ul.prepend(comment_li);
+          comments_div.appendChild(commentlist_ul);
+        });
+        //.....................................................
+
+        if (!(array[i].reference === "" && array[i].page_num !== null)) {
+          if (array[i].reference !== "") details_div.appendChild(reference_p);
+          if (array[i].page_num !== null) details_div.appendChild(page_p);
+        }
+        li.setAttribute("id", "li" + array[i]._id);
+        li.appendChild(details_div);
+        li.appendChild(note_options_div);
+        li.appendChild(comments_div);
+        ul.appendChild(li);
+        this.setState({
+          app_is_loading: false,
+        });
+      }
+      array_associate[i] = array[i]._id;
+    }
+  };
+  searchTerminology = (array) => {
+    if (array) {
+      array.forEach((term) => {
+        let ul = document.getElementById("Terminology_content_container");
+        let p1 = document.createElement("p");
+        let p2 = document.createElement("p");
+        let p3 = document.createElement("p");
+        let p4 = document.createElement("p");
+        let p5 = document.createElement("p");
+        let li = document.createElement("li");
+        p1.textContent = term.term;
+        p1.style.fontSize = "16pt";
+        p1.style.textAlign = "center";
+        p1.style.backgroundColor = "var(--white)";
+        p1.style.color = "var(--black)";
+        p2.textContent = term.meaning;
+        p2.style.fontSize = "14pt";
+        p3.textContent = "Category: " + term.category;
+        p3.style.fontSize = "10pt";
+        p3.style.textAlign = "right";
+        p4.textContent = "Subject: " + term.subject;
+        p4.style.fontSize = "10pt";
+        p4.style.textAlign = "right";
+        p5.textContent = "Delete";
+        p5.style.backgroundColor = "var(--red)";
+        p5.style.width = "fit-content";
+        p5.style.padding = "0 5px";
+        p5.style.cursor = "pointer";
+        p5.addEventListener("click", () => {
+          this.deleteTerminology(term._id);
+        });
+        li.appendChild(p1);
+        li.appendChild(p2);
+        li.appendChild(p3);
+        li.appendChild(p4);
+        li.appendChild(p5);
+        li.setAttribute("id", "li_term" + term._id);
+        ul.prepend(li);
       });
+      this.setState({
+        retrievingTerminology_DONE: true,
+      });
+    }
+  };
+  show_profile = (boolean) => {
+    this.setState({
+      profile: boolean,
+    });
   };
   //.....Reander Login HTML..........
   render() {
@@ -1665,6 +1975,7 @@ class App extends React.Component {
             logOut={this.logOut}
             acceptFriend={this.acceptFriend}
             type={this.type}
+            show_profile={this.show_profile}
           />
         )}
         <main id="Main_article" className="fr">
@@ -1676,34 +1987,73 @@ class App extends React.Component {
               state={this.state}
               postingTerminology={this.postingTerminology}
             />
-            <Posts
-              state={this.state}
-              postingPost={this.postingPost}
-              RetrievingMyPosts={this.RetrievingMyPosts}
-              searchPosts={this.searchPosts}
-              prepare_searchPosts={this.prepare_searchPosts}
-              logOut={this.logOut}
-              acceptFriend={this.acceptFriend}
-              type={this.type}
-              counter={this.counter}
-              updateBeforeLeave={this.updateBeforeLeave}
-              app_posts_sorted={this.app_posts_sorted}
-            />
+            {this.state.profile === false && (
+              <Posts
+                state={this.state}
+                postingPost={this.postingPost}
+                RetrievingMyPosts={this.RetrievingMyPosts}
+                searchPosts={this.searchPosts}
+                prepare_searchPosts={this.prepare_searchPosts}
+                logOut={this.logOut}
+                acceptFriend={this.acceptFriend}
+                type={this.type}
+                counter={this.counter}
+                updateBeforeLeave={this.updateBeforeLeave}
+                app_posts_sorted={this.app_posts_sorted}
+                path="/study"
+                profilePosts={this.profilePosts}
+              />
+            )}
+            {this.state.profile === true && (
+              <Posts
+                state={this.state}
+                postingPost={this.postingPost}
+                RetrievingMyPosts={this.RetrievingMyPosts}
+                searchPosts={this.searchPosts}
+                prepare_searchPosts={this.prepare_searchPosts}
+                logOut={this.logOut}
+                acceptFriend={this.acceptFriend}
+                type={this.type}
+                counter={this.counter}
+                updateBeforeLeave={this.updateBeforeLeave}
+                app_posts_sorted={this.app_posts_sorted}
+                path="/study"
+                profilePosts={this.profilePosts}
+              />
+            )}
           </Route>
 
-          {parseInt(
-            window.getComputedStyle(document.querySelector("#root")).width
-          ) > 1200 && (
-            <Friends
-              state={this.state}
-              searchUsers={this.searchUsers}
-              addFriend={this.addFriend}
-              RetrievingMySendingMessages={this.RetrievingMySendingMessages}
-              sendToMeMessage={this.sendToMeMessage}
-              sendToThemMessage={this.sendToThemMessage}
-              dbUpdate_user_connected={this.dbUpdate_user_connected}
-            />
-          )}
+          {this.props.path === "/study" &&
+            parseInt(
+              window.getComputedStyle(document.querySelector("#root")).width
+            ) > 1200 && (
+              <Friends
+                state={this.state}
+                searchUsers={this.searchUsers}
+                addFriend={this.addFriend}
+                RetrievingMySendingMessages={this.RetrievingMySendingMessages}
+                sendToMeMessage={this.sendToMeMessage}
+                sendToThemMessage={this.sendToThemMessage}
+                dbUpdate_user_connected={this.dbUpdate_user_connected}
+                path="/study"
+                serverReply={this.serverReply}
+              />
+            )}
+          {this.props.path === "/" &&
+            parseInt(
+              window.getComputedStyle(document.querySelector("#root")).width
+            ) > 1200 && (
+              <Friends
+                state={this.state}
+                searchUsers={this.searchUsers}
+                addFriend={this.addFriend}
+                RetrievingMySendingMessages={this.RetrievingMySendingMessages}
+                sendToMeMessage={this.sendToMeMessage}
+                sendToThemMessage={this.sendToThemMessage}
+                dbUpdate_user_connected={this.dbUpdate_user_connected}
+                path="/"
+              />
+            )}
         </main>
 
         {this.props.path === "/study" && (
@@ -1711,8 +2061,8 @@ class App extends React.Component {
             type="posts_search"
             searchPosts={this.searchPosts}
             prepare_searchPosts={this.prepare_searchPosts}
-            BuildingPosts={this.BuildingPosts}
             posts_alreadyBuilt={this.posts_alreadyBuilt}
+            posts_comments={this.posts_comments}
           />
         )}
         <div

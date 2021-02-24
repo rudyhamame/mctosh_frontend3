@@ -13,6 +13,7 @@ const Header = (props) => {
           state={props.state}
           acceptFriend={props.acceptFriend}
           type={props.type}
+          show_profile={props.show_profile}
         />
 
         <section>

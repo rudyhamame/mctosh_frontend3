@@ -3,7 +3,7 @@
   z-index: 100;
   font-family: "Pacifico", cursive;
   order: 1;
-  background-color: var(--special_black);
+  background-color: var(--red);
   margin: center;
   border-bottom: solid rgba(0, 0, 0, 0.096) 1px;
 }

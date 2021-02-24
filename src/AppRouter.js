@@ -10,6 +10,9 @@ const AppRouter = (props) => {
       <Route exact path="/study">
         <App authReport={props.authReport} path="/study" />
       </Route>
+      <Route exact path="/profile">
+        <App authReport={props.authReport} path="/profile" />
+      </Route>
     </Router>
   );
 };

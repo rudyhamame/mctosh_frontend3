@@ -1,17 +1,19 @@
 #MountPosts_content_container {
   flex-grow: 1;
-  padding: 10px 15px;
+  padding: 10px 100px;
   gap: 10px;
-  width: 55%;
+  width: 100%;
   margin: 0 auto;
-  background-color: var(--red);
+  background-color: var(--black);
+  /* border-right: black solid 10px;
+  border-left: black solid 10px; */
 }
 #MountPosts_content_container p {
   font-family: "Ropa Sans", sans-serif;
 }
 
 #MountPosts_content_container li {
-  background-color: black;
+  background-color: var(--special_black);
   padding: 20px;
   height: fit-content;
   border-radius: 10px;
@@ -41,12 +43,12 @@
 .commentlist_ul {
   background-color: var(--black);
   gap: 5px;
+  overflow: auto;
 }
 .comment_input {
-  background-color: var(--special_black);
+  background-color: var(--black);
   color: white;
   padding: 15px !important;
-  box-shadow: 0 0 10px black;
 }
 .comment_input::placeholder {
   color: white;
@@ -57,8 +59,8 @@
   gap: 5px;
 }
 .postername_p {
-  background-color: var(--blue) !important;
-  color: var(--black) !important;
+  background-color: var(--red) !important;
+  color: var(--white) !important;
 }
 .note_p {
   font-size: 16pt;
@@ -109,7 +111,7 @@
   background-color: var(--red);
 }
 
-@media screen and (max-width: 1650px) {
+/* @media screen and (max-width: 1650px) {
   #MountPosts_content_container {
     width: 75%;
   }
@@ -126,4 +128,4 @@
     flex-direction: column !important;
     align-items: flex-end;
   }
-}
+} */

@@ -40,8 +40,8 @@ const DropHorizontally = () => {
         gap: "50px",
         justifyContent: "center",
         backgroundColor: "var(--red)",
-        padding: "15px",
-        fontSize: "20pt",
+        padding: "10px",
+        fontSize: "16pt",
         color: "var(--white)",
       }}
       className="fr"

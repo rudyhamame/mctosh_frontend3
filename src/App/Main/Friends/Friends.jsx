@@ -65,7 +65,7 @@ const Friends = (props) => {
         {props.state.isOnline === true && (
           <i
             id="chat_icon"
-            style={{ color: "#ffeb2d" }}
+            style={{ color: "#32cd32" }}
             class="fas fa-users"
           ></i>
         )}

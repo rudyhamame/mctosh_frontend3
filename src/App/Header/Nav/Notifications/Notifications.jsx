@@ -29,12 +29,18 @@ const Notifications = (props) => {
   return (
     <section id="Notifications_article">
       <div id="Notification_icons_container">
-        <i id="i_bell_open" onClick={openNotifications} class="fas fa-bell"></i>
+        <i
+          id="i_bell_open"
+          onClick={openNotifications}
+          class="fas fa-bell"
+          title="Notifications"
+        ></i>
         <i
           id="i_bell_close"
           onClick={closeNotifications}
           style={{ display: "none" }}
           class="fas fa-bell"
+          title="Notifications"
         ></i>
       </div>
 

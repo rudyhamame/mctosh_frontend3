@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Footer from "../../Footer/Footer";
+import Nav from "../../Header/Nav/Nav";
 
 const Greeting = (props) => {
   return (
@@ -24,6 +25,7 @@ const Greeting = (props) => {
           <li id="Greeting_totalDuration_li"></li>
         </div>
       </section>
+      <Nav path="/" />
       <Footer />
     </article>
   );

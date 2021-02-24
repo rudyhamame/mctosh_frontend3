@@ -3,7 +3,7 @@
   width: 100%;
   justify-content: center;
   align-items: center;
-  background-color: white;
+  background-color: var(--white);
 }
 
 #timer_container {
@@ -15,7 +15,7 @@
 #Greeting_studySessions_area {
   color: var(--black);
   overflow: auto;
-  height: 300px;
+  height: 250px;
 }
 #Greeting_preStart_reportDiv {
   padding: 20px;
@@ -26,8 +26,8 @@
 }
 
 #Greeting_preStart {
+  padding-top: 50px;
   border-radius: 100px;
-  padding: 20px;
   align-items: center;
   justify-content: center;
   gap: 10px;

@@ -1,5 +1,6 @@
 #Terminology_article {
   order: 1;
+  z-index: 3;
 }
 #Terminology_title {
   background-color: var(--red);
@@ -38,7 +39,7 @@
   background-color: var(--special_black);
 }
 #Terminology_control_door {
-  background-color: var(--special_black);
+  background-color: var(--red);
   justify-content: center;
   align-items: center;
   order: 1;
@@ -76,9 +77,9 @@
   font-size: 12pt;
 }
 #Terminology_control_icon_open {
-  background-color: var(--red);
+  background-color: var(--special_black);
   color: var(--white);
-  font-size: 18pt;
+  font-size: 16pt;
   padding: 10px;
   transform: none;
   z-index: 1;
@@ -89,7 +90,7 @@
 #Terminology_control_icon_close {
   background-color: var(--red);
   color: var(--white);
-  font-size: 18pt;
+  font-size: 16pt;
   padding: 10px;
   transform: none;
   z-index: 1;

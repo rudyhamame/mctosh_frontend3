@@ -1,5 +1,6 @@
 #Friends_article {
   order: 5;
+  z-index: 3;
 }
 
 #Friends_content_container {
@@ -21,7 +22,7 @@
 }
 
 #Friends_control_door {
-  background-color: var(--special_black);
+  background-color: var(--red);
   justify-content: center;
   align-items: center;
   order: 1;
@@ -29,7 +30,7 @@
 }
 #Friends_control_door i {
   color: var(--white);
-  font-size: 18pt;
+  font-size: 16pt;
   padding: 10px;
   animation-name: arrow_control_color;
   animation-duration: 1.5s;
