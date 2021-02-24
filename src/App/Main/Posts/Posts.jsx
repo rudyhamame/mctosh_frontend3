@@ -7,12 +7,6 @@ import Header from "../../Header/Header";
 const Posts = (props) => {
   return (
     <article id="Posts_article" className="fc">
-      <Header
-        state={props.state}
-        logOut={props.logOut}
-        acceptFriend={props.acceptFriend}
-        type={props.type}
-      />
       <section id="Posts_content_container" className="fc">
         <InputPost
           state={props.state}
@@ -27,12 +21,6 @@ const Posts = (props) => {
         />
       </section>
 
-      <SearchPosts
-        type="posts_search"
-        searchPosts={props.searchPosts}
-        RetrievingMyPosts={props.RetrievingMyPosts}
-        prepare_searchPosts={props.prepare_searchPosts}
-      />
       <Footer />
     </article>
   );

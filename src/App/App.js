@@ -26,6 +26,8 @@ import Terminology from "./Main/Terminology/Terminology";
 import Posts from "./Main/Posts/Posts";
 import Friends from "./Main/Friends/Friends";
 import Greeting from "./Main/Greeting/Greeting";
+import SearchPosts from "./Main/Posts/InputPost/SearchPosts/SearchPosts";
+import Header from "./Header/Header";
 //...........component..................
 class App extends React.Component {
   //..........states...........
@@ -89,33 +91,31 @@ class App extends React.Component {
     // if (
     //   // If I have posts and for only one time!
     //   // this.state.retrievingMyPosts_DONE === false &&
-    //   this.state.timer.secs > 0
+    //   this.props.path === "/study"  > 0
     // )
     //   this.RetrievingMyPosts();
     // if (
     //   // If I have posts and for only one time!
     //   // this.state.retrievingMyPosts_DONE === false &&
-    //   this.state.timer.secs > 0
+    //   this.props.path === "/study"  > 0
     // )
     //   this.RetrievingFriendsPosts();
     if (
       // If I have terminology and for only one time!
       this.state.terminology.length > 0 &&
       this.state.retrievingTerminology_DONE === false &&
-      this.state.timer.secs > 0
+      this.props.path === "/study"
     )
       this.RetrievingTerminology();
     if (
       this.state.retrievingStudySessions_DONE === false &&
-      this.state.timer.secs === 0 &&
-      this.state.timer.mins === 0 &&
-      this.state.timer.hours === 0
+      this.props.path === "/"
     )
       this.RetrievingMyStudySessions();
-    if (this.state.timer.secs > 0) this.BuildingPosts();
+    if (this.props.path === "/study") this.BuildingPosts();
   }
   componentWillUnmount() {
-    if (this.state.timer.secs > 0) {
+    if (this.props.path === "/study") {
       let input = window.confirm(
         "Do you want this study session to be counted?"
       );
@@ -127,7 +127,9 @@ class App extends React.Component {
   }
   //...........................................Preperation..................................................
   preparingChat = () => {
-    let url = "http://localhost:4000/api/chat/prepareChat/" + this.state.my_id;
+    let url =
+      "https://backendstep1.herokuapp.com/api/chat/prepareChat/" +
+      this.state.my_id;
     let options = {
       method: "POST",
       mode: "cors",
@@ -439,16 +441,8 @@ class App extends React.Component {
         let p2 = document.createElement("p");
         let p3 = document.createElement("p");
         let p4 = document.createElement("p");
+        let p5 = document.createElement("p");
         let li = document.createElement("li");
-
-        // //.............................................
-        // let date = result.date;
-        // let date_timezone = new Date(date);
-        // let date_string = date_timezone.toDateString();
-        // let time_string = date_timezone.toLocaleTimeString();
-        // p2.textContent =
-        //   "Posted on: " + date_string + ", " + "at: " + time_string;
-        // //.............................................
         p1.textContent = term.term;
         p1.style.fontSize = "16pt";
         p1.style.textAlign = "center";
@@ -462,16 +456,51 @@ class App extends React.Component {
         p4.textContent = "Subject: " + term.subject;
         p4.style.fontSize = "10pt";
         p4.style.textAlign = "right";
+        p5.textContent = "Delete";
+        p5.style.backgroundColor = "var(--red)";
+        p5.style.width = "fit-content";
+        p5.style.padding = "0 5px";
+        p5.style.cursor = "pointer";
+        p5.addEventListener("click", () => {
+          this.deleteTerminology(term._id);
+        });
         li.appendChild(p1);
         li.appendChild(p2);
         li.appendChild(p3);
         li.appendChild(p4);
+        li.appendChild(p5);
+        li.setAttribute("id", "li_term" + term._id);
         ul.prepend(li);
       });
       this.setState({
         retrievingTerminology_DONE: true,
       });
     }
+  };
+  ////////////////////////////Delete terminology////////////////////////////
+  deleteTerminology = (term_id) => {
+    let url =
+      "https://backendstep1.herokuapp.com/api/user/deleteTerminology/" +
+      term_id +
+      "/" +
+      this.state.my_id;
+    let options = {
+      method: "DELETE",
+      mode: "cors",
+      headers: {
+        Authorization: "Bearer " + this.state.token,
+        "Content-Type": "application/json",
+      },
+    };
+    let req = new Request(url, options);
+    fetch(req).then((response) => {
+      if (response.status === 201) {
+        document.getElementById("li_term" + term_id).remove();
+        this.serverReply("term deleted");
+      } else {
+        this.serverReply("delete failed");
+      }
+    });
   };
 
   //////////////////////////Retrieving Messages ////////////////////////////////
@@ -523,7 +552,8 @@ class App extends React.Component {
       app_is_loading: true,
     });
     let url =
-      "http://localhost:4000/api/user/newTerminology/" + this.state.my_id;
+      "https://backendstep1.herokuapp.com/api/user/newTerminology/" +
+      this.state.my_id;
     let options = {
       method: "POST",
       mode: "cors",
@@ -565,6 +595,7 @@ class App extends React.Component {
           let p2 = document.createElement("p");
           let p3 = document.createElement("p");
           let p4 = document.createElement("p");
+          let p5 = document.createElement("p");
           let li = document.createElement("li");
 
           // //.............................................
@@ -588,10 +619,20 @@ class App extends React.Component {
           p4.textContent = "Subject: " + result.subject;
           p4.style.fontSize = "10pt";
           p4.style.textAlign = "right";
+          p5.textContent = "Delete";
+          p5.style.backgroundColor = "var(--red)";
+          p5.style.width = "fit-content";
+          p5.style.padding = "0 5px";
+          p5.style.cursor = "pointer";
+          p5.addEventListener("click", () => {
+            this.deleteTerminology(result._id);
+          });
+          li.setAttribute("id", "li_term" + result._id);
           li.appendChild(p1);
           li.appendChild(p2);
           li.appendChild(p3);
           li.appendChild(p4);
+          li.appendChild(p5);
 
           ul.prepend(li);
           //...................................
@@ -610,7 +651,7 @@ class App extends React.Component {
     this.setState({
       app_is_loading: true,
     });
-    let url = "http://localhost:4000/api/posts/addNew";
+    let url = "https://backendstep1.herokuapp.com/api/posts/addNew";
     let options = {
       method: "POST",
       mode: "cors",
@@ -648,7 +689,7 @@ class App extends React.Component {
           //.........................................
           this.state.friends.forEach((friend) => {
             let url_2 =
-              "http://localhost:4000/api/posts/postAdd/" +
+              "https://backendstep1.herokuapp.com/api/posts/postAdd/" +
               friend._id +
               "/" +
               result._id;
@@ -675,7 +716,7 @@ class App extends React.Component {
       .then((result) => {
         if (posting_check === 0) {
           let url_2 =
-            "http://localhost:4000/api/posts/postAdd/" +
+            "https://backendstep1.herokuapp.com/api/posts/postAdd/" +
             this.state.my_id +
             "/" +
             result._id;
@@ -716,7 +757,8 @@ class App extends React.Component {
   };
   ////////////////////////////////Deleting Post///////////////////////////////////////////
   deletePost = (post_id) => {
-    let url = "http://localhost:4000/api/posts/deletePost/" + post_id;
+    let url =
+      "https://backendstep1.herokuapp.com/api/posts/deletePost/" + post_id;
     let options = {
       method: "DELETE",
       mode: "cors",
@@ -728,7 +770,7 @@ class App extends React.Component {
     let req = new Request(url, options);
     fetch(req).then((response) => {
       if (response.status === 201) {
-        // document.getElementById(post_id).parentElement.parentElement.remove();
+        document.getElementById(post_id).parentElement.parentElement.remove();
         this.serverReply("post deleted");
       } else {
         this.serverReply("delete failed");
@@ -738,10 +780,7 @@ class App extends React.Component {
   ////////////////////////////////Edit Post///////////////////////////////////////////
   editPost = (post_id) => {
     let url =
-      "http://localhost:4000/api/user/updatePost/" +
-      post_id +
-      "/" +
-      this.state.my_id;
+      "https://backendstep1.herokuapp.com/api/posts/updatePost/" + post_id;
     let options = {
       method: "PUT",
       mode: "cors",
@@ -755,23 +794,32 @@ class App extends React.Component {
         subject: document.getElementById("InputPost_subject").value,
         reference: document.getElementById("InputPost_resourse").value,
         page_num: document.getElementById("InputPost_page").value,
-        date: new Date(),
       }),
     };
-    let req = new Request(url, options);
-    fetch(req).then((response) => {
-      if (response.status === 201) {
-        this.serverReply("post modified");
-      } else {
-        this.serverReply("modify failed");
-      }
-    });
+    if (
+      document.getElementById("InputPost_textarea").value &&
+      document.getElementById("InputPost_category").value &&
+      document.getElementById("InputPost_subject").value
+    ) {
+      let req = new Request(url, options);
+      fetch(req).then((response) => {
+        if (response.status === 201) {
+          this.serverReply("post modified");
+        } else {
+          this.serverReply("modify failed");
+        }
+      });
+    } else {
+      this.serverReply(
+        "Posting failed. Please make sure you select a category and/or a subject for your note"
+      );
+    }
   };
   ////////////////////////Post Comment/////////////////////////////
   postComment = (event, post_id, input_id) => {
     if (event.which === 13) {
       let url =
-        "http://localhost:4000/api/posts/commentPost/" +
+        "https://backendstep1.herokuapp.com/api/posts/commentPost/" +
         post_id.slice(10, post_id.length) +
         "/" +
         document.getElementById(input_id).value;
@@ -798,7 +846,7 @@ class App extends React.Component {
   sendToThemMessage = (message) => {
     if (message && message.trim() !== "") {
       let url =
-        "http://localhost:4000/api/chat/sendMessage/" +
+        "https://backendstep1.herokuapp.com/api/chat/sendMessage/" +
         this.state.friendID_selected +
         "/" +
         this.state.my_id;
@@ -864,7 +912,7 @@ class App extends React.Component {
     document.getElementById("server_answer_message").textContent = "Adding ...";
     document.getElementById("server_answer").style.width = "fit-content";
     let url =
-      "http://localhost:4000/api/user/acceptFriend/" +
+      "https://backendstep1.herokuapp.com/api/user/acceptFriend/" +
       this.state.my_id +
       "/" +
       friend.id;
@@ -883,7 +931,7 @@ class App extends React.Component {
           "You're now friends!";
 
         let url =
-          "http://localhost:4000/api/user/editUserInfo/" +
+          "https://backendstep1.herokuapp.com/api/user/editUserInfo/" +
           this.state.my_id +
           "/" +
           friend.id;
@@ -922,7 +970,7 @@ class App extends React.Component {
 
   makeNotificationsRead = (friend) => {
     let url =
-      "http://localhost:4000/api/user/editUserInfo/" +
+      "https://backendstep1.herokuapp.com/api/user/editUserInfo/" +
       this.state.my_id +
       "/" +
       friend.id;
@@ -952,7 +1000,9 @@ class App extends React.Component {
   ////////////////////////ADD FRIEND/////////////////////////////////////////////
 
   addFriend = (friend_username) => {
-    let url = "http://localhost:4000/api/user/addFriend/" + friend_username;
+    let url =
+      "https://backendstep1.herokuapp.com/api/user/addFriend/" +
+      friend_username;
     let options = {
       method: "POST",
       mode: "cors",
@@ -996,7 +1046,8 @@ class App extends React.Component {
   ////////////////////////SEARCH USER/////////////////////////
   searchUsers = (target) => {
     let ul = document.getElementById("AddFriend_addFriend_results");
-    let url = "http://localhost:4000/api/user/searchUsers/" + target;
+    let url =
+      "https://backendstep1.herokuapp.com/api/user/searchUsers/" + target;
     let options = {
       method: "GET",
       mode: "cors",
@@ -1187,7 +1238,8 @@ class App extends React.Component {
   };
   ////////////////////////////Update State//////////DONE/////////////////////
   updateUserInfo = () => {
-    let url = "http://localhost:4000/api/user/update/" + this.state.my_id;
+    let url =
+      "https://backendstep1.herokuapp.com/api/user/update/" + this.state.my_id;
     let req = new Request(url, {
       method: "GET",
       mode: "cors",
@@ -1274,8 +1326,8 @@ class App extends React.Component {
     let hours;
     document.getElementById("Posts_content_container").style.height = "100%";
     document.getElementById("Footer_article").style.display = "none";
-    document.getElementById("SearchPosts_article").style.display = "flex";
-    document.getElementById("timer").style.display = "inline";
+    // document.getElementById("SearchPosts_article").style.display = "flex";
+    // document.getElementById("timer").style.display = "inline";
     if (JSON.parse(sessionStorage.getItem("timer"))) {
       secs = JSON.parse(sessionStorage.getItem("timer")).secs;
       mins = JSON.parse(sessionStorage.getItem("timer")).mins;
@@ -1308,7 +1360,9 @@ class App extends React.Component {
 
   ////////////////////////////////////////////////////UPDATE isConnect on databae////////////////////////////////
   dbUpdate_user_connected = (isConnected) => {
-    let url = "http://localhost:4000/api/user/isOnline/" + this.state.my_id;
+    let url =
+      "https://backendstep1.herokuapp.com/api/user/isOnline/" +
+      this.state.my_id;
     let options = {
       method: "PUT",
       mode: "cors",
@@ -1339,7 +1393,8 @@ class App extends React.Component {
 
   updateBeforeLeave = () => {
     let url =
-      "http://localhost:4000/api/user/updateBeforeLeave/" + this.state.my_id;
+      "https://backendstep1.herokuapp.com/api/user/updateBeforeLeave/" +
+      this.state.my_id;
     let options = {
       method: "PUT",
       mode: "cors",
@@ -1447,192 +1502,171 @@ class App extends React.Component {
     this.searchPosts(keyword, subject, category);
   };
   searchPosts = (keyword, subject, category) => {
-    // this.setState({
-    //   searching_on: true,
-    // });
-    // let url =
-    //   "http://localhost:4000/api/user/searchPosts/" +
-    //   keyword +
-    //   "/" +
-    //   subject +
-    //   "/" +
-    //   category +
-    //   "/" +
-    //   this.state.my_id;
-    // let req = new Request(url, {
-    //   method: "GET",
-    //   mode: "cors",
-    //   headers: {
-    //     Authorization: "Bearer " + this.state.token,
-    //   },
-    // });
-    // fetch(req)
-    //   .then((response) => {
-    //     if (response.status === 200) {
-    //       return response.json(response);
-    //     }
-    //   })
-    //   .then((jsonData) => {
-    // if (jsonData) {
-    let ul = document.getElementById("MountPosts_content_container");
-    let array;
-    ul.innerHTML = "";
-    this.app_posts.forEach((post) => {
-      if (keyword !== "$" && subject === "$" && category === "$") {
-        if (
-          String(post.note).toLowerCase() === keyword.toLowerCase() ||
-          String(post.note).toLowerCase().includes(keyword.toLowerCase())
-        ) {
-          array.push(post);
-        }
-      }
-      if (keyword === "$" && subject !== "$" && category === "$") {
-        if (post.subject === subject) {
-          array.push(post);
-        }
-      }
-      if (keyword === "$" && subject === "$" && category !== "$") {
-        if (post.category === category) {
-          array.push(post);
-        }
-      }
-      if (keyword !== "$" && subject !== "$" && category === "$") {
-        if (
-          String(post.note).toLowerCase() === keyword.toLowerCase() ||
-          String(post.note)
-            .toLowerCase()
-            .includes(keyword.toLowerCase() && post.subject === subject)
-        ) {
-          array.push(post);
-        }
-      }
-      if (keyword !== "$" && subject === "$" && category !== "$") {
-        if (
-          String(post.note).toLowerCase() === keyword.toLowerCase() ||
-          String(post.note)
-            .toLowerCase()
-            .includes(keyword.toLowerCase() && post.category === category)
-        ) {
-          array.push(post);
-        }
-      }
-      if (keyword === "$" && subject !== "$" && category !== "$") {
-        if (post.subject === subject && post.category === category) {
-          array.push(post);
-        }
-      }
-      if (keyword !== "$" && subject !== "$" && category !== "$") {
-        if (
-          String(post.note).toLowerCase() === keyword.toLowerCase() ||
-          String(post.note)
-            .toLowerCase()
-            .includes(
-              keyword.toLowerCase() &&
-                post.subject === subject &&
-                post.category === category
-            )
-        ) {
-          array.push(post);
-        }
-      }
+    this.setState({
+      searching_on: true,
     });
-    let array_associate = [];
-    for (var i = 0; i < this.posts_array.length; i++) {
-      if (array_associate[i] !== this.posts_array[i]._id) {
-        let p1 = document.createElement("p");
-        let p2 = document.createElement("p");
-        let p3 = document.createElement("p");
-        let p4 = document.createElement("p");
-        let p5 = document.createElement("p");
-        let p6 = document.createElement("p");
-        let li = document.createElement("li");
-        let div = document.createElement("div");
-
-        //............date.................................
-        let date = this.posts_array[i].date;
-        let date_timezone = new Date(date);
-        let date_string = date_timezone.toDateString();
-        let time_string = date_timezone.toLocaleTimeString();
-        //.............................................
-        li.className = "fr";
-        p1.textContent = this.posts_array[i].note;
-        p2.textContent =
-          "Posted on: " + date_string + ", " + "at: " + time_string;
-        p3.textContent = "Category: " + this.posts_array[i].category;
-        p4.textContent = "Subject: " + this.posts_array[i].subject;
-        p5.textContent = "Reference: " + this.posts_array[i].reference;
-        p6.textContent = "Page #: " + this.posts_array[i].page_num;
-
-        p1.className = "MountPosts_note";
-        p2.className = "MountPosts_date";
-        p3.className = "MountPosts_date";
-        p4.className = "MountPosts_date";
-        p5.className = "MountPosts_date";
-        p6.className = "MountPosts_date";
-
-        div.appendChild(p2);
-        div.appendChild(p3);
-        div.appendChild(p4);
-        if (
-          !(
-            this.posts_array[i].reference === "" &&
-            this.posts_array[i].page_num !== null
-          )
-        ) {
-          if (this.posts_array[i].reference !== "") div.appendChild(p5);
-          if (this.posts_array[i].page_num !== null) div.appendChild(p6);
+    let url =
+      "https://backendstep1.herokuapp.com/api/user/searchPosts/" +
+      keyword +
+      "/" +
+      subject +
+      "/" +
+      category +
+      "/" +
+      this.state.my_id;
+    let req = new Request(url, {
+      method: "GET",
+      mode: "cors",
+      headers: {
+        Authorization: "Bearer " + this.state.token,
+      },
+    });
+    fetch(req)
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json(response);
         }
-        li.appendChild(p1);
-        li.appendChild(div);
-        ul.prepend(li);
-      } else {
-        // this.RetrievingMyPosts();
-      }
-      array_associate[i] = this.posts_array[i]._id;
-    }
-    // } else {
-    //   this.RetrievingMyPosts();
-    // }
-    // })
+      })
+      .then((jsonData) => {
+        if (jsonData) {
+          let ul = document.getElementById("MountPosts_content_container");
+          let array;
+          ul.innerHTML = "";
+          this.app_posts.forEach((post) => {
+            if (keyword !== "$" && subject === "$" && category === "$") {
+              if (
+                String(post.note).toLowerCase() === keyword.toLowerCase() ||
+                String(post.note).toLowerCase().includes(keyword.toLowerCase())
+              ) {
+                array.push(post);
+              }
+            }
+            if (keyword === "$" && subject !== "$" && category === "$") {
+              if (post.subject === subject) {
+                array.push(post);
+              }
+            }
+            if (keyword === "$" && subject === "$" && category !== "$") {
+              if (post.category === category) {
+                array.push(post);
+              }
+            }
+            if (keyword !== "$" && subject !== "$" && category === "$") {
+              if (
+                String(post.note).toLowerCase() === keyword.toLowerCase() ||
+                String(post.note)
+                  .toLowerCase()
+                  .includes(keyword.toLowerCase() && post.subject === subject)
+              ) {
+                array.push(post);
+              }
+            }
+            if (keyword !== "$" && subject === "$" && category !== "$") {
+              if (
+                String(post.note).toLowerCase() === keyword.toLowerCase() ||
+                String(post.note)
+                  .toLowerCase()
+                  .includes(keyword.toLowerCase() && post.category === category)
+              ) {
+                array.push(post);
+              }
+            }
+            if (keyword === "$" && subject !== "$" && category !== "$") {
+              if (post.subject === subject && post.category === category) {
+                array.push(post);
+              }
+            }
+            if (keyword !== "$" && subject !== "$" && category !== "$") {
+              if (
+                String(post.note).toLowerCase() === keyword.toLowerCase() ||
+                String(post.note)
+                  .toLowerCase()
+                  .includes(
+                    keyword.toLowerCase() &&
+                      post.subject === subject &&
+                      post.category === category
+                  )
+              ) {
+                array.push(post);
+              }
+            }
+          });
+          let array_associate = [];
+          for (var i = 0; i < this.posts_array.length; i++) {
+            if (array_associate[i] !== this.posts_array[i]._id) {
+              let p1 = document.createElement("p");
+              let p2 = document.createElement("p");
+              let p3 = document.createElement("p");
+              let p4 = document.createElement("p");
+              let p5 = document.createElement("p");
+              let p6 = document.createElement("p");
+              let li = document.createElement("li");
+              let div = document.createElement("div");
 
-    // .catch((err) => {
-    //   if (err.message === "Cannot read property 'credentials' of null")
-    //     console.log("Error", err.message);
-    // });
+              //............date.................................
+              let date = this.posts_array[i].date;
+              let date_timezone = new Date(date);
+              let date_string = date_timezone.toDateString();
+              let time_string = date_timezone.toLocaleTimeString();
+              //.............................................
+              li.className = "fr";
+              p1.textContent = this.posts_array[i].note;
+              p2.textContent =
+                "Posted on: " + date_string + ", " + "at: " + time_string;
+              p3.textContent = "Category: " + this.posts_array[i].category;
+              p4.textContent = "Subject: " + this.posts_array[i].subject;
+              p5.textContent = "Reference: " + this.posts_array[i].reference;
+              p6.textContent = "Page #: " + this.posts_array[i].page_num;
+
+              p1.className = "MountPosts_note";
+              p2.className = "MountPosts_date";
+              p3.className = "MountPosts_date";
+              p4.className = "MountPosts_date";
+              p5.className = "MountPosts_date";
+              p6.className = "MountPosts_date";
+
+              div.appendChild(p2);
+              div.appendChild(p3);
+              div.appendChild(p4);
+              if (
+                !(
+                  this.posts_array[i].reference === "" &&
+                  this.posts_array[i].page_num !== null
+                )
+              ) {
+                if (this.posts_array[i].reference !== "") div.appendChild(p5);
+                if (this.posts_array[i].page_num !== null) div.appendChild(p6);
+              }
+              li.appendChild(p1);
+              li.appendChild(div);
+              ul.prepend(li);
+            } else {
+              // this.RetrievingMyPosts();
+            }
+            array_associate[i] = this.posts_array[i]._id;
+          }
+        } else {
+          this.RetrievingMyPosts();
+        }
+      })
+
+      .catch((err) => {
+        if (err.message === "Cannot read property 'credentials' of null")
+          console.log("Error", err.message);
+      });
   };
   //.....Reander Login HTML..........
   render() {
     return (
       <article id="app_page" className="fc">
-        <h1
-          style={{
-            color: "white",
-            textAlign: "center",
-            backgroundColor: "var(--special_black)",
-            display: "none",
-            boxShadow: "0 0 2px black",
-            zIndex: "100",
-          }}
-          id="timer"
-        >
-          {this.state.timer.hours && this.state.timer.hours < 10
-            ? "0" + this.state.timer.hours
-            : this.state.timer.hours >= 10
-            ? this.state.timer.hours
-            : "00"}
-          :
-          {this.state.timer.mins && this.state.timer.mins < 10
-            ? "0" + this.state.timer.mins
-            : this.state.timer.mins >= 10
-            ? this.state.timer.mins
-            : "00"}
-          :
-          {this.state.timer.secs && this.state.timer.secs < 10
-            ? "0" + this.state.timer.secs
-            : this.state.timer.secs >= 10
-            ? this.state.timer.secs
-            : "00"}
-        </h1>{" "}
+        {this.props.path === "/study" && (
+          <Header
+            state={this.state}
+            logOut={this.logOut}
+            acceptFriend={this.acceptFriend}
+            type={this.type}
+          />
+        )}
         <main id="Main_article" className="fr">
           <Route exact path="/">
             <Greeting state={this.state} />
@@ -1671,6 +1705,16 @@ class App extends React.Component {
             />
           )}
         </main>
+
+        {this.props.path === "/study" && (
+          <SearchPosts
+            type="posts_search"
+            searchPosts={this.searchPosts}
+            prepare_searchPosts={this.prepare_searchPosts}
+            BuildingPosts={this.BuildingPosts}
+            posts_alreadyBuilt={this.posts_alreadyBuilt}
+          />
+        )}
         <div
           id="server_answer"
           onClick={() => {

@@ -1,11 +1,10 @@
 #MountPosts_content_container {
   flex-grow: 1;
-  padding: 20px 15px;
+  padding: 10px 15px;
   gap: 10px;
-  width: 50%;
+  width: 55%;
   margin: 0 auto;
   background-color: var(--red);
-  box-shadow: 2px 0px 70px rgba(0, 0, 0, 0.212);
 }
 #MountPosts_content_container p {
   font-family: "Ropa Sans", sans-serif;
@@ -25,9 +24,7 @@
   color: var(--white);
   font-family: "Ropa Sans", sans-serif;
 }
-.details_div {
-  overflow: scroll;
-}
+
 .details_div p {
   color: var(--white);
   font-size: 13pt;
@@ -43,8 +40,6 @@
 }
 .commentlist_ul {
   background-color: var(--black);
-
-  overflow: auto;
   gap: 5px;
 }
 .comment_input {
@@ -59,17 +54,19 @@
 .comments_div {
   order: 2;
   max-height: 200px;
-  overflow: hidden;
   gap: 5px;
 }
+.postername_p {
+  background-color: var(--blue) !important;
+  color: var(--black) !important;
+}
 .note_p {
-  font-size: 20pt;
+  font-size: 16pt;
   font-family: "Roboto", sans-serif;
   overflow-wrap: break-word !important;
 }
 
 #MountPosts_article {
-  overflow: auto;
   box-shadow: 0 10px 10px rgba(0, 0, 0, 0.075);
   flex-grow: 1;
   order: 2;

@@ -2,8 +2,7 @@ import React from "react";
 import Posts from "./Posts/Posts";
 import Friends from "./Friends/Friends";
 import Terminology from "./Terminology/Terminology";
-import Chat from "./Friends/Chat/Chat";
-import Footer from "../Footer/Footer";
+
 const Main = (props) => {
   return (
     <main id="Main_article" className="fr">

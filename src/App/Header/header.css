@@ -2,17 +2,19 @@
 #Header_article {
   z-index: 100;
   font-family: "Pacifico", cursive;
-  order: 4;
+  order: 1;
   background-color: var(--special_black);
   margin: center;
   border-bottom: solid rgba(0, 0, 0, 0.096) 1px;
-  width: 100%;
 }
 
 /*header content container*/
 #Header_content_container {
-  justify-content: center;
+  width: 1200px;
+  justify-content: space-between;
   align-items: center;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
 @keyframes header_blinker {

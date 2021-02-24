@@ -4,6 +4,7 @@ const SearchPosts = (props) => {
   let SearchPosts_keyword = document.getElementById("SearchPosts_keyword");
   let SearchPosts_subject = document.getElementById("SearchPosts_subject");
   let SearchPosts_category = document.getElementById("SearchPosts_category");
+
   ///////////////////////////SEATCH FOR USERS TO BE FRIENDS///////////////
 
   // function send_by_enter(event) {
@@ -73,7 +74,7 @@ const SearchPosts = (props) => {
             SearchPosts_keyword.value = "";
             SearchPosts_subject.value = "";
             SearchPosts_category.value = "";
-            props.RetrievingMyPosts();
+            props.BuildingPosts();
           }}
         >
           clear

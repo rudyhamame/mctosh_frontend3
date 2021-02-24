@@ -4,16 +4,19 @@
   gap: 30px;
   align-items: center;
   justify-content: center;
-  padding: 20px 0;
-  display: none;
+  padding: 5px 0;
   order: 3;
   width: 100%;
   border-top: solid rgba(0, 0, 0, 0.096) 2px;
-
   background-color: var(--special_black);
 }
-
-#SearchPosts_keyword_container {
+#SearchPosts_control_section {
+  color: var(--white);
+  align-items: center;
+  justify-content: center;
+}
+#SearchPosts_content_container {
+  display: none;
 }
 #SearchPosts_subject_container {
   overflow: hidden;
@@ -76,4 +79,7 @@
   border-radius: 0;
   color: var(--white);
   font-size: 12pt;
+}
+#search_close_icon {
+  display: none;
 }
