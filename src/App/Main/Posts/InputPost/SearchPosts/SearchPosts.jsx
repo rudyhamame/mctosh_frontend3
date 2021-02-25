@@ -14,8 +14,14 @@ const SearchPosts = (props) => {
       "none";
     document.getElementById("SearchPosts_control_close_icon").style.display =
       "inline";
-    document.getElementById("Friends_article").style.display = "flex";
-    document.getElementById("Terminology_article").style.display = "flex";
+    if (
+      parseInt(
+        window.getComputedStyle(document.querySelector("#root")).width
+      ) <= 1200
+    ) {
+      document.getElementById("Friends_article").style.display = "flex";
+      document.getElementById("Terminology_article").style.display = "flex";
+    }
   };
   const closeSearch = () => {
     document.getElementById("SearchPosts_content_container").style.display =
@@ -24,8 +30,14 @@ const SearchPosts = (props) => {
       "inline";
     document.getElementById("SearchPosts_control_close_icon").style.display =
       "none";
-    document.getElementById("Friends_article").style.display = "none";
-    document.getElementById("Terminology_article").style.display = "none";
+    if (
+      parseInt(
+        window.getComputedStyle(document.querySelector("#root")).width
+      ) <= 1200
+    ) {
+      document.getElementById("Friends_article").style.display = "none";
+      document.getElementById("Terminology_article").style.display = "none";
+    }
   };
 
   return (
