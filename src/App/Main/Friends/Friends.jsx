@@ -31,7 +31,7 @@ const Friends = (props) => {
     } else {
       props.dbUpdate_user_connected(false);
       if (parseInt(app_page_css.width) < 1200) {
-        Header_article.style.display = "inline";
+        Header_article.style.display = "flex";
         searchPosts.style.display = "flex";
         Friends_article.style.height = "initial";
         Friends_content_container.style.height = "0";

@@ -20,7 +20,7 @@
     font-size: 20pt;
   }
   #Nav_article i {
-    font-size: 10pt;
+    font-size: 10pt !important;
   }
   #Nav_article {
     gap: 17px;
