@@ -5,6 +5,7 @@
   align-items: center;
   background-color: var(--white);
   overflow: auto;
+  height: 100vh;
 }
 
 #timer_container {
@@ -123,13 +124,11 @@
   #Greeting_studySessions_area div {
     font-size: 10pt;
   }
-  #Greeting_preStart {
-  }
+
   #i_nav_logout {
     font-size: 12pt !important;
   }
   #Greeting_studysessions_article {
-    padding: 20px;
   }
   #Greeting_preStart_reportDiv h3 {
     font-size: 12pt;
