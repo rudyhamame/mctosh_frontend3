@@ -262,7 +262,6 @@ const Login = () => {
                 <input
                   id="Login_dob_input"
                   type="date"
-                  placeholder="date of birth"
                   style={{ display: "none" }}
                 />
                 <button id="Login_login_button" onClick={login}>

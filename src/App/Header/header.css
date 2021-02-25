@@ -34,4 +34,7 @@
 }
 
 @media screen and (max-width: 600px) {
+  #timer {
+    font-size: 12pt;
+  }
 }

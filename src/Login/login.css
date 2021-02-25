@@ -99,6 +99,7 @@
   }
   #Login_loginFrom_form {
     width: 380px;
+    gap: 5px;
   }
   #Login_main {
     gap: 20px;

@@ -3,12 +3,12 @@
   order: 3;
   align-items: center;
   background-color: var(--special_black);
+  overflow: auto;
 }
 #Posts_content_container {
   order: 1;
   flex-grow: 1;
   width: 100%;
-  overflow: auto;
 }
 
 @media screen and (max-width: 1400px) {

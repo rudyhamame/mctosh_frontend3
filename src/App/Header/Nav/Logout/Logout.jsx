@@ -7,7 +7,7 @@ const Logout = (props) => {
         <i
           onClick={() => {
             let url =
-              "http://localhost:4000/api/user/isOnline/" +
+              "https://backendstep1.herokuapp.com/api/user/isOnline/" +
               JSON.parse(sessionStorage.getItem("state")).my_id;
             let options = {
               method: "PUT",
@@ -37,7 +37,7 @@ const Logout = (props) => {
           }}
           class="fas fa-sign-out-alt"
           id="i_nav_logout"
-          style={{ color: "var(--red)", fontSize: "20pt", padding: "10px" }}
+          style={{ color: "var(--red)", padding: "10px" }}
           title="Log out"
         ></i>
       </section>

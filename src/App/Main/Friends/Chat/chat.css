@@ -6,7 +6,6 @@
   font-size: 12pt;
   font-weight: 300;
   background-color: var(--black);
-  overflow: hidden;
   height: 0;
   order: 3;
 }
@@ -42,7 +41,7 @@
   border-top-right-radius: 0;
   background-color: var(--black2);
   padding: 10px 20px;
-  font-size: 14pt;
+  font-size: 13pt;
   color: var(--white);
   min-height: 70px;
 }
@@ -95,4 +94,11 @@
   border: 0;
   color: white;
   border-radius: 0;
+}
+@media screen and (max-width: 1200px) {
+  #Chat_textarea_input {
+    padding: 10px 20px;
+    font-size: 12pt;
+    color: var(--white);
+  }
 }

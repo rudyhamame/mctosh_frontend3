@@ -16,9 +16,15 @@
 #Greeting_studySessions_area {
   color: var(--black);
   overflow: auto;
+  max-height: 200px;
+  padding: 10px 0;
 }
 #Greeting_preStart_reportDiv {
   padding: 20px;
+  text-align: center;
+}
+#Greeting_totalDuration_li {
+  font-size: 14pt;
 }
 #Greeting_studySessions_area div {
   padding: 10px;
@@ -78,8 +84,8 @@
   #Greeting_studySessions_area div {
     font-size: 10pt;
   }
-  #Greeting_preStart {
-    flex-direction: row;
+  #Greeting_studySessions_area {
+    max-height: 150px;
   }
 }
 @media screen and (max-height: 600px) {
@@ -96,10 +102,39 @@
   #Greeting_studySessions_area div {
     font-size: 10pt;
   }
-  #Greeting_preStart {
-    flex-direction: row;
+  #Greeting_studySessions_area {
+    max-height: 100px;
   }
   #i_nav_logout {
     font-size: 12pt !important;
+  }
+}
+@media screen and (max-width: 1000px) {
+  #Greeting_preStart h1 {
+    font-size: 18pt;
+  }
+  #Greeting_preStart h2 {
+    font-size: 14pt;
+  }
+  #Greeting_preStart_button {
+    font-size: 10pt;
+    white-space: nowrap;
+  }
+  #Greeting_studySessions_area div {
+    font-size: 10pt;
+  }
+  #Greeting_preStart {
+  }
+  #i_nav_logout {
+    font-size: 12pt !important;
+  }
+  #Greeting_studysessions_article {
+    padding: 20px;
+  }
+  #Greeting_preStart_reportDiv h3 {
+    font-size: 12pt;
+  }
+  #Greeting_totalDuration_li {
+    font-size: 12pt;
   }
 }

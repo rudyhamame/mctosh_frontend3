@@ -17,11 +17,11 @@
 }
 #Terminology_content_container {
   padding-top: 10px;
-  flex-grow: 1;
   color: white;
   overflow: auto;
   background-color: var(--black);
   gap: 10px;
+  flex-grow: 1;
 }
 #Terminology_content_container li {
   padding: 10px 20px;
@@ -57,7 +57,6 @@
   background-color: var(--red);
   gap: 10px;
   padding: 10px 40px;
-  padding-bottom: 50px;
   align-items: center;
   box-shadow: 0 -10px 100px rgba(66, 64, 64, 0.514);
   display: none;
@@ -84,7 +83,6 @@
   transform: none;
   z-index: 1;
   border-bottom: rgba(0, 0, 0, 0.068) solid 2px;
-  height: 50px;
   text-align: center;
 }
 #Terminology_control_icon_close {
@@ -103,8 +101,22 @@
 #Terminology_control_icon {
   display: none;
 }
+
 @media screen and (max-width: 1200px) {
+  #Terminology_container {
+    overflow: hidden;
+    height: 0;
+    width: 100%;
+  }
   #Terminology_article {
+    flex-direction: column;
     display: none;
+  }
+  #Terminology_control_door {
+    background-color: var(--black2);
+    order: 1;
+  }
+  #Terminology_container {
+    order: 2;
   }
 }

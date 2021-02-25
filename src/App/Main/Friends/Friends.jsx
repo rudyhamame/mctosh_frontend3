@@ -9,29 +9,32 @@ const Friends = (props) => {
     let Friends_content_container = document.getElementById(
       "Friends_content_container"
     );
+    let searchPosts = document.getElementById("SearchPosts_article");
     let Friends_article = document.getElementById("Friends_article");
     let Friends_control_door = document.getElementById("Friends_control_door");
     let app_page = document.querySelector("#app_page");
     let app_page_css = window.getComputedStyle(app_page);
+    let Header_article = document.getElementById("Header_article");
     if (Friends_control_door.title === "unclicked") {
       props.dbUpdate_user_connected(true);
       if (parseInt(app_page_css.width) >= 1500) {
         Friends_content_container.style.width = "400px";
       }
-      if (parseInt(app_page_css.width) < 1600) {
-        Friends_content_container.style.width = "500px";
-      }
-      if (parseInt(app_page_css.width) < 1200) {
-        Friends_article.style.height = "80vh";
-        Friends_content_container.style.height = "100%";
-      }
 
+      if (parseInt(app_page_css.width) < 1200) {
+        searchPosts.style.display = "none";
+        Friends_article.style.height = "100vh";
+        Friends_content_container.style.height = "100%";
+        Header_article.style.display = "none";
+      }
       Friends_control_door.title = "clicked";
     } else {
       props.dbUpdate_user_connected(false);
       if (parseInt(app_page_css.width) < 1200) {
+        Header_article.style.display = "inline";
+        searchPosts.style.display = "flex";
+        Friends_article.style.height = "initial";
         Friends_content_container.style.height = "0";
-        Friends_content_container.style.height = "initial";
       } else {
         Friends_content_container.style.width = "0";
       }
@@ -56,6 +59,7 @@ const Friends = (props) => {
         />
         <DropHorizontally />
       </section>
+
       <section
         onClick={openNotesAside}
         className="fr"

@@ -11,7 +11,6 @@ const Refresh = () => {
         id="InputPost_refresh_icon"
         style={{
           color: "var(--white)",
-          fontSize: "14pt",
         }}
         title="Refresh"
         onClick={refresh}

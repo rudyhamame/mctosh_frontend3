@@ -600,7 +600,6 @@ class App extends React.Component {
       }
       let li = document.getElementById("Greeting_totalDuration_li");
       let p = document.createElement("p");
-      p.style.fontSize = "14pt";
       p.style.fontWeight = "600";
       p.style.padding = "10px";
 
@@ -1026,6 +1025,8 @@ class App extends React.Component {
   };
   //////////////////////////SEND MESSAGE TO FRIEND'S Chat////////////////////////////////
   sendToThemMessage = (message) => {
+    let textarea = document.getElementById("Chat_textarea_input");
+    textarea.style.height = "70px";
     if (message && message.trim() !== "") {
       let url =
         "https://backendstep1.herokuapp.com/api/chat/sendMessage/" +
@@ -1325,7 +1326,6 @@ class App extends React.Component {
       //For every friend
       if (this.app_friends[i] !== this.state.friends[i]._id) {
         //If a friend is new to the app add it to the friends list with respect to the online status and to the app memory
-        this.app_friends[i] = this.state.friends[i]._id;
         let p = document.createElement("p");
         let li = document.createElement("li");
         let icon = document.createElement("i");
@@ -1354,6 +1354,7 @@ class App extends React.Component {
         } else {
           icon.style.color = "var(--black)";
         }
+        this.app_friends[i] = this.state.friends[i]._id;
       }
       if (this.app_friends[i] === this.state.friends[i]._id) {
         // if we already have this friend in the memory app just check their online status and change it
@@ -1368,42 +1369,6 @@ class App extends React.Component {
         }
       }
     }
-    // if (this.app_friends.length > this.state.friends.length) {
-    //   ul.innerHTML = "";
-    //   this.serverReply("A friend has unfollowed you");
-    //   for (i = 0; i < this.state.friends.length; i++) {
-    //     this.app_friends[i] = this.state.friends[i]._id;
-    //     let p = document.createElement("p");
-    //     let li = document.createElement("li");
-    //     let icon = document.createElement("i");
-
-    //     p.textContent =
-    //       this.state.friends[i].info.firstname +
-    //       " " +
-    //       this.state.friends[i].info.lastname;
-    //     p.setAttribute("id", [i]);
-    //     li.appendChild(p);
-    //     li.setAttribute("id", this.state.friends[i]._id);
-    //     li.addEventListener("click", () => {
-    //       this.get_current_friend_chat_id(li.id);
-    //       this.RetrievingMySendingMessages(li.id);
-    //       document.getElementById("DropHorizontally_article").style.display =
-    //         "none";
-    //     });
-    //     li.setAttribute("class", "fr");
-    //     li.setAttribute("title", this.state.friends[i].info.firstname);
-    //     icon.setAttribute("id", "onlinxe_icon" + this.state.friends[i]._id);
-    //     icon.setAttribute("class", "fas fa-circle");
-    //     li.appendChild(icon);
-    //     ul.appendChild(li);
-    //     if (this.state.friends[i].status.isConnected) {
-    //       icon.style.color = "#32cd32";
-    //     } else {
-    //       icon.style.color = "var(--black)";
-    //     }
-    //   }
-    //   if (this.state.posts.length === 0) this.app_friends.length = 0;
-    // }
   };
 
   ////////////////////////////Select friend id to chat //////////////////////////////////////////////////
@@ -2005,10 +1970,14 @@ class App extends React.Component {
             <Greeting state={this.state} />
           </Route>
           <Route exact path="/study">
-            <Terminology
-              state={this.state}
-              postingTerminology={this.postingTerminology}
-            />
+            {parseInt(
+              window.getComputedStyle(document.querySelector("#root")).width
+            ) > 1200 && (
+              <Terminology
+                state={this.state}
+                postingTerminology={this.postingTerminology}
+              />
+            )}
             {this.state.profile === false && (
               <Posts
                 state={this.state}
@@ -2043,24 +2012,23 @@ class App extends React.Component {
                 profilePosts={this.profilePosts}
               />
             )}
+            {this.props.path === "/study" &&
+              parseInt(
+                window.getComputedStyle(document.querySelector("#root")).width
+              ) > 1200 && (
+                <Friends
+                  state={this.state}
+                  searchUsers={this.searchUsers}
+                  addFriend={this.addFriend}
+                  RetrievingMySendingMessages={this.RetrievingMySendingMessages}
+                  sendToMeMessage={this.sendToMeMessage}
+                  sendToThemMessage={this.sendToThemMessage}
+                  dbUpdate_user_connected={this.dbUpdate_user_connected}
+                  path="/"
+                />
+              )}
           </Route>
 
-          {this.props.path === "/study" &&
-            parseInt(
-              window.getComputedStyle(document.querySelector("#root")).width
-            ) > 1200 && (
-              <Friends
-                state={this.state}
-                searchUsers={this.searchUsers}
-                addFriend={this.addFriend}
-                RetrievingMySendingMessages={this.RetrievingMySendingMessages}
-                sendToMeMessage={this.sendToMeMessage}
-                sendToThemMessage={this.sendToThemMessage}
-                dbUpdate_user_connected={this.dbUpdate_user_connected}
-                path="/study"
-                serverReply={this.serverReply}
-              />
-            )}
           {this.props.path === "/" &&
             parseInt(
               window.getComputedStyle(document.querySelector("#root")).width
@@ -2077,7 +2045,33 @@ class App extends React.Component {
               />
             )}
         </main>
-
+        <section style={{ order: "4" }}>
+          {this.props.path === "/study" &&
+            parseInt(
+              window.getComputedStyle(document.querySelector("#root")).width
+            ) <= 1200 && (
+              <Friends
+                state={this.state}
+                searchUsers={this.searchUsers}
+                addFriend={this.addFriend}
+                RetrievingMySendingMessages={this.RetrievingMySendingMessages}
+                sendToMeMessage={this.sendToMeMessage}
+                sendToThemMessage={this.sendToThemMessage}
+                dbUpdate_user_connected={this.dbUpdate_user_connected}
+                path="/study"
+                serverReply={this.serverReply}
+              />
+            )}
+          {this.props.path === "/study" &&
+            parseInt(
+              window.getComputedStyle(document.querySelector("#root")).width
+            ) <= 1200 && (
+              <Terminology
+                state={this.state}
+                postingTerminology={this.postingTerminology}
+              />
+            )}
+        </section>
         {this.props.path === "/study" && (
           <SearchPosts
             type="posts_search"
@@ -2093,7 +2087,7 @@ class App extends React.Component {
             document.getElementById("server_answer").style.width = "0";
           }}
         >
-          <h3 id="server_answer_message"></h3>
+          <p id="server_answer_message"></p>
         </div>
         {this.state.app_is_loading && (
           <div

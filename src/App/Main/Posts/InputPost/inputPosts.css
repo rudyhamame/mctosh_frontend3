@@ -18,7 +18,6 @@
   font-size: 13pt;
   line-height: 20pt;
   border-bottom-left-radius: 10px;
-  min-height: 70px;
   height: 70px;
   padding: 20px;
   background-color: var(--special_black);
@@ -89,13 +88,16 @@
   transform: none;
 }
 
-/* @media screen and (max-width: 700px) {
+@media screen and (max-width: 1000px) {
   #InputPost_textarea {
     font-size: 10pt;
   }
-  #InputPost_greeting_text {
-    font-size: 10pt;
-    white-space: normal;
+  #InputPost_textarea_container {
+    padding: 0 5px;
+    flex-direction: column;
+  }
+  #InputPost_textarea {
+    border-bottom-left-radius: 0px;
   }
   #InputPost_category,
   #InputPost_subject,
@@ -103,8 +105,10 @@
   #InputPost_page {
     font-size: 10pt;
   }
+
   #InputPost_post_button {
     font-size: 12pt;
+    border-bottom-right-radius: 0px;
   }
 }
 @media screen and (max-width: 600px) {
@@ -123,18 +127,13 @@
   }
   #InputPost_post_button {
     font-size: 10pt;
-  }
-}
-@media screen and (max-width: 1650px) {
-  #InputPost_textarea_container,
-  #InputPost_inputs_container {
-    width: 75%;
+    padding: 10px 15px;
   }
 }
 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1300px) {
   #InputPost_textarea_container,
   #InputPost_inputs_container {
     width: 100%;
   }
-} */
+}

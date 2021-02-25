@@ -21,29 +21,36 @@ const Terminology = (props) => {
     let Terminology_container = document.getElementById(
       "Terminology_container"
     );
-    let Terminology_article = document.getElementById("Terminology_article");
     let Terminology_control_door = document.getElementById(
       "Terminology_control_door"
     );
     let app_page = document.querySelector("#app_page");
     let app_page_css = window.getComputedStyle(app_page);
+    let Header_article = document.getElementById("Header_article");
+    let searchPosts = document.getElementById("SearchPosts_article");
+    let Friends_article = document.getElementById("Friends_article");
+    let Terminology_article = document.getElementById("Terminology_article");
+
     if (Terminology_control_door.title === "unclicked") {
       if (parseInt(app_page_css.width) >= 1500) {
         Terminology_container.style.width = "400px";
       }
-      if (parseInt(app_page_css.width) < 1600) {
-        Terminology_container.style.width = "500px";
-      }
-      if (parseInt(app_page_css.width) < 1200) {
-        Terminology_article.style.height = "80vh";
-        Terminology_container.style.height = "100%";
-      }
 
+      if (parseInt(app_page_css.width) <= 1200) {
+        Header_article.style.display = "none";
+        Terminology_article.style.height = "100vh";
+        Friends_article.style.display = "none";
+        searchPosts.style.display = "none";
+        Terminology_container.style.height = "100vh";
+      }
       Terminology_control_door.title = "clicked";
     } else {
       if (parseInt(app_page_css.width) < 1200) {
+        Header_article.style.display = "flex";
+        Terminology_article.style.height = "initial";
         Terminology_container.style.height = "0";
-        Terminology_container.style.height = "initial";
+        Friends_article.style.display = "flex";
+        searchPosts.style.display = "flex";
       } else {
         Terminology_container.style.width = "0";
       }

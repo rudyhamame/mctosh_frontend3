@@ -42,7 +42,6 @@ input[value=""]::-webkit-datetime-edit {
 
 @media screen and (max-width: 1200px) {
   #Friends_content_container {
-    height: 0;
     background-color: var(--red);
     width: 100% !important;
   }
@@ -75,17 +74,15 @@ input[value=""]::-webkit-datetime-edit {
   #Chat_goback_icon {
     font-size: 16pt;
   }
-  #Friends_content_container {
-    height: 0;
-  }
 }
 @media screen and (max-width: 1200px) {
   #Friends_content_container {
-    height: 100% !important;
-    width: 100% !important;
+    overflow: hidden;
+    height: 0;
+    width: 0;
   }
   #Friends_article {
-    height: 100% !important;
-    width: 100% !important;
+    flex-direction: column;
+    display: none;
   }
 }

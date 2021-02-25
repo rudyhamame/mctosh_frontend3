@@ -23,12 +23,6 @@ const SearchUsers = (props) => {
         id="SearchUsers_input"
         type="text"
         placeholder="Enter a keyword"
-        onChange={() => {
-          if (SearchUsers_input.value === "") {
-            AddFriend_addFriend_results.innerHTML = "";
-          }
-          props.searchUsers(SearchUsers_input.value);
-        }}
         onKeyPress={(event) => {
           send_by_enter(event);
         }}

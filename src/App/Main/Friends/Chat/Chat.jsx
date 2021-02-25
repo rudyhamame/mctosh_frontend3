@@ -5,14 +5,11 @@ const Chat = (props) => {
 
   function auto_grow(event) {
     textarea.style.height = textarea.scrollHeight + "px";
-
     if (event.which === 8) {
-      textarea.style.height = textarea.scrollHeight - 20 + "px";
+      textarea.style.height = textarea.scrollHeight + "px";
     }
   }
-  function minimizeHeight() {
-    textarea.style.height = "70px";
-  }
+
   function send_by_enter(event) {
     if (event.which === 13) {
       props.sendToThemMessage(textarea.value);
@@ -45,7 +42,6 @@ const Chat = (props) => {
             auto_grow(event);
             send_by_enter(event);
           }}
-          onChange={(event) => minimizeHeight(event)}
         ></textarea>
         <button id="Chat_submit_button">
           <i

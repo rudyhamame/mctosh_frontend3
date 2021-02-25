@@ -14,24 +14,12 @@ const ProfileIcon = (props) => {
         ></i>
       )}
       {props.profile === "true" && (
-        <div
-          className="fr"
-          style={{ gap: "10px", color: "white", cursor: "pointer" }}
-        >
-          <i
-            class="fas fa-chevron-circle-left"
-            onClick={() => {
-              window.location.reload();
-            }}
-          ></i>
-          <h4
-            onClick={() => {
-              window.location.reload();
-            }}
-          >
-            Go back
-          </h4>
-        </div>
+        <i
+          class="fas fa-chevron-circle-left"
+          onClick={() => {
+            window.location.reload();
+          }}
+        ></i>
       )}
     </div>
   );
