@@ -1416,7 +1416,7 @@ class App extends React.Component {
         return jsonData;
       })
       .then((jsonData) => {
-        if (jsonData.friends.length >= this.app_friends.length) {
+        if (jsonData.friends.length > this.app_friends.length) {
           this.buildFriendsList();
         }
         this.buildNotifications();
