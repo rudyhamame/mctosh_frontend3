@@ -1,15 +1,14 @@
 #Notifications_dropMenu_container {
   display: none;
-  position: absolute;
+  position: fixed;
   background-color: var(--background_menu);
   height: 50%;
-  width: 300px;
   overflow: auto;
   color: white;
   justify-content: flex-start;
   gap: 10px;
-  border-top: var(--red) 10px solid;
-  bottom: 50px;
+  border-bottom: var(--red) 10px solid;
+  width: 20%;
 }
 
 #Notifications_dropMenu_container li {
@@ -32,4 +31,17 @@
   position: absolute;
   font-size: 10px !important;
   z-index: 1;
+}
+
+@media screen and (max-width: 1000px) {
+  #Notifications_dropMenu_container {
+    width: 60%;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  #Notifications_dropMenu_container {
+    width: 100%;
+    left: 0;
+  }
 }

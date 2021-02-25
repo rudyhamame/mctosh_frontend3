@@ -18,8 +18,9 @@
   font-size: 13pt;
   line-height: 20pt;
   border-bottom-left-radius: 10px;
-  height: 70px;
-  padding: 20px;
+  height: 60px;
+  min-height: 60px;
+  padding: 15px 20px;
   background-color: var(--special_black);
   color: white;
 }
@@ -90,7 +91,7 @@
 
 @media screen and (max-width: 1000px) {
   #InputPost_textarea {
-    font-size: 10pt;
+    font-size: 12pt;
   }
   #InputPost_textarea_container {
     padding: 0 5px;
