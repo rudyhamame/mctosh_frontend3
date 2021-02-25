@@ -107,15 +107,43 @@
     max-height: 100px;
   }
   #i_nav_logout {
-    font-size: 12pt !important;
+    font-size: 14pt !important;
   }
 }
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1200px) {
   #Greeting_preStart h1 {
-    font-size: 18pt;
+    font-size: 40pt;
   }
   #Greeting_preStart h2 {
+    font-size: 20pt;
+  }
+  #Greeting_preStart_button {
     font-size: 14pt;
+    white-space: nowrap;
+  }
+  #Greeting_studySessions_area div {
+    font-size: 12pt;
+  }
+
+  #i_nav_logout {
+    font-size: 18pt !important;
+  }
+  #Greeting_studysessions_article {
+  }
+  #Greeting_preStart_reportDiv h3 {
+    font-size: 12pt;
+  }
+  #Greeting_totalDuration_li {
+    font-size: 12pt;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  #Greeting_preStart h1 {
+    font-size: 25pt;
+  }
+  #Greeting_preStart h2 {
+    font-size: 16pt;
   }
   #Greeting_preStart_button {
     font-size: 10pt;
@@ -126,7 +154,7 @@
   }
 
   #i_nav_logout {
-    font-size: 12pt !important;
+    font-size: 18pt !important;
   }
   #Greeting_studysessions_article {
   }

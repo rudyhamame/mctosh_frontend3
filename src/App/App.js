@@ -1415,12 +1415,12 @@ class App extends React.Component {
         });
         return jsonData;
       })
-      .then((jsonData) => {
-        if (jsonData.friends.length > this.app_friends.length) {
+      .then(() => {
+        if (this.props.path === "/study") {
           this.buildFriendsList();
+          this.buildNotifications();
+          if (this.state.friendID_selected) this.RetrievingMySendingMessages();
         }
-        this.buildNotifications();
-        if (this.state.friendID_selected) this.RetrievingMySendingMessages();
       })
       .catch((err) => {
         if (err.message === "Cannot read property 'credentials' of null")
