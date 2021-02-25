@@ -27,6 +27,7 @@
   align-items: center;
   justify-content: center;
   flex-grow: 1;
+  padding: 20px;
   /* padding: 0 30px; */
 }
 #Login_loginLogo_container {
@@ -87,6 +88,44 @@
 
 #Login_copyright_text {
   font-weight: 300;
+}
+
+@media screen and (max-height: 600px) {
+  #Login_loginLogo_text {
+    font-size: 50pt;
+  }
+  #Login_subLoginLogo_text {
+    font-size: 30pt;
+  }
+  #Login_loginFrom_form {
+    width: 380px;
+  }
+  #Login_main {
+    gap: 20px;
+  }
+  #Login_loginFrom_form input,
+  #Login_loginFrom_form button {
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-height: 500px) {
+  #Login_loginLogo_text {
+    font-size: 40pt;
+  }
+  #Login_subLoginLogo_text {
+    font-size: 20pt;
+  }
+  #Login_loginFrom_form {
+    width: 380px;
+  }
+  #Login_loginFrom_form input,
+  #Login_loginFrom_form button {
+    font-size: 12px;
+  }
+  #Login_main {
+    gap: 10px;
+  }
 }
 
 @media screen and (max-width: 600px) {

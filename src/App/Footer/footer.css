@@ -49,3 +49,9 @@
     font-size: 16pt;
   }
 }
+
+@media screen and (max-width: 1200px) {
+  #Footer_article {
+    display: none;
+  }
+}

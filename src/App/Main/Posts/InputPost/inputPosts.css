@@ -23,7 +23,6 @@
   padding: 20px;
   background-color: var(--special_black);
   color: white;
-  min-width: 200px;
 }
 #InputPost_textarea::placeholder {
   color: rgba(255, 255, 255, 0.658);
@@ -77,11 +76,9 @@
 }
 #InputPost_resourse,
 #InputPost_page {
-  min-width: 120px;
 }
 #InputPost_category,
 #InputPost_subject {
-  min-width: 150px;
 }
 
 #InputPost_resourse::placeholder,

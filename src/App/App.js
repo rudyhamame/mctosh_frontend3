@@ -55,6 +55,7 @@ class App extends React.Component {
       retrievingFriendsPosts_DONE: false,
       retrievingTerminology_DONE: false,
       retrievingStudySessions_DONE: false,
+      notifications: [],
       timer: {
         hours: 0,
         mins: 0,
@@ -86,6 +87,7 @@ class App extends React.Component {
     }, 1000);
   }
   componentDidUpdate() {
+    console.log(this.state.notifications);
     if (this.state.timer && this.state.isConnected)
       sessionStorage.setItem("timer", JSON.stringify(this.state.timer));
 
@@ -1088,14 +1090,15 @@ class App extends React.Component {
   ////////////////////////ACCEPT FRIEND/////////////////////////////////////////////
 
   acceptFriend = (friend) => {
-    document.getElementById(friend.id).style.backgroundColor = "var(--black)";
+    let friend_trim = friend.slice(11, friend.length);
+    document.getElementById(friend_trim).style.backgroundColor = "var(--black)";
     document.getElementById("server_answer_message").textContent = "Adding ...";
     document.getElementById("server_answer").style.width = "fit-content";
     let url =
       "https://backendstep1.herokuapp.com/api/user/acceptFriend/" +
       this.state.my_id +
       "/" +
-      friend.id;
+      friend_trim;
     let options = {
       method: "POST",
       mode: "cors",
@@ -1114,7 +1117,7 @@ class App extends React.Component {
           "https://backendstep1.herokuapp.com/api/user/editUserInfo/" +
           this.state.my_id +
           "/" +
-          friend.id;
+          friend_trim;
         let options = {
           method: "PUT",
           mode: "cors",
@@ -1130,7 +1133,7 @@ class App extends React.Component {
               document.getElementById("server_answer").style.width = "0";
               document.getElementById("server_answer_message").textContent = "";
             }, 5000);
-            document.getElementById(friend.id).parentElement.style.display =
+            document.getElementById(friend_trim).parentElement.style.display =
               "none";
           }
         });
@@ -1142,7 +1145,8 @@ class App extends React.Component {
           document.getElementById("server_answer").style.width = "0";
           document.getElementById("server_answer_message").textContent = "";
         }, 5000);
-        document.getElementById(friend.id).parentElement.style.display = "none";
+        document.getElementById(friend_trim).parentElement.style.display =
+          "none";
       }
     });
   };
@@ -1364,42 +1368,42 @@ class App extends React.Component {
         }
       }
     }
-    if (this.app_friends.length > this.state.friends.length) {
-      this.serverReply("A friend has unfollowed you");
-      ul.innerHTML = "";
-      for (i = 0; i < this.state.friends.length; i++) {
-        this.app_friends[i] = this.state.friends[i]._id;
-        let p = document.createElement("p");
-        let li = document.createElement("li");
-        let icon = document.createElement("i");
+    // if (this.app_friends.length > this.state.friends.length) {
+    //   ul.innerHTML = "";
+    //   this.serverReply("A friend has unfollowed you");
+    //   for (i = 0; i < this.state.friends.length; i++) {
+    //     this.app_friends[i] = this.state.friends[i]._id;
+    //     let p = document.createElement("p");
+    //     let li = document.createElement("li");
+    //     let icon = document.createElement("i");
 
-        p.textContent =
-          this.state.friends[i].info.firstname +
-          " " +
-          this.state.friends[i].info.lastname;
-        p.setAttribute("id", [i]);
-        li.appendChild(p);
-        li.setAttribute("id", this.state.friends[i]._id);
-        li.addEventListener("click", () => {
-          this.get_current_friend_chat_id(li.id);
-          this.RetrievingMySendingMessages(li.id);
-          document.getElementById("DropHorizontally_article").style.display =
-            "none";
-        });
-        li.setAttribute("class", "fr");
-        li.setAttribute("title", this.state.friends[i].info.firstname);
-        icon.setAttribute("id", "onlinxe_icon" + this.state.friends[i]._id);
-        icon.setAttribute("class", "fas fa-circle");
-        li.appendChild(icon);
-        ul.appendChild(li);
-        if (this.state.friends[i].status.isConnected) {
-          icon.style.color = "#32cd32";
-        } else {
-          icon.style.color = "var(--black)";
-        }
-      }
-      if (this.state.posts.length === 0) this.app_friends.length = 0;
-    }
+    //     p.textContent =
+    //       this.state.friends[i].info.firstname +
+    //       " " +
+    //       this.state.friends[i].info.lastname;
+    //     p.setAttribute("id", [i]);
+    //     li.appendChild(p);
+    //     li.setAttribute("id", this.state.friends[i]._id);
+    //     li.addEventListener("click", () => {
+    //       this.get_current_friend_chat_id(li.id);
+    //       this.RetrievingMySendingMessages(li.id);
+    //       document.getElementById("DropHorizontally_article").style.display =
+    //         "none";
+    //     });
+    //     li.setAttribute("class", "fr");
+    //     li.setAttribute("title", this.state.friends[i].info.firstname);
+    //     icon.setAttribute("id", "onlinxe_icon" + this.state.friends[i]._id);
+    //     icon.setAttribute("class", "fas fa-circle");
+    //     li.appendChild(icon);
+    //     ul.appendChild(li);
+    //     if (this.state.friends[i].status.isConnected) {
+    //       icon.style.color = "#32cd32";
+    //     } else {
+    //       icon.style.color = "var(--black)";
+    //     }
+    //   }
+    //   if (this.state.posts.length === 0) this.app_friends.length = 0;
+    // }
   };
 
   ////////////////////////////Select friend id to chat //////////////////////////////////////////////////
@@ -1444,9 +1448,12 @@ class App extends React.Component {
           study_session: jsonData.study_session,
           isOnline: jsonData.isOnline,
         });
+        return jsonData;
       })
-      .then(() => {
-        this.buildFriendsList();
+      .then((jsonData) => {
+        if (jsonData.friends.length >= this.app_friends.length) {
+          this.buildFriendsList();
+        }
         this.buildNotifications();
         if (this.state.friendID_selected) this.RetrievingMySendingMessages();
       })
@@ -1461,44 +1468,47 @@ class App extends React.Component {
 
   buildNotifications = () => {
     let ul = document.getElementById("Notifications_dropMenu_container");
-    this.state.notifications.forEach((notification) => {
-      if (notification.status !== "read") {
+    for (var i = 0; i < this.state.notifications.length; i++) {
+      if (
+        this.state.notifications[i].status !== "read" &&
+        this.notificaitons_array[i] !== this.state.notifications[i]._id
+      ) {
         document.getElementById("i_bell_open").style.color = "yellow";
-        // document.getElementById("i_bell_close").style.color = "yellow";
-        ul.innerHTML = "";
-
         let p = document.createElement("p");
         let li = document.createElement("li");
         let div = document.createElement("div");
         let decline_icon = document.createElement("i");
         let accept_icon = document.createElement("i");
-
         accept_icon.addEventListener("click", () => {
-          this.acceptFriend(notification);
+          this.acceptFriend(accept_icon.id);
         });
         decline_icon.addEventListener("click", () => {
-          this.makeNotificationsRead(notification);
+          this.makeNotificationsRead(this.state.notifications[i]);
         });
         decline_icon.setAttribute("class", "fas fa-times");
         accept_icon.setAttribute("class", "fas fa-user-check");
-        accept_icon.setAttribute("id", "accept_icon" + notification.id);
-        decline_icon.setAttribute("id", "decline_icon" + notification.id);
+        accept_icon.setAttribute(
+          "id",
+          "accept_icon" + this.state.notifications[i].id
+        );
+        decline_icon.setAttribute(
+          "id",
+          "decline_icon" + this.state.notifications[i].id
+        );
 
-        p.textContent = notification.message;
+        p.textContent = this.state.notifications[i].message;
         div.setAttribute("class", "fr");
         div.style.justifyContent = "space-between";
-        li.setAttribute("id", notification.id);
+        li.setAttribute("id", this.state.notifications[i].id);
         li.appendChild(p);
         div.appendChild(li);
         div.appendChild(decline_icon);
         div.appendChild(accept_icon);
         ul.appendChild(div);
-        this.notificaitons_array.push(notification);
-      } else {
-        document.getElementById("i_bell_open").style.color = "var(--white)";
-        document.getElementById("i_bell_close").style.color = "var(--white)";
       }
-    });
+
+      this.notificaitons_array[i] = this.state.notifications[i]._id;
+    }
   };
   ///////////////////////////////////////Counter////////////////////////////////////////////////
   counter = () => {

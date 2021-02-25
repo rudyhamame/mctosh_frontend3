@@ -13,6 +13,7 @@ const Notifications = (props) => {
     Notifications_dropMenu_container.style.display = "flex";
     i_bell_close.style.display = "inline";
     i_bell_open.style.display = "none";
+    i_bell_open.style.color = "white";
   }
 
   function closeNotifications() {

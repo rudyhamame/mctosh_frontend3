@@ -15,7 +15,7 @@
   transform: scale(0.96);
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 1200px) {
   #Header_content_container h2 {
     font-size: 20pt;
   }

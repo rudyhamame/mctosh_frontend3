@@ -4,6 +4,7 @@
   justify-content: center;
   align-items: center;
   background-color: var(--white);
+  overflow: auto;
 }
 
 #timer_container {
@@ -15,7 +16,6 @@
 #Greeting_studySessions_area {
   color: var(--black);
   overflow: auto;
-  height: 250px;
 }
 #Greeting_preStart_reportDiv {
   padding: 20px;
@@ -60,4 +60,46 @@
   color: var(--white);
   border-radius: 40px;
   margin-top: 30px;
+}
+@media screen and (max-height: 700px) {
+  #Greeting_preStart {
+    transform: scale(0.8);
+  }
+  #Greeting_preStart h1 {
+    font-size: 30pt;
+  }
+  #Greeting_preStart h2 {
+    font-size: 20pt;
+  }
+  #Greeting_preStart_button {
+    font-size: 15pt;
+    white-space: nowrap;
+  }
+  #Greeting_studySessions_area div {
+    font-size: 10pt;
+  }
+  #Greeting_preStart {
+    flex-direction: row;
+  }
+}
+@media screen and (max-height: 600px) {
+  #Greeting_preStart h1 {
+    font-size: 25pt;
+  }
+  #Greeting_preStart h2 {
+    font-size: 15pt;
+  }
+  #Greeting_preStart_button {
+    font-size: 10pt;
+    white-space: nowrap;
+  }
+  #Greeting_studySessions_area div {
+    font-size: 10pt;
+  }
+  #Greeting_preStart {
+    flex-direction: row;
+  }
+  #i_nav_logout {
+    font-size: 12pt !important;
+  }
 }
