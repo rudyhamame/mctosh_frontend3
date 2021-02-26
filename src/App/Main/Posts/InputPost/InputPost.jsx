@@ -29,15 +29,38 @@ const InputForm = (props) => {
         <section id="InputPost_inputs_container" className="fr">
           <select id="InputPost_category" title="dsf">
             <option value="" disabled selected hidden>
-              Category
+              System
             </option>
             <option value="General Principles">General Principles</option>
-            <option value="Individual Organ">Individual Organ</option>
+            <option value="Individual Organ">Behavioral health system</option>
+            <option value="Individual Organ">Nervous system</option>
+            <option value="Individual Organ">Respiratory system</option>
+            <option value="Individual Organ">Renal system</option>
+            <option value="Individual Organ">Female reproductive system</option>
+            <option value="Individual Organ">Male reproductive system</option>
+            <option value="Individual Organ">Endocrine system</option>
+            <option value="Individual Organ">Blood system</option>
+            <option value="Individual Organ">Immune system</option>
+            <option value="Individual Organ">
+              Multisystem processes and disorders
+            </option>
+            <option value="Individual Organ">Musculoskeletal tissue</option>
+            <option value="Individual Organ">
+              Skin and subcutaneous tissue
+            </option>
+            <option value="Individual Organ">Cardiovascular system</option>
+            <option value="Individual Organ">Gastrointestinal system</option>
+            <option value="Individual Organ">
+              Biostatistics and population health
+            </option>
+            <option value="Individual Organ">
+              Social sciences: communication skills and ethics
+            </option>
           </select>
 
           <select id="InputPost_subject" name="subject">
             <option value="" disabled selected hidden>
-              Subject
+              Discipline
             </option>
             <option value="Pathology">Pathology</option>
             <option value="Physiology">Physiology</option>
