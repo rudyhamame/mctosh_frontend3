@@ -1,4 +1,5 @@
 #MountPosts_article {
+  overflow: hidden;
 }
 #MountPosts_content_container {
   padding: 10px 100px;
@@ -7,6 +8,7 @@
   margin: 0 auto;
   background-color: var(--black);
   flex-grow: 1;
+  overflow: auto;
 }
 #MountPosts_content_container p {
   font-family: "Ropa Sans", sans-serif;

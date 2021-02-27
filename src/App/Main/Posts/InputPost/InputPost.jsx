@@ -32,28 +32,38 @@ const InputForm = (props) => {
               System
             </option>
             <option value="General Principles">General Principles</option>
-            <option value="Individual Organ">Behavioral health system</option>
-            <option value="Individual Organ">Nervous system</option>
-            <option value="Individual Organ">Respiratory system</option>
-            <option value="Individual Organ">Renal system</option>
-            <option value="Individual Organ">Female reproductive system</option>
-            <option value="Individual Organ">Male reproductive system</option>
-            <option value="Individual Organ">Endocrine system</option>
-            <option value="Individual Organ">Blood system</option>
-            <option value="Individual Organ">Immune system</option>
-            <option value="Individual Organ">
+            <option value="Behavioral health system">
+              Behavioral health system
+            </option>
+            <option value="Nervous system">Nervous system</option>
+            <option value="Respiratory system">Respiratory system</option>
+            <option value="Renal system">Renal system</option>
+            <option value="Female reproductive system">
+              Female reproductive system
+            </option>
+            <option value="Male reproductive system">
+              Male reproductive system
+            </option>
+            <option value="Endocrine system">Endocrine system</option>
+            <option value="Blood system">Blood system</option>
+            <option value="Immune system">Immune system</option>
+            <option value="Multisystem processes and disorders">
               Multisystem processes and disorders
             </option>
-            <option value="Individual Organ">Musculoskeletal tissue</option>
-            <option value="Individual Organ">
+            <option value="Musculoskeletal tissue">
+              Musculoskeletal tissue
+            </option>
+            <option value="Skin and subcutaneous tissue">
               Skin and subcutaneous tissue
             </option>
-            <option value="Individual Organ">Cardiovascular system</option>
-            <option value="Individual Organ">Gastrointestinal system</option>
-            <option value="Individual Organ">
+            <option value="Cardiovascular system">Cardiovascular system</option>
+            <option value="Gastrointestinal system">
+              Gastrointestinal system
+            </option>
+            <option value="Biostatistics and population health">
               Biostatistics and population health
             </option>
-            <option value="Individual Organ">
+            <option value="Social sciences: communication skills and ethics">
               Social sciences: communication skills and ethics
             </option>
           </select>

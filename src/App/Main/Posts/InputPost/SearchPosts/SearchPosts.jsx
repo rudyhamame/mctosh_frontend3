@@ -58,16 +58,49 @@ const SearchPosts = (props) => {
         <section id="SearchPosts_category_container" className="fr">
           <select id="SearchPosts_category">
             <option value="" disabled selected hidden>
-              Search by category
+              Search by system
             </option>
             <option value="General Principles">General Principles</option>
-            <option value="Individual Organ">Individual Organ</option>
+            <option value="Behavioral health system">
+              Behavioral health system
+            </option>
+            <option value="Nervous system">Nervous system</option>
+            <option value="Respiratory system">Respiratory system</option>
+            <option value="Renal system">Renal system</option>
+            <option value="Female reproductive system">
+              Female reproductive system
+            </option>
+            <option value="Male reproductive system">
+              Male reproductive system
+            </option>
+            <option value="Endocrine system">Endocrine system</option>
+            <option value="Blood system">Blood system</option>
+            <option value="Immune system">Immune system</option>
+            <option value="Multisystem processes and disorders">
+              Multisystem processes and disorders
+            </option>
+            <option value="Musculoskeletal tissue">
+              Musculoskeletal tissue
+            </option>
+            <option value="Skin and subcutaneous tissue">
+              Skin and subcutaneous tissue
+            </option>
+            <option value="Cardiovascular system">Cardiovascular system</option>
+            <option value="Gastrointestinal system">
+              Gastrointestinal system
+            </option>
+            <option value="Biostatistics and population health">
+              Biostatistics and population health
+            </option>
+            <option value="Social sciences: communication skills and ethics">
+              Social sciences: communication skills and ethics
+            </option>
           </select>
         </section>
         <section id="SearchPosts_subject_container" className="fr">
           <select id="SearchPosts_subject" name="subject">
             <option value="" disabled selected hidden>
-              Search by subject
+              Search by discipline
             </option>
             <option value="Pathology">Pathology</option>
             <option value="Physiology">Physiology</option>
