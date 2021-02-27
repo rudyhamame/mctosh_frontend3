@@ -628,6 +628,7 @@ class App extends React.Component {
         let p3 = document.createElement("p");
         let p4 = document.createElement("p");
         let p5 = document.createElement("p");
+        let p6 = document.createElement("p");
         let li = document.createElement("li");
         p1.textContent = term.term;
         p1.style.fontSize = "16pt";
@@ -636,10 +637,10 @@ class App extends React.Component {
         p1.style.color = "var(--black)";
         p2.textContent = term.meaning;
         p2.style.fontSize = "14pt";
-        p3.textContent = "Category: " + term.category;
+        p3.textContent = term.category;
         p3.style.fontSize = "10pt";
         p3.style.textAlign = "right";
-        p4.textContent = "Subject: " + term.subject;
+        p4.textContent = term.subject;
         p4.style.fontSize = "10pt";
         p4.style.textAlign = "right";
         p5.textContent = "Delete";
@@ -650,11 +651,22 @@ class App extends React.Component {
         p5.addEventListener("click", () => {
           this.deleteTerminology(term._id);
         });
+        p6.textContent = "Edit";
+        p6.style.backgroundColor = "var(--red)";
+        p6.style.width = "fit-content";
+        p6.style.padding = "0 5px";
+        p6.style.marginTop = "5px";
+
+        p6.style.cursor = "pointer";
+        p6.addEventListener("click", () => {
+          this.editTerminology(term._id);
+        });
         li.appendChild(p1);
         li.appendChild(p2);
         li.appendChild(p3);
         li.appendChild(p4);
         li.appendChild(p5);
+        li.appendChild(p6);
         li.setAttribute("id", "li_term" + term._id);
         ul.prepend(li);
       });
@@ -687,6 +699,71 @@ class App extends React.Component {
         this.serverReply("delete failed");
       }
     });
+  };
+  ////////////////////////////Edit terminology////////////////////////////
+  termIsEditing = false;
+  termIdSelected;
+  editEvenCounter = -1;
+  editTerminology = (term_id) => {
+    this.editEvenCounter++;
+    if (this.editEvenCounter % 2 === 0) {
+      this.termIdSelected = term_id;
+      this.termIsEditing = true;
+      document.getElementById(
+        "Terminology_term"
+      ).value = document.getElementById(
+        "li_term" + term_id
+      ).children[0].textContent;
+      document.getElementById(
+        "Terminology_meaning"
+      ).value = document.getElementById(
+        "li_term" + term_id
+      ).children[1].textContent;
+      document.getElementById(
+        "Terminology_category"
+      ).value = document.getElementById(
+        "li_term" + term_id
+      ).children[2].textContent;
+      document.getElementById(
+        "Terminology_subject"
+      ).value = document.getElementById(
+        "li_term" + term_id
+      ).children[3].textContent;
+      //.........................
+      document.getElementById("Terminology_inputs_container").style.display =
+        "flex";
+      document.getElementById("Terminology_control_icon_close").style.display =
+        "inline";
+      document.getElementById("Terminology_control_icon_open").style.display =
+        "none";
+      document.getElementById("li_term" + term_id).children[5].textContent =
+        "Cancel?";
+      document.getElementById(
+        "li_term" + term_id
+      ).children[5].style.backgroundColor = "var(--black)";
+      document.getElementById("Terminology_post_button").textContent = "Edit";
+      //.......
+    } else {
+      this.termIsEditing = false;
+      document.getElementById("Terminology_inputs_container").style.display =
+        "none";
+      document.getElementById("Terminology_control_icon_close").style.display =
+        "none";
+      document.getElementById("Terminology_control_icon_open").style.display =
+        "inline";
+      //...........
+      document.getElementById(
+        "li_term" + term_id
+      ).children[5].style.backgroundColor = "var(--red)";
+      document.getElementById("li_term" + term_id).children[5].textContent =
+        "Edit";
+      document.getElementById("Terminology_post_button").textContent = "Post";
+      //.......
+      document.getElementById("Terminology_term").value = "";
+      document.getElementById("Terminology_meaning").value = "";
+      document.getElementById("Terminology_category").value = "";
+      document.getElementById("Terminology_subject").value = "";
+    }
   };
 
   //////////////////////////Retrieving Messages ////////////////////////////////
@@ -734,100 +811,182 @@ class App extends React.Component {
   //................................................................................................
   ////////////////////////////Posting a terminology////////////////////////
   postingTerminology = (term, meaning, category, subject) => {
-    this.setState({
-      app_is_loading: true,
-    });
-    let url =
-      "https://backendstep1.herokuapp.com/api/user/newTerminology/" +
-      this.state.my_id;
-    let options = {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        Authorization: "Bearer " + this.state.token,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        term: term,
-        meaning: meaning,
-        category: category,
-        subject: subject,
-        date: new Date(),
-      }),
-    };
-    let req = new Request(url, options);
-    fetch(req)
-      .then((result) => {
-        if (result.status === 201) {
+    if (this.termIsEditing === false) {
+      this.setState({
+        app_is_loading: true,
+      });
+      let url =
+        "https://backendstep1.herokuapp.com/api/user/newTerminology/" +
+        this.state.my_id;
+      let options = {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          Authorization: "Bearer " + this.state.token,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          term: term,
+          meaning: meaning,
+          category: category,
+          subject: subject,
+          date: new Date(),
+        }),
+      };
+      let req = new Request(url, options);
+      fetch(req)
+        .then((result) => {
+          if (result.status === 201) {
+            document.getElementById("Terminology_term").value = "";
+            document.getElementById("Terminology_meaning").value = "";
+            document.getElementById("Terminology_category").value = "";
+            document.getElementById("Terminology_subject").value = "";
+            this.serverReply("Posted successfully!");
+          } else {
+            this.serverReply(
+              "Posting failed. Please make sure you select a category and/or a subject for your note"
+            );
+            this.setState({
+              app_is_loading: false,
+            });
+          }
+          return result.json();
+        })
+        .then((result) => {
+          if (result) {
+            let ul = document.getElementById("Terminology_content_container");
+            let p1 = document.createElement("p");
+            let p2 = document.createElement("p");
+            let p3 = document.createElement("p");
+            let p4 = document.createElement("p");
+            let p5 = document.createElement("p");
+            let p6 = document.createElement("p");
+            let li = document.createElement("li");
+
+            // //.............................................
+            // let date = result.date;
+            // let date_timezone = new Date(date);
+            // let date_string = date_timezone.toDateString();
+            // let time_string = date_timezone.toLocaleTimeString();
+            // p2.textContent =
+            //   "Posted on: " + date_string + ", " + "at: " + time_string;
+            // //.............................................
+            p1.textContent = result.term;
+            p1.style.fontSize = "16pt";
+            p1.style.textAlign = "center";
+            p1.style.backgroundColor = "var(--white)";
+            p1.style.color = "var(--black)";
+            p2.textContent = result.meaning;
+            p2.style.fontSize = "14pt";
+            p3.textContent = result.category;
+            p3.style.fontSize = "10pt";
+            p3.style.textAlign = "right";
+            p4.textContent = result.subject;
+            p4.style.fontSize = "10pt";
+            p4.style.textAlign = "right";
+            p5.textContent = "Delete";
+            p5.style.backgroundColor = "var(--red)";
+            p5.style.width = "fit-content";
+            p5.style.padding = "0 5px";
+            p5.style.cursor = "pointer";
+            p5.addEventListener("click", () => {
+              this.deleteTerminology(result._id);
+            });
+            p6.textContent = "Edit";
+            p6.style.backgroundColor = "var(--red)";
+            p6.style.width = "fit-content";
+            p6.style.padding = "0 5px";
+            p6.style.marginTop = "5px";
+            p6.style.cursor = "pointer";
+            p6.addEventListener("click", () => {
+              this.editTerminology(result._id);
+            });
+            li.setAttribute("id", "li_term" + result._id);
+            li.appendChild(p1);
+            li.appendChild(p2);
+            li.appendChild(p3);
+            li.appendChild(p4);
+            li.appendChild(p5);
+            li.appendChild(p6);
+            li.setAttribute("id", "li_term" + result._id);
+
+            ul.prepend(li);
+            //...................................
+            this.setState({
+              app_is_loading: false,
+              retrievingTerminology_DONE: true,
+            });
+          }
+        });
+    } else {
+      let url =
+        "https://backendstep1.herokuapp.com/api/user/editTerminology/" +
+        this.termIdSelected +
+        "/" +
+        this.state.my_id;
+      let options = {
+        method: "PUT",
+        mode: "cors",
+        headers: {
+          Authorization: "Bearer " + this.state.token,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          term: document.getElementById("Terminology_term").value,
+          meaning: document.getElementById("Terminology_meaning").value,
+          category: document.getElementById("Terminology_category").value,
+          subject: document.getElementById("Terminology_subject").value,
+          date: new Date(),
+        }),
+      };
+      let req = new Request(url, options);
+      fetch(req)
+        .then((response) => {
+          if (response.status === 201) {
+            this.enableEditPost = false;
+            document.getElementById("Terminology_post_button").textContent =
+              "Post";
+
+            document.getElementById(
+              "li_term" + this.termIdSelected
+            ).children[0].textContent = document.getElementById(
+              "Terminology_term"
+            ).value;
+            document.getElementById(
+              "li_term" + this.termIdSelected
+            ).children[1].textContent = document.getElementById(
+              "Terminology_meaning"
+            ).value;
+            document.getElementById(
+              "li_term" + this.termIdSelected
+            ).children[2].textContent = document.getElementById(
+              "Terminology_category"
+            ).value;
+            document.getElementById(
+              "li_term" + this.termIdSelected
+            ).children[3].textContent = document.getElementById(
+              "Terminology_subject"
+            ).value;
+            document.getElementById(
+              "li_term" + this.termIdSelected
+            ).children[5].textContent = "Edit";
+            document.getElementById(
+              "li_term" + this.termIdSelected
+            ).children[5].style.backgroundColor = "var(--red)";
+            this.serverReply("term modified");
+          } else {
+            this.serverReply(
+              "modifying failed. Please make sure you select a category and/or a subject for your note"
+            );
+          }
+        })
+        .then(() => {
           document.getElementById("Terminology_term").value = "";
           document.getElementById("Terminology_meaning").value = "";
           document.getElementById("Terminology_category").value = "";
           document.getElementById("Terminology_subject").value = "";
-          this.serverReply("Posted successfully!");
-        } else {
-          this.serverReply(
-            "Posting failed. Please make sure you select a category and/or a subject for your note"
-          );
-          this.setState({
-            app_is_loading: false,
-          });
-        }
-        return result.json();
-      })
-      .then((result) => {
-        if (result) {
-          let ul = document.getElementById("Terminology_content_container");
-          let p1 = document.createElement("p");
-          let p2 = document.createElement("p");
-          let p3 = document.createElement("p");
-          let p4 = document.createElement("p");
-          let p5 = document.createElement("p");
-          let li = document.createElement("li");
-
-          // //.............................................
-          // let date = result.date;
-          // let date_timezone = new Date(date);
-          // let date_string = date_timezone.toDateString();
-          // let time_string = date_timezone.toLocaleTimeString();
-          // p2.textContent =
-          //   "Posted on: " + date_string + ", " + "at: " + time_string;
-          // //.............................................
-          p1.textContent = result.term;
-          p1.style.fontSize = "16pt";
-          p1.style.textAlign = "center";
-          p1.style.backgroundColor = "var(--white)";
-          p1.style.color = "var(--black)";
-          p2.textContent = result.meaning;
-          p2.style.fontSize = "14pt";
-          p3.textContent = "Category: " + result.category;
-          p3.style.fontSize = "10pt";
-          p3.style.textAlign = "right";
-          p4.textContent = "Subject: " + result.subject;
-          p4.style.fontSize = "10pt";
-          p4.style.textAlign = "right";
-          p5.textContent = "Delete";
-          p5.style.backgroundColor = "var(--red)";
-          p5.style.width = "fit-content";
-          p5.style.padding = "0 5px";
-          p5.style.cursor = "pointer";
-          p5.addEventListener("click", () => {
-            this.deleteTerminology(result._id);
-          });
-          li.setAttribute("id", "li_term" + result._id);
-          li.appendChild(p1);
-          li.appendChild(p2);
-          li.appendChild(p3);
-          li.appendChild(p4);
-          li.appendChild(p5);
-
-          ul.prepend(li);
-          //...................................
-          this.setState({
-            app_is_loading: false,
-            retrievingTerminology_DONE: true,
-          });
-        }
-      });
+        });
+    }
   };
 
   //////////////////////////Posting POSTS////////////////////////////////
@@ -1005,8 +1164,8 @@ class App extends React.Component {
         fetch(req)
           .then((result) => {
             if (result.status === 201) {
-               let ul = document.getElementById("MountPosts_content_container");
-               ul.innerHTML = "";
+              let ul = document.getElementById("MountPosts_content_container");
+              ul.innerHTML = "";
               return result.json(result);
             }
           })
