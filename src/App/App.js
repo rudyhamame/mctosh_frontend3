@@ -1022,107 +1022,112 @@ class App extends React.Component {
           document.getElementById("InputPost_subject").value
         ) {
           let req = new Request(url, options);
-          fetch(req).then((response) => {
-            if (response.status === 201) {
-              //..............
+          fetch(req)
+            .then((response) => {
+              if (response.status === 201) {
+                //..............
+
+                //.............
+                document.getElementById(
+                  this.targetIDEditPost
+                ).children[1].style.backgroundColor = "var(--red)";
+                document.getElementById(
+                  this.targetIDEditPost
+                ).children[1].textContent = "Edit";
+                this.serverReply("post modified");
+                //...............note-realtime-edit
+                document.getElementById(
+                  this.targetIDEditPost
+                ).parentElement.parentElement.children[1].children[0].textContent = document.getElementById(
+                  "InputPost_textarea"
+                ).value;
+                //................................
+                //...............details-realtime-edit
+                document.getElementById(
+                  this.targetIDEditPost
+                ).parentElement.parentElement.children[0].children[2].textContent =
+                  "System: " +
+                  document.getElementById("InputPost_category").value;
+                document.getElementById(
+                  this.targetIDEditPost
+                ).parentElement.parentElement.children[0].children[3].textContent =
+                  "Discipline: " +
+                  document.getElementById("InputPost_subject").value;
+                if (
+                  document.getElementById(this.targetIDEditPost).parentElement
+                    .parentElement.children[0].children[4]
+                ) {
+                  if (
+                    document.getElementById("InputPost_resourse").value !== ""
+                  ) {
+                    document.getElementById(
+                      this.targetIDEditPost
+                    ).parentElement.parentElement.children[0].children[4].textContent =
+                      "Reference: " +
+                      document.getElementById("InputPost_resourse").value;
+                  } else {
+                    document
+                      .getElementById(this.targetIDEditPost)
+                      .parentElement.parentElement.children[0].children[4].remove();
+                  }
+                } else {
+                  if (
+                    document.getElementById("InputPost_resourse").value !== ""
+                  ) {
+                    let p_reference = document.createElement("p");
+                    p_reference.textContent =
+                      "Reference: " +
+                      document.getElementById("InputPost_resourse").value;
+                    document
+                      .getElementById(this.targetIDEditPost)
+                      .parentElement.parentElement.children[0].appendChild(
+                        p_reference
+                      );
+                  }
+                }
+                if (
+                  document.getElementById(this.targetIDEditPost).parentElement
+                    .parentElement.children[0].children[5]
+                ) {
+                  if (document.getElementById("InputPost_page").value !== "") {
+                    document.getElementById(
+                      this.targetIDEditPost
+                    ).parentElement.parentElement.children[0].children[5].textContent =
+                      "Page#: " +
+                      document.getElementById("InputPost_page").value;
+                  } else {
+                    document
+                      .getElementById(this.targetIDEditPost)
+                      .parentElement.parentElement.children[0].children[5].remove();
+                  }
+                } else {
+                  if (document.getElementById("InputPost_page").value !== "") {
+                    let p_page = document.createElement("p");
+                    p_page.textContent =
+                      "Page #: " +
+                      document.getElementById("InputPost_page").value;
+                    document
+                      .getElementById(this.targetIDEditPost)
+                      .parentElement.parentElement.children[0].appendChild(
+                        p_page
+                      );
+                  }
+                }
+                //..................
+
+                document.getElementById("InputPost_post_button").innerHTML =
+                  "Post";
+              } else {
+                this.serverReply("modify failed");
+              }
+            })
+            .then(() => {
               document.getElementById("InputPost_textarea").value = "";
               document.getElementById("InputPost_category").value = "";
               document.getElementById("InputPost_subject").value = "";
               document.getElementById("InputPost_resourse").value = "";
               document.getElementById("InputPost_page").value = "";
-              //.............
-              document.getElementById(
-                this.targetIDEditPost
-              ).children[1].style.backgroundColor = "var(--red)";
-              document.getElementById(
-                this.targetIDEditPost
-              ).children[1].textContent = "Edit";
-              this.serverReply("post modified");
-              //...............note-realtime-edit
-              document.getElementById(
-                this.targetIDEditPost
-              ).parentElement.parentElement.children[1].children[0].textContent = document.getElementById(
-                "InputPost_textarea"
-              ).value;
-              //................................
-              //...............details-realtime-edit
-              document.getElementById(
-                this.targetIDEditPost
-              ).parentElement.parentElement.children[0].children[2].textContent =
-                "System: " +
-                document.getElementById("InputPost_category").value;
-              document.getElementById(
-                this.targetIDEditPost
-              ).parentElement.parentElement.children[0].children[3].textContent =
-                "Discipline: " +
-                document.getElementById("InputPost_subject").value;
-              if (
-                document.getElementById(this.targetIDEditPost).parentElement
-                  .parentElement.children[0].children[4]
-              ) {
-                if (
-                  document.getElementById("InputPost_resourse").value !== ""
-                ) {
-                  document.getElementById(
-                    this.targetIDEditPost
-                  ).parentElement.parentElement.children[0].children[4].textContent =
-                    "Reference: " +
-                    document.getElementById("InputPost_resourse").value;
-                } else {
-                  document
-                    .getElementById(this.targetIDEditPost)
-                    .parentElement.parentElement.children[0].children[4].remove();
-                }
-              } else {
-                if (
-                  document.getElementById("InputPost_resourse").value !== ""
-                ) {
-                  let p_reference = document.createElement("p");
-                  p_reference.textContent =
-                    "Reference: " +
-                    document.getElementById("InputPost_resourse").value;
-                  document
-                    .getElementById(this.targetIDEditPost)
-                    .parentElement.parentElement.children[0].appendChild(
-                      p_reference
-                    );
-                }
-              }
-              if (
-                document.getElementById(this.targetIDEditPost).parentElement
-                  .parentElement.children[0].children[5]
-              ) {
-                if (document.getElementById("InputPost_page").value !== "") {
-                  document.getElementById(
-                    this.targetIDEditPost
-                  ).parentElement.parentElement.children[0].children[5].textContent =
-                    "Page#: " + document.getElementById("InputPost_page").value;
-                } else {
-                  document
-                    .getElementById(this.targetIDEditPost)
-                    .parentElement.parentElement.children[0].children[5].remove();
-                }
-              } else {
-                if (document.getElementById("InputPost_page").value !== "") {
-                  let p_page = document.createElement("p");
-                  p_page.textContent =
-                    "Page #: " +
-                    document.getElementById("InputPost_page").value;
-                  document
-                    .getElementById(this.targetIDEditPost)
-                    .parentElement.parentElement.children[0].appendChild(
-                      p_page
-                    );
-                }
-              }
-              //..................
-
-              document.getElementById("InputPost_post_button").innerHTML =
-                "Post";
-            } else {
-              this.serverReply("modify failed");
-            }
-          });
+            });
         } else {
           this.serverReply(
             "Modifying failed. Please make sure you select a category and/or a subject for your note"
