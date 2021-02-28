@@ -1024,6 +1024,13 @@ class App extends React.Component {
           let req = new Request(url, options);
           fetch(req).then((response) => {
             if (response.status === 201) {
+              //..............
+              document.getElementById("InputPost_textarea").value = "";
+              document.getElementById("InputPost_category").value = "";
+              document.getElementById("InputPost_subject").value = "";
+              document.getElementById("InputPost_resourse").value = "";
+              document.getElementById("InputPost_page").value = "";
+              //.............
               document.getElementById(
                 this.targetIDEditPost
               ).children[1].style.backgroundColor = "var(--red)";
