@@ -100,13 +100,29 @@ const SearchPosts = (props) => {
         <section id="SearchPosts_subject_container" className="fr">
           <select id="SearchPosts_subject" name="subject">
             <option value="" disabled selected hidden>
-              Search by discipline
+              Discipline
             </option>
             <option value="Pathology">Pathology</option>
             <option value="Physiology">Physiology</option>
             <option value="Pharmacology">Pharmacology</option>
-            <option value="Biochemistry">Biochemistry</option>
-            <option value="Nutrition">Nutrition</option>
+            <option value="Biochemistry: Molecular">
+              Biochemistry: Molecular
+            </option>
+            <option value="Biochemistry: Cellular">
+              Biochemistry: Cellular
+            </option>
+            <option value="Biochemistry: Lab Tech">
+              Biochemistry: Lab Tech
+            </option>
+            <option value="Biochemistry: Genetics">
+              Biochemistry: Genetics
+            </option>
+            <option value="Biochemistry: Nutrition ">
+              Biochemistry: Nutrition
+            </option>
+            <option value="Biochemistry: Metabolism ">
+              Biochemistry: Metabolism
+            </option>
             <option value="Microbiology">Microbiology</option>
             <option value="Immunology">Immunology</option>
             <option value="Gross Anatomy">Gross Anatomy</option>
