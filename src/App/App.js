@@ -102,8 +102,7 @@ class App extends React.Component {
       this.props.path === "/"
     )
       this.RetrievingMyStudySessions();
-    if (this.state.profile === false && this.props.path === "/study")
-      this.BuildingPosts();
+
     if (this.state.profile === true && this.props.path === "/study")
       this.BuildingPostsProfile();
   }
@@ -139,9 +138,11 @@ class App extends React.Component {
   posts_comments = [];
   BuildingPosts = () => {
     let ul = document.getElementById("MountPosts_content_container");
-    this.state.posts.sort((a, b) => {
-      return new Date(b.date) - new Date(a.date);
-    });
+    if (this.state.posts.length > 0) {
+      this.state.posts.sort((a, b) => {
+        return new Date(b.date) - new Date(a.date);
+      });
+    }
     for (
       var i = 0;
       i < this.state.posts.length &&
@@ -1256,7 +1257,6 @@ class App extends React.Component {
         );
       }
     }
-
     //.........................................
   };
   ////////////////////////////////Deleting Post///////////////////////////////////////////
@@ -1317,42 +1317,6 @@ class App extends React.Component {
         "var(--red)";
       document.getElementById(post_id).children[1].textContent = "Edit";
     }
-
-    // let url =
-    //   "https://backendstep1.herokuapp.com/api/posts/updatePost/" + post_id;
-    // let options = {
-    //   method: "PUT",
-    //   mode: "cors",
-    //   headers: {
-    //     Authorization: "Bearer " + this.state.token,
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     note: document.getElementById("InputPost_textarea").value,
-    //     category: document.getElementById("InputPost_category").value,
-    //     subject: document.getElementById("InputPost_subject").value,
-    //     reference: document.getElementById("InputPost_resourse").value,
-    //     page_num: document.getElementById("InputPost_page").value,
-    //   }),
-    // };
-    // if (
-    //   document.getElementById("InputPost_textarea").value &&
-    //   document.getElementById("InputPost_category").value &&
-    //   document.getElementById("InputPost_subject").value
-    // ) {
-    //   let req = new Request(url, options);
-    //   fetch(req).then((response) => {
-    //     if (response.status === 201) {
-    //       this.serverReply("post modified");
-    //     } else {
-    //       this.serverReply("modify failed");
-    //     }
-    //   });
-    // } else {
-    //   this.serverReply(
-    //     "Posting failed. Please make sure you select a category and/or a subject for your note"
-    //   );
-    // }
   };
   ////////////////////////Post Comment/////////////////////////////
   postComment = (event, post_id, input_id) => {
@@ -1409,38 +1373,6 @@ class App extends React.Component {
           return result.json();
         }
       });
-      // .then((result) => {
-      //   console.log(result);
-      //   let ul = document.getElementById("Chat_messages");
-      //   document.getElementById("Chat_textarea_input").value = "";
-      //   //..........................................
-      //   document
-      //     .getElementById("Chat_messages")
-      //     .scrollBy(0, document.getElementById("Chat_messages").scrollHeight);
-
-      //   if (result.conversation === "sent") {
-      //   let p = document.createElement("p");
-      //   let li = document.createElement("li");
-      //   let div = document.createElement("div");
-      //   p.textContent = result.message;
-      //   li.setAttribute("class", "sentMessagesLI");
-      //   li.appendChild(p);
-      //   div.setAttribute("class", "sentMessagesDIV fc");
-      //   div.appendChild(li);
-      //   ul.appendChild(div);
-      //   // }
-      //   // if (result.destination === "received") {
-      //   //   let p = document.createElement("p");
-      //   //   let li = document.createElement("li");
-      //   //   let div = document.createElement("div");
-      //   //   p.textContent = result.message;
-      //   //   li.setAttribute("class", "receivedMessagesLI");
-      //   //   li.appendChild(p);
-      //   //   div.setAttribute("class", "receivedMessagesDIV fc");
-      //   //   div.appendChild(li);
-      //   //   ul.appendChild(div);
-      //   // }
-      // });
     } else {
       this.serverReply("You can't send an empty message");
     }
@@ -1758,7 +1690,7 @@ class App extends React.Component {
     fetch(req)
       .then((response) => {
         if (response.status === 200) {
-          return response.json(response);
+          return response.json();
         }
       })
       .then((jsonData) => {
@@ -1771,6 +1703,7 @@ class App extends React.Component {
           study_session: jsonData.study_session,
           isOnline: jsonData.isOnline,
         });
+
         return jsonData;
       })
       .then(() => {
@@ -1779,6 +1712,12 @@ class App extends React.Component {
           this.buildNotifications();
           if (this.state.friendID_selected) this.RetrievingMySendingMessages();
         }
+        if (
+          this.state.profile === false &&
+          this.props.path === "/study" &&
+          this.state.posts.length > 0
+        )
+          this.BuildingPosts();
       })
       .catch((err) => {
         if (err.message === "Cannot read property 'credentials' of null")
