@@ -2209,6 +2209,7 @@ class App extends React.Component {
         let p3 = document.createElement("p");
         let p4 = document.createElement("p");
         let p5 = document.createElement("p");
+        let p6 = document.createElement("p");
         let li = document.createElement("li");
         p1.textContent = term.term;
         p1.style.fontSize = "16pt";
@@ -2231,11 +2232,22 @@ class App extends React.Component {
         p5.addEventListener("click", () => {
           this.deleteTerminology(term._id);
         });
+        p6.textContent = "Edit";
+        p6.style.backgroundColor = "var(--red)";
+        p6.style.width = "fit-content";
+        p6.style.padding = "0 5px";
+        p6.style.marginTop = "5px";
+
+        p6.style.cursor = "pointer";
+        p6.addEventListener("click", () => {
+          this.editTerminology(term._id);
+        });
         li.appendChild(p1);
         li.appendChild(p2);
         li.appendChild(p3);
         li.appendChild(p4);
         li.appendChild(p5);
+        li.appendChild(p6);
         li.setAttribute("id", "li_term" + term._id);
         ul.prepend(li);
       });
