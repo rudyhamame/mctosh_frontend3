@@ -38,6 +38,7 @@ const InputForm = (props) => {
             <option value="Nervous system">Nervous system</option>
             <option value="Respiratory system">Respiratory system</option>
             <option value="Renal system">Renal system</option>
+            <option value="Reproductive system">Reproductive system</option>
             <option value="Female reproductive system">
               Female reproductive system
             </option>
