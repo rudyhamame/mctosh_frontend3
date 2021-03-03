@@ -2218,10 +2218,10 @@ class App extends React.Component {
         p1.style.color = "var(--black)";
         p2.textContent = term.meaning;
         p2.style.fontSize = "14pt";
-        p3.textContent = "Category: " + term.category;
+        p3.textContent = term.category;
         p3.style.fontSize = "10pt";
         p3.style.textAlign = "right";
-        p4.textContent = "Subject: " + term.subject;
+        p4.textContent = term.subject;
         p4.style.fontSize = "10pt";
         p4.style.textAlign = "right";
         p5.textContent = "Delete";
