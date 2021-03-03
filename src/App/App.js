@@ -986,6 +986,7 @@ class App extends React.Component {
           document.getElementById("Terminology_meaning").value = "";
           document.getElementById("Terminology_category").value = "";
           document.getElementById("Terminology_subject").value = "";
+          this.termIsEditing = false;
         });
     }
   };
