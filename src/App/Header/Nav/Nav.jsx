@@ -23,13 +23,13 @@ const Nav = (props) => {
           <Link to="/">
             <i class="fas fa-home" id="Nav_home_i" title="Exit"></i>
           </Link>
-          <ProfileIcon show_profile={props.show_profile} />
+          {/* <ProfileIcon show_profile={props.show_profile} /> */}
           {/* <Menu /> */}
           <Logout logOut={props.logOut} />
-          <Notifications
+          {/* <Notifications
             state={props.state}
             acceptFriend={props.acceptFriend}
-          />
+          /> */}
           {/* {parseInt(width) < 1200 && <MessengerIcon />} */}
           <Dim />
           <Refresh />

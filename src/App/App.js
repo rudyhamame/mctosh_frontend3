@@ -2322,7 +2322,7 @@ class App extends React.Component {
                 profilePosts={this.profilePosts}
               />
             )}
-            {this.props.path === "/study" &&
+            {/* {this.props.path === "/study" &&
               parseInt(
                 window.getComputedStyle(document.querySelector("#root")).width
               ) > 1200 && (
@@ -2336,10 +2336,10 @@ class App extends React.Component {
                   dbUpdate_user_connected={this.dbUpdate_user_connected}
                   path="/"
                 />
-              )}
+              )} */}
           </Route>
 
-          {this.props.path === "/" &&
+          {/* {this.props.path === "/" &&
             parseInt(
               window.getComputedStyle(document.querySelector("#root")).width
             ) > 1200 && (
@@ -2353,10 +2353,10 @@ class App extends React.Component {
                 dbUpdate_user_connected={this.dbUpdate_user_connected}
                 path="/"
               />
-            )}
+            )} */}
         </main>
         <section style={{ order: "4" }}>
-          {this.props.path === "/study" &&
+          {/* {this.props.path === "/study" &&
             parseInt(
               window.getComputedStyle(document.querySelector("#root")).width
             ) <= 1200 && (
@@ -2371,7 +2371,7 @@ class App extends React.Component {
                 path="/study"
                 serverReply={this.serverReply}
               />
-            )}
+            )} */}
           {this.props.path === "/study" &&
             parseInt(
               window.getComputedStyle(document.querySelector("#root")).width
