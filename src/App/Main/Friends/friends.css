@@ -22,11 +22,13 @@
 }
 
 #Friends_control_door {
-  background-color: var(--red);
+  background-color: var(--black);
   justify-content: center;
   align-items: center;
   order: 1;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.24);
+  border-left: solid rgba(0, 0, 0, 0.459) 2px;
+  z-index: 99;
 }
 #Friends_control_door i {
   color: var(--white);

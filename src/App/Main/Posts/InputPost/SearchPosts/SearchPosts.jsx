@@ -54,6 +54,36 @@ const SearchPosts = (props) => {
           class="fas fa-sort-down"
         ></i>
       </section>
+      <h1
+        style={{
+          color: "rgba(255, 255, 255, 0.801)",
+          textAlign: "center",
+          position: "absolute",
+          left: "0",
+          fontFamily: "'Raleway', sans-serif",
+          fontWeight: "300",
+          paddingLeft: "40px",
+        }}
+        id="Header_timer_h1"
+      >
+        {props.state.timer.hours && props.state.timer.hours < 10
+          ? "0" + props.state.timer.hours
+          : props.state.timer.hours >= 10
+          ? props.state.timer.hours
+          : "00"}
+        :
+        {props.state.timer.mins && props.state.timer.mins < 10
+          ? "0" + props.state.timer.mins
+          : props.state.timer.mins >= 10
+          ? props.state.timer.mins
+          : "00"}
+        :
+        {props.state.timer.secs && props.state.timer.secs < 10
+          ? "0" + props.state.timer.secs
+          : props.state.timer.secs >= 10
+          ? props.state.timer.secs
+          : "00"}
+      </h1>{" "}
       <section id="SearchPosts_content_container" className="fr">
         <section id="SearchPosts_category_container" className="fr">
           <select id="SearchPosts_category">

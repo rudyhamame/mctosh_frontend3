@@ -37,7 +37,7 @@ const Logout = (props) => {
           }}
           class="fas fa-sign-out-alt"
           id="i_nav_logout"
-          style={{ color: "var(--red)", padding: "10px" }}
+          style={{ color: "#01796f", padding: "10px" }}
           title="Log out"
         ></i>
       </section>

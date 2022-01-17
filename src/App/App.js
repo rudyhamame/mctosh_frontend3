@@ -2384,6 +2384,7 @@ class App extends React.Component {
             prepare_searchPosts={this.prepare_searchPosts}
             posts_alreadyBuilt={this.posts_alreadyBuilt}
             posts_comments={this.posts_comments}
+            state={this.state}
           />
         )}
         <div

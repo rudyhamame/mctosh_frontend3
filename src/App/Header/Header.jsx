@@ -16,40 +16,12 @@ const Header = (props) => {
           show_profile={props.show_profile}
         />
 
-        <section style={{ position: "absolute", right: "0", left: "0" }}>
-          {" "}
-          <h1
-            style={{
-              color: "white",
-              textAlign: "center",
-            }}
-            id="Header_timer_h1"
-          >
-            {props.state.timer.hours && props.state.timer.hours < 10
-              ? "0" + props.state.timer.hours
-              : props.state.timer.hours >= 10
-              ? props.state.timer.hours
-              : "00"}
-            :
-            {props.state.timer.mins && props.state.timer.mins < 10
-              ? "0" + props.state.timer.mins
-              : props.state.timer.mins >= 10
-              ? props.state.timer.mins
-              : "00"}
-            :
-            {props.state.timer.secs && props.state.timer.secs < 10
-              ? "0" + props.state.timer.secs
-              : props.state.timer.secs >= 10
-              ? props.state.timer.secs
-              : "00"}
-          </h1>{" "}
-        </section>
         <h1
           style={{
             color: "white",
             textAlign: "center",
-            position: "absolute",
-            right: "0",
+            fontFamily: "'Raleway', sans-serif",
+            fontWeight: "500",
           }}
         >
           {props.state.firstname}

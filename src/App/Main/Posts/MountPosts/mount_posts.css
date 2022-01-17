@@ -110,7 +110,7 @@
 }
 
 .MountPosts_postOptionsContainer p {
-  background-color: var(--red);
+  background-color: #01796f;
 }
 
 @media screen and (max-width: 1000px) {

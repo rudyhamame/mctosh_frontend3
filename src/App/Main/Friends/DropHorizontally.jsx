@@ -39,7 +39,7 @@ const DropHorizontally = () => {
         order: "1",
         gap: "50px",
         justifyContent: "center",
-        backgroundColor: "var(--red)",
+        backgroundColor: "#01796f",
         padding: "10px",
         fontSize: "16pt",
         color: "var(--white)",

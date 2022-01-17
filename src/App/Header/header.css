@@ -3,9 +3,9 @@
   z-index: 100;
   font-family: "Pacifico", cursive;
   order: 1;
-  background-color: var(--red);
   margin: center;
-  border-bottom: solid rgba(0, 0, 0, 0.096) 1px;
+  border-bottom: solid rgba(0, 0, 0, 0.671) 1px;
+  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.137);
 }
 
 /*header content container*/
@@ -14,7 +14,7 @@
   align-items: center;
   margin: 0 auto;
   padding: 0 20px;
-  position: relative;
+  justify-content: space-between;
 }
 
 @keyframes header_blinker {

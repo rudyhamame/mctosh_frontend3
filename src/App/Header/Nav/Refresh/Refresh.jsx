@@ -9,9 +9,6 @@ const Refresh = () => {
       <i
         class="fas fa-sync-alt"
         id="InputPost_refresh_icon"
-        style={{
-          color: "var(--white)",
-        }}
         title="Refresh"
         onClick={refresh}
       ></i>

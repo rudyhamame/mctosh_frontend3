@@ -3,7 +3,7 @@
   z-index: 3;
 }
 #Terminology_title {
-  background-color: var(--red);
+  background-color: #01796f;
   color: var(--white);
   padding: 18px;
   text-align: center;
@@ -39,12 +39,14 @@
   background-color: var(--special_black);
 }
 #Terminology_control_door {
-  background-color: var(--red);
+  background-color: var(--black);
+  border-right: solid rgba(0, 0, 0, 0.459) 2px;
+
   justify-content: center;
   align-items: center;
   order: 1;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.24);
-  z-index: 1;
+  z-index: 99;
 }
 #Terminology_control_door i {
   color: var(--white);
@@ -54,7 +56,7 @@
   animation-duration: 1.5s;
 }
 #Terminology_inputs_container {
-  background-color: var(--red);
+  background-color: #01796f;
   gap: 10px;
   padding: 10px 40px;
   align-items: center;
@@ -86,7 +88,7 @@
   text-align: center;
 }
 #Terminology_control_icon_close {
-  background-color: var(--red);
+  background-color: #01796f;
   color: var(--white);
   font-size: 16pt;
   padding: 10px;
