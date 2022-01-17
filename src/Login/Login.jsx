@@ -64,7 +64,7 @@ const Login = () => {
   ////////////////////////////////////////////CHECK AND GET CREDENTIALS//////////////////////////////////////
   const login = (event) => {
     let login;
-    event.preventDefault();
+    // event.preventDefault();
     let Login_username_input = document.getElementById("Login_username_input");
     let Login_password_input = document.getElementById("Login_password_input");
     if (Login_password_input.value && Login_username_input.value) {
@@ -226,8 +226,8 @@ const Login = () => {
         <article id="Login_article" className="fc">
           <main id="Login_main" className="fc">
             <section id="Login_loginLogo_container">
-              <h1 id="Login_loginLogo_text">MED</h1>
-              <h4 id="Login_subLoginLogo_text">study planner</h4>
+              <h1 id="Login_loginLogo_text">MCTOSH</h1>
+              <h4 id="Login_subLoginLogo_text">Virtual Medicine</h4>
             </section>
             <section id="Login_loginForm_container">
               <section id="Login_loginFrom_form" className="fc">
@@ -247,11 +247,21 @@ const Login = () => {
                   id="Login_username_input"
                   type="text"
                   placeholder="username"
+                  onKeyPress={(event) => {
+                    if (event.which === 13) {
+                      login();
+                    }
+                  }}
                 />
                 <input
                   id="Login_password_input"
                   type="password"
                   placeholder="password"
+                  onKeyPress={(event) => {
+                    if (event.which === 13) {
+                      login();
+                    }
+                  }}
                 />
                 <input
                   id="Login_email_input"

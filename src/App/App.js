@@ -63,6 +63,7 @@ class App extends React.Component {
       },
       study_session: null,
       profile: false,
+      friendAddedSuccessfully: null,
     };
   }
   ////////////////////////////////////////Variables//////////////
@@ -89,7 +90,10 @@ class App extends React.Component {
   componentDidUpdate() {
     console.log(this.state.notifications);
     if (this.state.timer && this.state.isConnected)
-      sessionStorage.setItem("timer", JSON.stringify(this.state.timer));
+      sessionStorage.setItem(
+        "Header_timer_h1",
+        JSON.stringify(this.state.timer)
+      );
 
     if (
       this.state.terminology.length > 0 &&
@@ -173,18 +177,20 @@ class App extends React.Component {
             );
             let li = document.createElement("li");
             li.setAttribute("class", "comment_li");
-            li.textContent = this.state.posts[i].comments[
-              this.state.posts[i].comments.length - 1
-            ];
+            li.textContent =
+              this.state.posts[i].comments[
+                this.state.posts[i].comments.length - 1
+              ];
             commentlist_ul.prepend(li);
             comments_div.appendChild(commentlist_ul);
             this.posts_comments[i] = this.state.posts[i].comments.length;
           } else {
             let li = document.createElement("li");
             li.setAttribute("class", "comment_li");
-            li.textContent = this.state.posts[i].comments[
-              this.state.posts[i].comments.length - 1
-            ];
+            li.textContent =
+              this.state.posts[i].comments[
+                this.state.posts[i].comments.length - 1
+              ];
             commentlist_ul.prepend(li);
             this.posts_comments[i] = this.state.posts[i].comments.length;
           }
@@ -362,18 +368,20 @@ class App extends React.Component {
                 );
                 let li = document.createElement("li");
                 li.setAttribute("class", "comment_li");
-                li.textContent = this.state.posts[i].comments[
-                  this.state.posts[i].comments.length - 1
-                ];
+                li.textContent =
+                  this.state.posts[i].comments[
+                    this.state.posts[i].comments.length - 1
+                  ];
                 commentlist_ul.prepend(li);
                 comments_div.appendChild(commentlist_ul);
                 this.posts_comments[i] = this.state.posts[i].comments.length;
               } else {
                 let li = document.createElement("li");
                 li.setAttribute("class", "comment_li");
-                li.textContent = this.state.posts[i].comments[
-                  this.state.posts[i].comments.length - 1
-                ];
+                li.textContent =
+                  this.state.posts[i].comments[
+                    this.state.posts[i].comments.length - 1
+                  ];
                 commentlist_ul.prepend(li);
                 this.posts_comments[i] = this.state.posts[i].comments.length;
               }
@@ -710,26 +718,14 @@ class App extends React.Component {
     if (this.editEvenCounter % 2 === 0) {
       this.termIdSelected = term_id;
       this.termIsEditing = true;
-      document.getElementById(
-        "Terminology_term"
-      ).value = document.getElementById(
-        "li_term" + term_id
-      ).children[0].textContent;
-      document.getElementById(
-        "Terminology_meaning"
-      ).value = document.getElementById(
-        "li_term" + term_id
-      ).children[1].textContent;
-      document.getElementById(
-        "Terminology_category"
-      ).value = document.getElementById(
-        "li_term" + term_id
-      ).children[2].textContent;
-      document.getElementById(
-        "Terminology_subject"
-      ).value = document.getElementById(
-        "li_term" + term_id
-      ).children[3].textContent;
+      document.getElementById("Terminology_term").value =
+        document.getElementById("li_term" + term_id).children[0].textContent;
+      document.getElementById("Terminology_meaning").value =
+        document.getElementById("li_term" + term_id).children[1].textContent;
+      document.getElementById("Terminology_category").value =
+        document.getElementById("li_term" + term_id).children[2].textContent;
+      document.getElementById("Terminology_subject").value =
+        document.getElementById("li_term" + term_id).children[3].textContent;
       //.........................
       document.getElementById("Terminology_inputs_container").style.display =
         "flex";
@@ -950,9 +946,8 @@ class App extends React.Component {
 
             document.getElementById(
               "li_term" + this.termIdSelected
-            ).children[0].textContent = document.getElementById(
-              "Terminology_term"
-            ).value;
+            ).children[0].textContent =
+              document.getElementById("Terminology_term").value;
             document.getElementById(
               "li_term" + this.termIdSelected
             ).children[1].textContent = document.getElementById(
@@ -1040,9 +1035,8 @@ class App extends React.Component {
                 //...............note-realtime-edit
                 document.getElementById(
                   this.targetIDEditPost
-                ).parentElement.parentElement.children[1].children[0].textContent = document.getElementById(
-                  "InputPost_textarea"
-                ).value;
+                ).parentElement.parentElement.children[1].children[0].textContent =
+                  document.getElementById("InputPost_textarea").value;
                 //................................
                 //...............details-realtime-edit
                 document.getElementById(
@@ -1498,7 +1492,7 @@ class App extends React.Component {
     let req = new Request(url, options);
     fetch(req).then((response) => {
       if (response.status === 201) {
-        return response.json().then((result) => {
+        response.json().then((result) => {
           document.getElementById("server_answer").style.width = "fit-content";
           document.getElementById("server_answer_message").textContent =
             result.message;
@@ -1507,6 +1501,7 @@ class App extends React.Component {
             document.getElementById("server_answer_message").textContent = "";
           }, 5000);
         });
+        document.getElementById(friend_username).children[1].remove(); //So the icon will disappear
       } else {
         document.getElementById("server_answer").style.width = "fit-content";
         document.getElementById("server_answer_message").textContent =
@@ -1781,11 +1776,11 @@ class App extends React.Component {
     document.getElementById("Posts_content_container").style.height = "100%";
     // document.getElementById("Footer_article").style.display = "none";
     // document.getElementById("SearchPosts_article").style.display = "flex";
-    // document.getElementById("timer").style.display = "inline";
-    if (JSON.parse(sessionStorage.getItem("timer"))) {
-      secs = JSON.parse(sessionStorage.getItem("timer")).secs;
-      mins = JSON.parse(sessionStorage.getItem("timer")).mins;
-      hours = JSON.parse(sessionStorage.getItem("timer")).hours;
+    // document.getElementById("Header_timer_h1").style.display = "inline";
+    if (JSON.parse(sessionStorage.getItem("Header_timer_h1"))) {
+      secs = JSON.parse(sessionStorage.getItem("Header_timer_h1")).secs;
+      mins = JSON.parse(sessionStorage.getItem("Header_timer_h1")).mins;
+      hours = JSON.parse(sessionStorage.getItem("Header_timer_h1")).hours;
     } else {
       secs = 0;
       mins = 0;
@@ -1832,7 +1827,7 @@ class App extends React.Component {
     fetch(req)
       .then((response) => {
         if (response.status === 201 && this.state.isConnected === false) {
-          sessionStorage.removeItem("timer");
+          sessionStorage.removeItem("Header_timer_h1");
           sessionStorage.removeItem("state");
           window.location.reload();
           return response.json();
@@ -1865,7 +1860,7 @@ class App extends React.Component {
     fetch(req)
       .then((response) => {
         if (response.status === 201 && this.state.isConnected === false) {
-          sessionStorage.removeItem("timer");
+          sessionStorage.removeItem("Header_timer_h1");
           sessionStorage.removeItem("state");
           window.location.reload();
           return response.json();
@@ -2322,7 +2317,7 @@ class App extends React.Component {
                 profilePosts={this.profilePosts}
               />
             )}
-            {/* {this.props.path === "/study" &&
+            {this.props.path === "/study" &&
               parseInt(
                 window.getComputedStyle(document.querySelector("#root")).width
               ) > 1200 && (
@@ -2336,10 +2331,10 @@ class App extends React.Component {
                   dbUpdate_user_connected={this.dbUpdate_user_connected}
                   path="/"
                 />
-              )} */}
+              )}
           </Route>
 
-          {/* {this.props.path === "/" &&
+          {this.props.path === "/" &&
             parseInt(
               window.getComputedStyle(document.querySelector("#root")).width
             ) > 1200 && (
@@ -2353,10 +2348,10 @@ class App extends React.Component {
                 dbUpdate_user_connected={this.dbUpdate_user_connected}
                 path="/"
               />
-            )} */}
+            )}
         </main>
         <section style={{ order: "4" }}>
-          {/* {this.props.path === "/study" &&
+          {this.props.path === "/study" &&
             parseInt(
               window.getComputedStyle(document.querySelector("#root")).width
             ) <= 1200 && (
@@ -2371,7 +2366,7 @@ class App extends React.Component {
                 path="/study"
                 serverReply={this.serverReply}
               />
-            )} */}
+            )}
           {this.props.path === "/study" &&
             parseInt(
               window.getComputedStyle(document.querySelector("#root")).width

@@ -11,10 +11,10 @@
 /*header content container*/
 #Header_content_container {
   width: 1200px;
-  justify-content: space-between;
   align-items: center;
   margin: 0 auto;
   padding: 0 20px;
+  position: relative;
 }
 
 @keyframes header_blinker {

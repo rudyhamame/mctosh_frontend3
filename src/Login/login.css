@@ -30,7 +30,17 @@
   padding: 20px;
   /* padding: 0 30px; */
 }
-#Login_loginLogo_container {
+#Login_signupShow_text {
+  cursor: pointer;
+}
+#Login_signupShow_text:hover {
+  transform: scale(0.92);
+}
+#Login_loginShow_text {
+  cursor: pointer;
+}
+#Login_loginShow_text:hover {
+  transform: scale(0.92);
 }
 
 #Login_loginLogo_text {

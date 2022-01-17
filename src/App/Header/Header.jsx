@@ -22,8 +22,11 @@ const Header = (props) => {
             style={{
               color: "white",
               textAlign: "center",
+              position: "absolute",
+              right: "0",
+              left: "0",
             }}
-            id="timer"
+            id="Header_timer_h1"
           >
             {props.state.timer.hours && props.state.timer.hours < 10
               ? "0" + props.state.timer.hours
@@ -44,6 +47,16 @@ const Header = (props) => {
               : "00"}
           </h1>{" "}
         </section>
+        <h1
+          style={{
+            color: "white",
+            textAlign: "center",
+            position: "absolute",
+            right: "0",
+          }}
+        >
+          {props.state.firstname}
+        </h1>
       </div>
     </header>
   );

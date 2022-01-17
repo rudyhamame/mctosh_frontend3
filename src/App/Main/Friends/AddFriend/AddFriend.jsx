@@ -10,6 +10,7 @@ const AddFirend = (props) => {
           component="AddFriend"
           searchUsers={props.searchUsers}
           addFriend={props.addFriend}
+          state={props.state}
         />
       </section>
       <section id="AddFriend_addFriend" className="fc">

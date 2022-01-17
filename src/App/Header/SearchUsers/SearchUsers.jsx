@@ -7,16 +7,19 @@ const SearchUsers = (props) => {
   );
   ///////////////////////////SEATCH FOR USERS TO BE FRIENDS///////////////
 
-  function send_by_enter(event) {
-    if (event.which === 13) {
-      AddFriend_addFriend_results.innerHTML = "";
-      props.searchUsers(SearchUsers_input.value);
-    }
+  function send_by_enter() {
+    AddFriend_addFriend_results.innerHTML = "";
+    props.searchUsers(SearchUsers_input.value);
   }
 
   return (
     <section id="Search_section" className="fr">
-      <button id="Search_button" onClick={() => {}}>
+      <button
+        id="Search_button"
+        onClick={() => {
+          send_by_enter();
+        }}
+      >
         Search
       </button>
       <input
@@ -24,7 +27,9 @@ const SearchUsers = (props) => {
         type="text"
         placeholder="Enter a keyword"
         onKeyPress={(event) => {
-          send_by_enter(event);
+          if (event.which === 13) {
+            send_by_enter(event);
+          }
         }}
       />
     </section>
