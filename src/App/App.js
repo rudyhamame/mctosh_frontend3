@@ -1705,11 +1705,7 @@ class App extends React.Component {
           this.buildNotifications();
           if (this.state.friendID_selected) this.RetrievingMySendingMessages();
         }
-        if (
-          this.state.profile === false &&
-          this.props.path === "/study" &&
-          this.state.posts.length > 0
-        )
+        if (this.props.path === "/study" && this.state.posts.length > 0)
           this.BuildingPosts();
       })
       .catch((err) => {
