@@ -178,8 +178,8 @@ const Login = () => {
       Login_password_input.value &&
       Login_firstname_input.value &&
       Login_lastname_input.value &&
-      Login_email_input.value &&
-      Login_dob_input.value
+      Login_email_input.value
+      // Login_dob_input.value
     ) {
       const url = "https://backendstep1.herokuapp.com/api/user/signup";
       const options = {
