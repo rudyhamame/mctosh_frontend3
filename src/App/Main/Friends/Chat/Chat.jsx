@@ -31,7 +31,7 @@ const Chat = (props) => {
           }}
         ></i>
         <h1 id="Chat_title_text">
-          {/* {props.state.friend === true && "Typing..."} */}
+          {/* {props.state.friend_target === true && "Typing..."} */}
         </h1>
       </section>
       <ul id="Chat_messages"></ul>
