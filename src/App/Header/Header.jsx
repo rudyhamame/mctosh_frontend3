@@ -16,15 +16,12 @@ const Header = (props) => {
           show_profile={props.show_profile}
         />
 
-        <section>
+        <section style={{ position: "absolute", right: "0", left: "0" }}>
           {" "}
           <h1
             style={{
               color: "white",
               textAlign: "center",
-              position: "absolute",
-              right: "0",
-              left: "0",
             }}
             id="Header_timer_h1"
           >
