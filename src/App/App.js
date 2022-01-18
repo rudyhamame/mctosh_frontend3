@@ -1710,6 +1710,9 @@ class App extends React.Component {
           this.buildNotifications();
           if (this.state.friendID_selected) this.RetrievingMySendingMessages();
         }
+        this.setState({
+          app_is_loading: false,
+        });
         // if (this.props.path === "/study" && this.state.posts.length > 0)
         //   this.BuildingPosts();
       })
