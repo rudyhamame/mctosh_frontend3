@@ -1710,8 +1710,8 @@ class App extends React.Component {
           this.buildNotifications();
           if (this.state.friendID_selected) this.RetrievingMySendingMessages();
         }
-        if (this.props.path === "/study" && this.state.posts.length > 0)
-          this.BuildingPosts();
+        // if (this.props.path === "/study" && this.state.posts.length > 0)
+        //   this.BuildingPosts();
       })
       .catch((err) => {
         if (err.message === "Cannot read property 'credentials' of null")
