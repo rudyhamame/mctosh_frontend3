@@ -1374,6 +1374,7 @@ class App extends React.Component {
 
   acceptFriend = (friend) => {
     let friend_trim = friend.slice(11, friend.length);
+    alert(friend_trim);
     document.getElementById(friend_trim).style.backgroundColor = "var(--black)";
     document.getElementById("server_answer_message").textContent = "Adding ...";
     document.getElementById("server_answer").style.width = "fit-content";
@@ -1436,11 +1437,13 @@ class App extends React.Component {
   ////////////////////////Decline Request/////////////////////////////////////////////
 
   makeNotificationsRead = (friend) => {
+    let friend_trim = friend.slice(12, friend.length);
+    alert(friend_trim);
     let url =
       "https://backendstep1.herokuapp.com/api/user/editUserInfo/" +
       this.state.my_id +
       "/" +
-      friend.id;
+      friend_trim.id;
 
     let options = {
       method: "PUT",
@@ -1452,9 +1455,11 @@ class App extends React.Component {
     };
     let req = new Request(url, options);
     fetch(req).then((response) => {
-      document.getElementById(friend.id).style.backgroundColor = "var(--black)";
+      document.getElementById(friend_trim).style.backgroundColor =
+        "var(--black)";
       if (response.status === 200) {
-        document.getElementById(friend.id).parentElement.style.display = "none";
+        document.getElementById(friend_trim).parentElement.style.display =
+          "none";
         document.getElementById("server_answer").style.width = "fit-content";
         document.getElementById("server_answer_message").textContent = "Done!";
         setTimeout(() => {
@@ -1730,12 +1735,7 @@ class App extends React.Component {
         let div = document.createElement("div");
         let decline_icon = document.createElement("i");
         let accept_icon = document.createElement("i");
-        accept_icon.addEventListener("click", () => {
-          this.acceptFriend(accept_icon.id);
-        });
-        decline_icon.addEventListener("click", () => {
-          this.makeNotificationsRead(this.state.notifications[i]);
-        });
+
         decline_icon.setAttribute("class", "fas fa-times");
         accept_icon.setAttribute("class", "fas fa-user-check");
         accept_icon.setAttribute(
@@ -1746,6 +1746,12 @@ class App extends React.Component {
           "id",
           "decline_icon" + this.state.notifications[i].id
         );
+        decline_icon.addEventListener("click", () => {
+          this.makeNotificationsRead(decline_icon.id);
+        });
+        accept_icon.addEventListener("click", () => {
+          this.acceptFriend(accept_icon.id);
+        });
 
         p.textContent = this.state.notifications[i].message;
         div.setAttribute("class", "fr");
