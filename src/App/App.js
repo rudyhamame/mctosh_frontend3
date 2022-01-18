@@ -64,6 +64,8 @@ class App extends React.Component {
       study_session: null,
       profile: false,
       friendAddedSuccessfully: null,
+      posts_updated: false,
+      posts_deleted: false,
     };
   }
   ////////////////////////////////////////Variables//////////////
@@ -85,6 +87,12 @@ class App extends React.Component {
 
     setInterval(() => {
       this.updateUserInfo();
+      if (
+        this.props.path === "/study" &&
+        this.state.posts.length > 0 &&
+        !this.state.posts_updated
+      )
+        this.BuildingPosts();
     }, 1000);
   }
   componentDidUpdate() {
@@ -146,16 +154,15 @@ class App extends React.Component {
         return new Date(b.date) - new Date(a.date);
       });
     }
-    for (
-      var i = 0;
-      i < this.state.posts.length &&
-      !(this.state.posts.length < this.posts_alreadyBuilt.length);
-      i++
-    ) {
+    if (!this.state.posts_updated)
+      document.getElementById("MountPosts_content_container");
+    ul.innerHTML = "";
+    for (var i = 0; i < this.state.posts.length; i++) {
       if (
         this.state.posts[i]._id !== this.posts_alreadyBuilt[i] ||
         (this.state.posts[i]._id === this.posts_alreadyBuilt[i] &&
-          this.state.posts[i].comments.length !== this.posts_comments[i])
+          this.state.posts[i].comments.length !== this.posts_comments[i]) ||
+        this.state.posts_deleted
       ) {
         if (
           this.state.posts[i]._id === this.posts_alreadyBuilt[i] &&
@@ -330,6 +337,8 @@ class App extends React.Component {
           this.posts_comments[i] = this.state.posts[i].comments.length;
           this.setState({
             app_is_loading: false,
+            posts_updated: true,
+            posts_deleted: false,
           });
         }
       }
@@ -1695,12 +1704,14 @@ class App extends React.Component {
         this.setState({
           friends: jsonData.friends,
           chat: jsonData.chat,
-          posts: jsonData.posts,
           notifications: jsonData.notifications,
           terminology: jsonData.terminology,
           study_session: jsonData.study_session,
           isOnline: jsonData.isOnline,
         });
+
+        if (this.state.posts.length !== jsonData.posts.length)
+          this.setState({ posts: jsonData.posts, posts_updated: false });
 
         return jsonData;
       })
@@ -1710,11 +1721,6 @@ class App extends React.Component {
           this.buildNotifications();
           if (this.state.friendID_selected) this.RetrievingMySendingMessages();
         }
-        this.setState({
-          app_is_loading: false,
-        });
-        // if (this.props.path === "/study" && this.state.posts.length > 0)
-        //   this.BuildingPosts();
       })
       .catch((err) => {
         if (err.message === "Cannot read property 'credentials' of null")
@@ -2124,9 +2130,10 @@ class App extends React.Component {
           p_edit.textContent = "Edit";
           options_div.appendChild(p_delete);
           options_div.appendChild(p_edit);
-          p_delete.addEventListener("click", () =>
-            this.deletePost(options_div.id)
-          );
+          p_delete.addEventListener("click", () => {
+            this.setState({ posts_deleted: true });
+            this.deletePost(options_div.id);
+          });
           p_edit.addEventListener("click", () => this.editPost(options_div.id));
           note_options_div.appendChild(options_div);
           options_div.setAttribute(
