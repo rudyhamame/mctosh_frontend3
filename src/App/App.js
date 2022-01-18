@@ -1443,7 +1443,7 @@ class App extends React.Component {
       "https://backendstep1.herokuapp.com/api/user/editUserInfo/" +
       this.state.my_id +
       "/" +
-      friend_trim.id;
+      friend_trim;
 
     let options = {
       method: "PUT",
