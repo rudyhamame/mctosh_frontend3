@@ -42,7 +42,6 @@ class App extends React.Component {
       token: JSON.parse(sessionStorage.getItem("state")).token,
       isConnected: true,
       isOnline: false,
-      posts: [],
       friends: [],
       chat: [],
       terminology: [],
@@ -69,7 +68,7 @@ class App extends React.Component {
     };
   }
   ////////////////////////////////////////Variables//////////////
-
+  posts = [];
   /////////////////////////////////////////////////////Lifecycle//////////////////////////
   componentDidMount() {
     if (this.props.path === "/study") {
@@ -84,15 +83,8 @@ class App extends React.Component {
       token: JSON.parse(sessionStorage.getItem("state")).token,
     });
     this.preparingChat();
-
     setInterval(() => {
       this.updateUserInfo();
-      if (
-        this.props.path === "/study" &&
-        this.state.posts.length > 0 &&
-        !this.state.posts_updated
-      )
-        this.BuildingPosts();
     }, 1000);
   }
   componentDidUpdate() {
@@ -148,57 +140,52 @@ class App extends React.Component {
   posts_alreadyBuilt = [];
   posts_comments = [];
   BuildingPosts = () => {
+    console.log(this.posts_alreadyBuilt);
     let ul = document.getElementById("MountPosts_content_container");
-    if (this.state.posts.length > 0) {
-      this.state.posts.sort((a, b) => {
-        return new Date(b.date) - new Date(a.date);
-      });
-    }
-    if (!this.state.posts_updated)
-      document.getElementById("MountPosts_content_container");
-    ul.innerHTML = "";
-    for (var i = 0; i < this.state.posts.length; i++) {
+    // if (this.posts.length > 0) {
+    //   this.posts.sort((a, b) => {
+    //     return new Date(b.date) - new Date(a.date);
+    //   });
+    // }
+    for (var i = 0; i < this.posts.length; i++) {
+      console.log(this.posts);
       if (
-        this.state.posts[i]._id !== this.posts_alreadyBuilt[i] ||
-        (this.state.posts[i]._id === this.posts_alreadyBuilt[i] &&
-          this.state.posts[i].comments.length !== this.posts_comments[i]) ||
-        this.state.posts_deleted
+        this.posts[i]._id !== this.posts_alreadyBuilt[i] ||
+        (this.posts[i]._id === this.posts_alreadyBuilt[i] &&
+          this.posts[i].comments.length !== this.posts_comments[i]) ||
+        this.posts_deleted
       ) {
         if (
-          this.state.posts[i]._id === this.posts_alreadyBuilt[i] &&
-          this.state.posts[i].comments.length !== this.posts_comments[i]
+          this.posts[i]._id === this.posts_alreadyBuilt[i] &&
+          this.posts[i].comments.length !== this.posts_comments[i]
         ) {
           let commentlist_ul = document.getElementById(
-            "commentlist_ul" + this.state.posts[i]._id
+            "commentlist_ul" + this.posts[i]._id
           );
-          if (this.state.posts[i].comments.length === 1) {
+          if (this.posts[i].comments.length === 1) {
             let commentlist_ul = document.createElement("ul");
             commentlist_ul.setAttribute(
               "id",
-              "commentlist_ul" + this.state.posts[i]._id
+              "commentlist_ul" + this.posts[i]._id
             );
             commentlist_ul.setAttribute("class", "fc commentlist_ul");
             let comments_div = document.getElementById(
-              "commentDiv" + this.state.posts[i]._id
+              "commentDiv" + this.posts[i]._id
             );
             let li = document.createElement("li");
             li.setAttribute("class", "comment_li");
             li.textContent =
-              this.state.posts[i].comments[
-                this.state.posts[i].comments.length - 1
-              ];
+              this.posts[i].comments[this.posts[i].comments.length - 1];
             commentlist_ul.prepend(li);
             comments_div.appendChild(commentlist_ul);
-            this.posts_comments[i] = this.state.posts[i].comments.length;
+            this.posts_comments[i] = this.posts[i].comments.length;
           } else {
             let li = document.createElement("li");
             li.setAttribute("class", "comment_li");
             li.textContent =
-              this.state.posts[i].comments[
-                this.state.posts[i].comments.length - 1
-              ];
+              this.posts[i].comments[this.posts[i].comments.length - 1];
             commentlist_ul.prepend(li);
-            this.posts_comments[i] = this.state.posts[i].comments.length;
+            this.posts_comments[i] = this.posts[i].comments.length;
           }
         } else {
           this.setState({
@@ -215,14 +202,14 @@ class App extends React.Component {
           //.............................comments.......................
 
           //............date.................................
-          let date = this.state.posts[i].date;
+          let date = this.posts[i].date;
           let date_timezone = new Date(date);
           let date_string = date_timezone.toDateString();
           let time_string = date_timezone.toLocaleTimeString();
           //.............................................
           //...............................note..................................
           let note_p = document.createElement("p");
-          note_p.textContent = this.state.posts[i].note;
+          note_p.textContent = this.posts[i].note;
           note_p.setAttribute("class", "note_p");
           note_options_div.setAttribute("class", "fr note_options_div");
           note_options_div.setAttribute("id", "note_options_div" + i);
@@ -235,7 +222,7 @@ class App extends React.Component {
           details_div.appendChild(postername_p);
           //..................................
 
-          if (this.state.posts[i].id === this.state.my_id) {
+          if (this.posts[i].id === this.state.my_id) {
             postername_p.textContent = "Mine";
             let p_delete = document.createElement("p");
             let p_edit = document.createElement("p");
@@ -245,9 +232,10 @@ class App extends React.Component {
             p_edit.textContent = "Edit";
             options_div.appendChild(p_delete);
             options_div.appendChild(p_edit);
-            p_delete.addEventListener("click", () =>
-              this.deletePost(options_div.id)
-            );
+            p_delete.addEventListener("click", () => {
+              this.deletePost(options_div.id);
+            });
+
             p_edit.addEventListener("click", () =>
               this.editPost(options_div.id)
             );
@@ -256,12 +244,10 @@ class App extends React.Component {
               "class",
               "fc MountPosts_postOptionsContainer"
             );
-            options_div.setAttribute("id", this.state.posts[i]._id);
+            options_div.setAttribute("id", this.posts[i]._id);
           } else {
             postername_p.textContent =
-              this.state.posts[i].firstname +
-              " " +
-              this.state.posts[i].lastname;
+              this.posts[i].firstname + " " + this.posts[i].lastname;
           }
           //........................................................................
 
@@ -274,11 +260,10 @@ class App extends React.Component {
             date_string +
             ", " +
             time_string;
-          category_p.textContent = "System: " + this.state.posts[i].category;
-          subject_p.textContent = "Discipline: " + this.state.posts[i].subject;
-          reference_p.textContent =
-            "Reference: " + this.state.posts[i].reference;
-          page_p.textContent = "Page #: " + this.state.posts[i].page_num;
+          category_p.textContent = "System: " + this.posts[i].category;
+          subject_p.textContent = "Discipline: " + this.posts[i].subject;
+          reference_p.textContent = "Reference: " + this.posts[i].reference;
+          page_p.textContent = "Page #: " + this.posts[i].page_num;
           date_p.className = "MountPosts_date";
           details_div.appendChild(date_p);
           details_div.appendChild(category_p);
@@ -290,24 +275,18 @@ class App extends React.Component {
           let commentlist_ul = document.createElement("ul");
           comments_div.appendChild(comment_input);
           comments_div.setAttribute("class", "fc comments_div");
-          comments_div.setAttribute(
-            "id",
-            "commentDiv" + this.state.posts[i]._id
-          );
-          comment_input.setAttribute(
-            "id",
-            "comment_input" + this.state.posts[i]._id
-          );
+          comments_div.setAttribute("id", "commentDiv" + this.posts[i]._id);
+          comment_input.setAttribute("id", "comment_input" + this.posts[i]._id);
           comment_input.setAttribute("class", "comment_input");
           commentlist_ul.setAttribute(
             "id",
-            "commentlist_ul" + this.state.posts[i]._id
+            "commentlist_ul" + this.posts[i]._id
           );
           comment_input.setAttribute("placeholder", "Enter a comment");
           comment_input.addEventListener("keypress", (event) => {
             this.postComment(event, comments_div.id, comment_input.id);
           });
-          this.state.posts[i].comments.forEach((comment) => {
+          this.posts[i].comments.forEach((comment) => {
             let comment_li = document.createElement("li");
             comment_li.textContent = comment;
             comment_li.setAttribute("class", "comment_li");
@@ -318,23 +297,20 @@ class App extends React.Component {
           //.....................................................
 
           if (
-            !(
-              this.state.posts[i].reference === "" &&
-              this.state.posts[i].page_num !== null
-            )
+            !(this.posts[i].reference === "" && this.posts[i].page_num !== null)
           ) {
-            if (this.state.posts[i].reference !== "")
+            if (this.posts[i].reference !== "")
               details_div.appendChild(reference_p);
-            if (this.state.posts[i].page_num !== null)
+            if (this.posts[i].page_num !== null)
               details_div.appendChild(page_p);
           }
-          li.setAttribute("id", "li" + this.state.posts[i]._id);
+          li.setAttribute("id", "li" + this.posts[i]._id);
           li.appendChild(details_div);
           li.appendChild(note_options_div);
           li.appendChild(comments_div);
           ul.appendChild(li);
-          this.posts_alreadyBuilt[i] = this.state.posts[i]._id;
-          this.posts_comments[i] = this.state.posts[i].comments.length;
+          this.posts_alreadyBuilt[i] = this.posts[i]._id;
+          this.posts_comments[i] = this.posts[i].comments.length;
           this.setState({
             app_is_loading: false,
             posts_updated: true,
@@ -343,7 +319,7 @@ class App extends React.Component {
         }
       }
 
-      // if (this.state.posts.length < this.posts_alreadyBuilt.length) {
+      // if (this.posts.length < this.posts_alreadyBuilt.length) {
       //   this.posts_alreadyBuilt = [];
       //   ul.innerHTML = "";
       // }
@@ -353,45 +329,41 @@ class App extends React.Component {
   profilePosts = [];
   BuildingPostsProfile = () => {
     let ul = document.getElementById("MountPosts_content_container");
-    for (var i = 0; i < this.state.posts.length; i++) {
-      if (this.state.posts[i].id === this.state.my_id) {
-        if (this.state.posts.length >= this.profilePosts.length) {
-          if (this.state.posts[i]._id !== this.profilePosts[i]) {
+    for (var i = 0; i < this.posts.length; i++) {
+      if (this.posts[i].id === this.state.my_id) {
+        if (this.posts.length >= this.profilePosts.length) {
+          if (this.posts[i]._id !== this.profilePosts[i]) {
             if (
-              this.state.posts[i]._id === this.profilePosts[i] &&
-              this.state.posts[i].comments.length !== this.posts_comments[i]
+              this.posts[i]._id === this.profilePosts[i] &&
+              this.posts[i].comments.length !== this.posts_comments[i]
             ) {
               let commentlist_ul = document.getElementById(
-                "commentlist_ul" + this.state.posts[i]._id
+                "commentlist_ul" + this.posts[i]._id
               );
-              if (this.state.posts[i].comments.length === 1) {
+              if (this.posts[i].comments.length === 1) {
                 let commentlist_ul = document.createElement("ul");
                 commentlist_ul.setAttribute(
                   "id",
-                  "commentlist_ul" + this.state.posts[i]._id
+                  "commentlist_ul" + this.posts[i]._id
                 );
                 commentlist_ul.setAttribute("class", "fc commentlist_ul");
                 let comments_div = document.getElementById(
-                  "commentDiv" + this.state.posts[i]._id
+                  "commentDiv" + this.posts[i]._id
                 );
                 let li = document.createElement("li");
                 li.setAttribute("class", "comment_li");
                 li.textContent =
-                  this.state.posts[i].comments[
-                    this.state.posts[i].comments.length - 1
-                  ];
+                  this.posts[i].comments[this.posts[i].comments.length - 1];
                 commentlist_ul.prepend(li);
                 comments_div.appendChild(commentlist_ul);
-                this.posts_comments[i] = this.state.posts[i].comments.length;
+                this.posts_comments[i] = this.posts[i].comments.length;
               } else {
                 let li = document.createElement("li");
                 li.setAttribute("class", "comment_li");
                 li.textContent =
-                  this.state.posts[i].comments[
-                    this.state.posts[i].comments.length - 1
-                  ];
+                  this.posts[i].comments[this.posts[i].comments.length - 1];
                 commentlist_ul.prepend(li);
-                this.posts_comments[i] = this.state.posts[i].comments.length;
+                this.posts_comments[i] = this.posts[i].comments.length;
               }
             } else {
               this.setState({
@@ -408,14 +380,14 @@ class App extends React.Component {
               //.............................comments.......................
 
               //............date.................................
-              let date = this.state.posts[i].date;
+              let date = this.posts[i].date;
               let date_timezone = new Date(date);
               let date_string = date_timezone.toDateString();
               let time_string = date_timezone.toLocaleTimeString();
               //.............................................
               //...............................note..................................
               let note_p = document.createElement("p");
-              note_p.textContent = this.state.posts[i].note;
+              note_p.textContent = this.posts[i].note;
               note_p.setAttribute("class", "note_p");
               note_options_div.setAttribute("class", "fr note_options_div");
               note_options_div.setAttribute("id", "note_options_div" + i);
@@ -449,7 +421,7 @@ class App extends React.Component {
                 "class",
                 "fc MountPosts_postOptionsContainer"
               );
-              options_div.setAttribute("id", this.state.posts[i]._id);
+              options_div.setAttribute("id", this.posts[i]._id);
 
               //........................................................................
 
@@ -462,12 +434,10 @@ class App extends React.Component {
                 date_string +
                 ", " +
                 time_string;
-              category_p.textContent =
-                "Category: " + this.state.posts[i].category;
-              subject_p.textContent = "Subject: " + this.state.posts[i].subject;
-              reference_p.textContent =
-                "Reference: " + this.state.posts[i].reference;
-              page_p.textContent = "Page #: " + this.state.posts[i].page_num;
+              category_p.textContent = "Category: " + this.posts[i].category;
+              subject_p.textContent = "Subject: " + this.posts[i].subject;
+              reference_p.textContent = "Reference: " + this.posts[i].reference;
+              page_p.textContent = "Page #: " + this.posts[i].page_num;
               date_p.className = "MountPosts_date";
               details_div.appendChild(date_p);
               details_div.appendChild(category_p);
@@ -479,24 +449,21 @@ class App extends React.Component {
               let commentlist_ul = document.createElement("ul");
               comments_div.appendChild(comment_input);
               comments_div.setAttribute("class", "fc comments_div");
-              comments_div.setAttribute(
-                "id",
-                "commentDiv" + this.state.posts[i]._id
-              );
+              comments_div.setAttribute("id", "commentDiv" + this.posts[i]._id);
               comment_input.setAttribute(
                 "id",
-                "comment_input" + this.state.posts[i]._id
+                "comment_input" + this.posts[i]._id
               );
               comment_input.setAttribute("class", "comment_input");
               commentlist_ul.setAttribute(
                 "id",
-                "commentlist_ul" + this.state.posts[i]._id
+                "commentlist_ul" + this.posts[i]._id
               );
               comment_input.setAttribute("placeholder", "Enter a comment");
               comment_input.addEventListener("keypress", (event) => {
                 this.postComment(event, comments_div.id, comment_input.id);
               });
-              this.state.posts[i].comments.forEach((comment) => {
+              this.posts[i].comments.forEach((comment) => {
                 let comment_li = document.createElement("li");
                 comment_li.textContent = comment;
                 comment_li.setAttribute("class", "comment_li");
@@ -508,29 +475,29 @@ class App extends React.Component {
 
               if (
                 !(
-                  this.state.posts[i].reference === "" &&
-                  this.state.posts[i].page_num !== null
+                  this.posts[i].reference === "" &&
+                  this.posts[i].page_num !== null
                 )
               ) {
-                if (this.state.posts[i].reference !== "")
+                if (this.posts[i].reference !== "")
                   details_div.appendChild(reference_p);
-                if (this.state.posts[i].page_num !== null)
+                if (this.posts[i].page_num !== null)
                   details_div.appendChild(page_p);
               }
-              li.setAttribute("id", "li" + this.state.posts[i]._id);
+              li.setAttribute("id", "li" + this.posts[i]._id);
               li.appendChild(details_div);
               li.appendChild(note_options_div);
               li.appendChild(comments_div);
               ul.prepend(li);
-              this.profilePosts[i] = this.state.posts[i]._id;
-              // this.posts_comments[i] = this.state.posts[i].comments.length;
+              this.profilePosts[i] = this.posts[i]._id;
+              // this.posts_comments[i] = this.posts[i].comments.length;
               this.setState({
                 app_is_loading: false,
               });
             }
           }
         }
-        // if (this.state.posts.length < this.posts_alreadyBuilt.length) {
+        // if (this.posts.length < this.posts_alreadyBuilt.length) {
         //   this.posts_alreadyBuilt = [];
         //   ul.innerHTML = "";
         // }
@@ -996,268 +963,365 @@ class App extends React.Component {
 
   //////////////////////////Posting POSTS////////////////////////////////
   postingPost = () => {
-    if (this.enableEditPost === true) {
-      if (
-        !(
-          document.getElementById("InputPost_resourse").value === "" &&
-          document.getElementById("InputPost_page").value !== ""
-        )
-      ) {
-        let url =
-          "https://backendstep1.herokuapp.com/api/posts/updatePost/" +
-          this.targetIDEditPost;
-        let options = {
-          method: "PUT",
-          mode: "cors",
-          headers: {
-            Authorization: "Bearer " + this.state.token,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            note: document.getElementById("InputPost_textarea").value,
-            category: document.getElementById("InputPost_category").value,
-            subject: document.getElementById("InputPost_subject").value,
-            reference: document.getElementById("InputPost_resourse").value,
-            page_num: document.getElementById("InputPost_page").value,
-          }),
-        };
-        if (
-          document.getElementById("InputPost_textarea").value &&
-          document.getElementById("InputPost_category").value &&
-          document.getElementById("InputPost_subject").value
-        ) {
-          let req = new Request(url, options);
-          fetch(req)
-            .then((response) => {
-              // if (response.status === 201) {
-              //   //..............
-              //   //.............
-              //   document.getElementById(
-              //     this.targetIDEditPost
-              //   ).children[1].style.backgroundColor = "var(--red)";
-              //   document.getElementById(
-              //     this.targetIDEditPost
-              //   ).children[1].textContent = "Edit";
-              //   this.serverReply("post modified");
-              //   //...............note-realtime-edit
-              //   document.getElementById(
-              //     this.targetIDEditPost
-              //   ).parentElement.parentElement.children[1].children[0].textContent =
-              //     document.getElementById("InputPost_textarea").value;
-              //   //................................
-              //   //...............details-realtime-edit
-              //   document.getElementById(
-              //     this.targetIDEditPost
-              //   ).parentElement.parentElement.children[0].children[2].textContent =
-              //     "System: " +
-              //     document.getElementById("InputPost_category").value;
-              //   document.getElementById(
-              //     this.targetIDEditPost
-              //   ).parentElement.parentElement.children[0].children[3].textContent =
-              //     "Discipline: " +
-              //     document.getElementById("InputPost_subject").value;
-              //   if (
-              //     document.getElementById(this.targetIDEditPost).parentElement
-              //       .parentElement.children[0].children[4]
-              //   ) {
-              //     if (
-              //       document.getElementById("InputPost_resourse").value !== ""
-              //     ) {
-              //       document.getElementById(
-              //         this.targetIDEditPost
-              //       ).parentElement.parentElement.children[0].children[4].textContent =
-              //         "Reference: " +
-              //         document.getElementById("InputPost_resourse").value;
-              //     } else {
-              //       document
-              //         .getElementById(this.targetIDEditPost)
-              //         .parentElement.parentElement.children[0].children[4].remove();
-              //     }
-              //   } else {
-              //     if (
-              //       document.getElementById("InputPost_resourse").value !== ""
-              //     ) {
-              //       let p_reference = document.createElement("p");
-              //       p_reference.textContent =
-              //         "Reference: " +
-              //         document.getElementById("InputPost_resourse").value;
-              //       document
-              //         .getElementById(this.targetIDEditPost)
-              //         .parentElement.parentElement.children[0].appendChild(
-              //           p_reference
-              //         );
-              //     }
-              //   }
-              //   if (
-              //     document.getElementById(this.targetIDEditPost).parentElement
-              //       .parentElement.children[0].children[5]
-              //   ) {
-              //     if (document.getElementById("InputPost_page").value !== "") {
-              //       document.getElementById(
-              //         this.targetIDEditPost
-              //       ).parentElement.parentElement.children[0].children[5].textContent =
-              //         "Page#: " +
-              //         document.getElementById("InputPost_page").value;
-              //     } else {
-              //       document
-              //         .getElementById(this.targetIDEditPost)
-              //         .parentElement.parentElement.children[0].children[5].remove();
-              //     }
-              //   } else {
-              //     if (document.getElementById("InputPost_page").value !== "") {
-              //       let p_page = document.createElement("p");
-              //       p_page.textContent =
-              //         "Page #: " +
-              //         document.getElementById("InputPost_page").value;
-              //       document
-              //         .getElementById(this.targetIDEditPost)
-              //         .parentElement.parentElement.children[0].appendChild(
-              //           p_page
-              //         );
-              //     }
-              //   }
-              //   //..................
-              //   document.getElementById("InputPost_post_button").innerHTML =
-              //     "Post";
-              // } else {
-              //   this.serverReply("modify failed");
-              // }
-            })
-            .then(() => {
-              document.getElementById("InputPost_textarea").value = "";
-              document.getElementById("InputPost_category").value = "";
-              document.getElementById("InputPost_subject").value = "";
-              document.getElementById("InputPost_resourse").value = "";
-              document.getElementById("InputPost_page").value = "";
-            });
-        } else {
-          this.serverReply(
-            "Modifying failed. Please make sure you select a category and/or a subject for your note"
-          );
+    // if (this.enableEditPost === true) {
+    //   if (
+    //     !(
+    //       document.getElementById("InputPost_resourse").value === "" &&
+    //       document.getElementById("InputPost_page").value !== ""
+    //     )
+    //   ) {
+    //     let url =
+    //       "https://backendstep1.herokuapp.com/api/posts/updatePost/" +
+    //       this.targetIDEditPost;
+    //     let options = {
+    //       method: "PUT",
+    //       mode: "cors",
+    //       headers: {
+    //         Authorization: "Bearer " + this.state.token,
+    //         "Content-Type": "application/json",
+    //       },
+    //       body: JSON.stringify({
+    //         note: document.getElementById("InputPost_textarea").value,
+    //         category: document.getElementById("InputPost_category").value,
+    //         subject: document.getElementById("InputPost_subject").value,
+    //         reference: document.getElementById("InputPost_resourse").value,
+    //         page_num: document.getElementById("InputPost_page").value,
+    //       }),
+    //     };
+    //     if (
+    //       document.getElementById("InputPost_textarea").value &&
+    //       document.getElementById("InputPost_category").value &&
+    //       document.getElementById("InputPost_subject").value
+    //     ) {
+    //       let req = new Request(url, options);
+    //       fetch(req)
+    //         .then((response) => {
+    // if (response.status === 201) {
+    //   //..............
+    //   //.............
+    //   document.getElementById(
+    //     this.targetIDEditPost
+    //   ).children[1].style.backgroundColor = "var(--red)";
+    //   document.getElementById(
+    //     this.targetIDEditPost
+    //   ).children[1].textContent = "Edit";
+    //   this.serverReply("post modified");
+    //   //...............note-realtime-edit
+    //   document.getElementById(
+    //     this.targetIDEditPost
+    //   ).parentElement.parentElement.children[1].children[0].textContent =
+    //     document.getElementById("InputPost_textarea").value;
+    //   //................................
+    //   //...............details-realtime-edit
+    //   document.getElementById(
+    //     this.targetIDEditPost
+    //   ).parentElement.parentElement.children[0].children[2].textContent =
+    //     "System: " +
+    //     document.getElementById("InputPost_category").value;
+    //   document.getElementById(
+    //     this.targetIDEditPost
+    //   ).parentElement.parentElement.children[0].children[3].textContent =
+    //     "Discipline: " +
+    //     document.getElementById("InputPost_subject").value;
+    //   if (
+    //     document.getElementById(this.targetIDEditPost).parentElement
+    //       .parentElement.children[0].children[4]
+    //   ) {
+    //     if (
+    //       document.getElementById("InputPost_resourse").value !== ""
+    //     ) {
+    //       document.getElementById(
+    //         this.targetIDEditPost
+    //       ).parentElement.parentElement.children[0].children[4].textContent =
+    //         "Reference: " +
+    //         document.getElementById("InputPost_resourse").value;
+    //     } else {
+    //       document
+    //         .getElementById(this.targetIDEditPost)
+    //         .parentElement.parentElement.children[0].children[4].remove();
+    //     }
+    //   } else {
+    //     if (
+    //       document.getElementById("InputPost_resourse").value !== ""
+    //     ) {
+    //       let p_reference = document.createElement("p");
+    //       p_reference.textContent =
+    //         "Reference: " +
+    //         document.getElementById("InputPost_resourse").value;
+    //       document
+    //         .getElementById(this.targetIDEditPost)
+    //         .parentElement.parentElement.children[0].appendChild(
+    //           p_reference
+    //         );
+    //     }
+    //   }
+    //   if (
+    //     document.getElementById(this.targetIDEditPost).parentElement
+    //       .parentElement.children[0].children[5]
+    //   ) {
+    //     if (document.getElementById("InputPost_page").value !== "") {
+    //       document.getElementById(
+    //         this.targetIDEditPost
+    //       ).parentElement.parentElement.children[0].children[5].textContent =
+    //         "Page#: " +
+    //         document.getElementById("InputPost_page").value;
+    //     } else {
+    //       document
+    //         .getElementById(this.targetIDEditPost)
+    //         .parentElement.parentElement.children[0].children[5].remove();
+    //     }
+    //   } else {
+    //     if (document.getElementById("InputPost_page").value !== "") {
+    //       let p_page = document.createElement("p");
+    //       p_page.textContent =
+    //         "Page #: " +
+    //         document.getElementById("InputPost_page").value;
+    //       document
+    //         .getElementById(this.targetIDEditPost)
+    //         .parentElement.parentElement.children[0].appendChild(
+    //           p_page
+    //         );
+    //     }
+    //   }
+    //   //..................
+    //   document.getElementById("InputPost_post_button").innerHTML =
+    //     "Post";
+    // } else {
+    //   this.serverReply("modify failed");
+    // }
+    //       })
+    //       .then(() => {
+    //         document.getElementById("InputPost_textarea").value = "";
+    //         document.getElementById("InputPost_category").value = "";
+    //         document.getElementById("InputPost_subject").value = "";
+    //         document.getElementById("InputPost_resourse").value = "";
+    //         document.getElementById("InputPost_page").value = "";
+    //       });
+    //   } else {
+    //     this.serverReply(
+    //       "Modifying failed. Please make sure you select a category and/or a subject for your note"
+    //     );
+    //   }
+    // } else {
+    //   this.serverReply(
+    //     "Modifying failed. You can't enter a page number without a reference."
+    //   );
+    // }
+    // this.enableEditPost = false;
+    // } else {
+    // if (
+    //   !(
+    //     document.getElementById("InputPost_resourse").value === "" &&
+    //     document.getElementById("InputPost_page").value !== ""
+    //   )
+    // ) {
+    // let posting_check = 0;
+    document.getElementById("InputPost_textarea").style.height = "0";
+    this.setState({
+      app_is_loading: true,
+    });
+    let url = "https://backendstep1.herokuapp.com/api/posts/addNew";
+    let options = {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        Authorization: "Bearer " + this.state.token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: this.state.my_id,
+        firstname: this.state.firstname,
+        lastname: this.state.lastname,
+        note: document.getElementById("InputPost_textarea").value,
+        category: document.getElementById("InputPost_category").value,
+        subject: document.getElementById("InputPost_subject").value,
+        reference: document.getElementById("InputPost_resourse").value,
+        page_num: document.getElementById("InputPost_page").value,
+        comments: [],
+        date: new Date(),
+      }),
+    };
+    let req = new Request(url, options);
+    fetch(req)
+      .then((result) => {
+        if (result.status === 201) {
+          // let ul = document.getElementById("MountPosts_content_container");
+          // ul.innerHTML = "";
+          return result.json(result);
         }
-      } else {
-        this.serverReply(
-          "Modifying failed. You can't enter a page number without a reference."
-        );
-      }
-      this.enableEditPost = false;
-    } else {
-      if (
-        !(
-          document.getElementById("InputPost_resourse").value === "" &&
-          document.getElementById("InputPost_page").value !== ""
-        )
-      ) {
-        let posting_check = 0;
-        document.getElementById("InputPost_textarea").style.height = "0";
-        this.setState({
-          app_is_loading: true,
-        });
-        let url = "https://backendstep1.herokuapp.com/api/posts/addNew";
-        let options = {
+      })
+      .then((result) => {
+        if (result) {
+          document.getElementById("InputPost_textarea").value = "";
+          document.getElementById("InputPost_category").value = "";
+          document.getElementById("InputPost_subject").value = "";
+          document.getElementById("InputPost_resourse").value = "";
+          document.getElementById("InputPost_page").value = "";
+          //.........................................
+          this.state.friends.forEach((friend) => {
+            let url_2 =
+              "https://backendstep1.herokuapp.com/api/posts/postAdd/" +
+              friend._id +
+              "/" +
+              result._id;
+            let options_2 = {
+              method: "POST",
+              mode: "cors",
+              headers: {
+                Authorization: "Bearer " + this.state.token,
+                "Content-Type": "application/json",
+              },
+            };
+            let req_2 = new Request(url_2, options_2);
+            fetch(req_2);
+          });
+
+          return result;
+        }
+      })
+      .then((result) => {
+        let url_2 =
+          "https://backendstep1.herokuapp.com/api/posts/postAdd/" +
+          this.state.my_id +
+          "/" +
+          result._id;
+        let options_2 = {
           method: "POST",
           mode: "cors",
           headers: {
             Authorization: "Bearer " + this.state.token,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            id: this.state.my_id,
-            firstname: this.state.firstname,
-            lastname: this.state.lastname,
-            note: document.getElementById("InputPost_textarea").value,
-            category: document.getElementById("InputPost_category").value,
-            subject: document.getElementById("InputPost_subject").value,
-            reference: document.getElementById("InputPost_resourse").value,
-            page_num: document.getElementById("InputPost_page").value,
-            comments: [],
-            date: new Date(),
-          }),
         };
-        let req = new Request(url, options);
-        fetch(req)
-          .then((result) => {
-            if (result.status === 201) {
-              let ul = document.getElementById("MountPosts_content_container");
-              ul.innerHTML = "";
-              return result.json(result);
-            }
-          })
-          .then((result) => {
-            if (result) {
-              document.getElementById("InputPost_textarea").value = "";
-              document.getElementById("InputPost_category").value = "";
-              document.getElementById("InputPost_subject").value = "";
-              document.getElementById("InputPost_resourse").value = "";
-              document.getElementById("InputPost_page").value = "";
-              //.........................................
-              this.state.friends.forEach((friend) => {
-                let url_2 =
-                  "https://backendstep1.herokuapp.com/api/posts/postAdd/" +
-                  friend._id +
-                  "/" +
-                  result._id;
-                let options_2 = {
-                  method: "POST",
-                  mode: "cors",
-                  headers: {
-                    Authorization: "Bearer " + this.state.token,
-                    "Content-Type": "application/json",
-                  },
-                };
-                let req_2 = new Request(url_2, options_2);
-                fetch(req_2).then((result) => {
-                  if (result.status !== 201) {
-                    posting_check++;
-                  }
-                });
-              });
-            } else {
-              posting_check++;
-            }
-            return result;
-          })
-          .then((result) => {
-            if (posting_check === 0) {
-              let url_2 =
-                "https://backendstep1.herokuapp.com/api/posts/postAdd/" +
-                this.state.my_id +
-                "/" +
-                result._id;
-              let options_2 = {
-                method: "POST",
-                mode: "cors",
-                headers: {
-                  Authorization: "Bearer " + this.state.token,
-                  "Content-Type": "application/json",
-                },
-              };
-              let req_2 = new Request(url_2, options_2);
-              fetch(req_2).then((result) => {
-                if (result.status !== 201) {
-                  posting_check++;
-                }
-              });
-            }
-          })
-          .then(() => {
-            if (posting_check > 0) {
-              this.serverReply(
-                "Posting failed. Please make sure you select a category and/or a subject for your note"
-              );
-              this.setState({
-                app_is_loading: false,
-              });
-            } else {
-              this.serverReply("Posted successfully!");
-            }
-          });
-      } else {
-        this.serverReply(
-          "Posting failed. You can't enter a page number without a reference."
-        );
-      }
-    }
+        let req_2 = new Request(url_2, options_2);
+        fetch(req_2);
+        return result;
+      });
+    // .then((result) => {
+    //   let ul = document.getElementById("MountPosts_content_container");
+    //   let date_p = document.createElement("p");
+    //   let category_p = document.createElement("p");
+    //   let subject_p = document.createElement("p");
+    //   let reference_p = document.createElement("p");
+    //   let page_p = document.createElement("p");
+    //   let li = document.createElement("li");
+    //   let details_div = document.createElement("div");
+    //   let note_options_div = document.createElement("div");
+    //   //.............................comments.......................
+
+    //   //............date.................................
+    //   let date = result.date;
+    //   let date_timezone = new Date(date);
+    //   let date_string = date_timezone.toDateString();
+    //   let time_string = date_timezone.toLocaleTimeString();
+    //   //.............................................
+    //   //...............................note..................................
+    //   let note_p = document.createElement("p");
+    //   note_p.textContent = result.note;
+    //   note_p.setAttribute("class", "note_p");
+    //   note_options_div.setAttribute("class", "fr note_options_div");
+    //   note_options_div.setAttribute("id", "note_options_div" + "new");
+    //   note_options_div.appendChild(note_p);
+    //   //.......................Options....................................
+    //   let options_div = document.createElement("div");
+    //   //............................Poster name.......................
+    //   let postername_p = document.createElement("p");
+    //   postername_p.setAttribute("class", "postername_p");
+    //   details_div.appendChild(postername_p);
+    //   //..................................
+
+    //   if (result.id === this.state.my_id) {
+    //     postername_p.textContent = "Mine";
+    //     let p_delete = document.createElement("p");
+    //     let p_edit = document.createElement("p");
+    //     p_delete.style.cursor = "pointer";
+    //     p_edit.style.cursor = "pointer";
+    //     p_delete.textContent = "Delete";
+    //     p_edit.textContent = "Edit";
+    //     options_div.appendChild(p_delete);
+    //     options_div.appendChild(p_edit);
+    //     p_delete.addEventListener("click", () =>
+    //       this.deletePost(options_div.id)
+    //     );
+    //     p_edit.addEventListener("click", () => this.editPost(options_div.id));
+    //     note_options_div.appendChild(options_div);
+    //     options_div.setAttribute(
+    //       "class",
+    //       "fc MountPosts_postOptionsContainer"
+    //     );
+    //     options_div.setAttribute("id", result._id);
+    //   } else {
+    //     postername_p.textContent = result.firstname + " " + result.lastname;
+    //   }
+    //   //........................................................................
+
+    //   //.....................................................................
+    //   li.className = "fc";
+
+    //   date_p.innerHTML =
+    //     "<i class='far fa-clock'></i>" +
+    //     "  " +
+    //     date_string +
+    //     ", " +
+    //     time_string;
+    //   category_p.textContent = "System: " + result.category;
+    //   subject_p.textContent = "Discipline: " + result.subject;
+    //   reference_p.textContent = "Reference: " + result.reference;
+    //   page_p.textContent = "Page #: " + result.page_num;
+    //   date_p.className = "MountPosts_date";
+    //   details_div.appendChild(date_p);
+    //   details_div.appendChild(category_p);
+    //   details_div.appendChild(subject_p);
+    //   details_div.setAttribute("class", "fr details_div");
+    //   //...................comments...............
+    //   let comments_div = document.createElement("div");
+    //   let comment_input = document.createElement("input");
+    //   let commentlist_ul = document.createElement("ul");
+    //   comments_div.appendChild(comment_input);
+    //   comments_div.setAttribute("class", "fc comments_div");
+    //   comments_div.setAttribute("id", "commentDiv" + result._id);
+    //   comment_input.setAttribute("id", "comment_input" + result._id);
+    //   comment_input.setAttribute("class", "comment_input");
+    //   commentlist_ul.setAttribute("id", "commentlist_ul" + result._id);
+    //   comment_input.setAttribute("placeholder", "Enter a comment");
+    //   comment_input.addEventListener("keypress", (event) => {
+    //     this.postComment(event, comments_div.id, comment_input.id);
+    //   });
+    //   result.comments.forEach((comment) => {
+    //     let comment_li = document.createElement("li");
+    //     comment_li.textContent = comment;
+    //     comment_li.setAttribute("class", "comment_li");
+    //     commentlist_ul.setAttribute("class", "fc commentlist_ul");
+    //     commentlist_ul.prepend(comment_li);
+    //     comments_div.appendChild(commentlist_ul);
+    //   });
+    //   //.....................................................
+
+    //   if (!(result.reference === "" && result.page_num !== null)) {
+    //     if (result.reference !== "") details_div.appendChild(reference_p);
+    //     if (result.page_num !== null) details_div.appendChild(page_p);
+    //   }
+    //   li.setAttribute("id", "li" + result._id);
+    //   li.appendChild(details_div);
+    //   li.appendChild(note_options_div);
+    //   li.appendChild(comments_div);
+    //   ul.appendChild(li);
+
+    //   //   this.serverReply(
+    //   //     "Posting failed. Please make sure you select a category and/or a subject for your note"
+    //   //   );
+    //   this.setState({
+    //     app_is_loading: false,
+    //   });
+    //   // } else {
+    //   //   this.serverReply("Posted successfully!");
+    //   // }
+    // });
+    // } else {
+    //   this.serverReply(
+    //     "Posting failed. You can't enter a page number without a reference."
+    //   );
+
     //.........................................
   };
   ////////////////////////////////Deleting Post///////////////////////////////////////////
@@ -1279,6 +1343,10 @@ class App extends React.Component {
         this.deletePost_enabled = true;
         document.getElementById(post_id).parentElement.parentElement.remove();
         this.serverReply("post deleted");
+        for (var i = 0; i < this.posts_alreadyBuilt.length; i++) {
+          if (post_id === this.posts_alreadyBuilt[i])
+            this.posts_alreadyBuilt.splice(i, 1);
+        }
       } else {
         this.serverReply("delete failed");
       }
@@ -1292,7 +1360,7 @@ class App extends React.Component {
     this.editPostControlCounter++;
     if (this.editPostControlCounter % 2 === 0) {
       this.targetIDEditPost = post_id;
-      this.state.posts.forEach((post) => {
+      this.posts.forEach((post) => {
         if (post._id === post_id) {
           document.getElementById("InputPost_textarea").value = post.note;
           document.getElementById("InputPost_category").value = post.category;
@@ -1683,6 +1751,11 @@ class App extends React.Component {
     document.getElementById("Chat_article").style.height = "100%";
     document.getElementById("FriendsList_article").style.height = "0";
   };
+
+  ///DeleteFriendPost
+  deleteFriendPost = (post_id) => {
+    document.getElementById("li" + post_id).remove();
+  };
   ////////////////////////////Update State//////////DONE/////////////////////
   updateUserInfo = () => {
     let url =
@@ -1710,18 +1783,37 @@ class App extends React.Component {
           isOnline: jsonData.isOnline,
         });
 
-        if (this.state.posts.length !== jsonData.posts.length)
-          this.setState({ posts: jsonData.posts, posts_updated: false });
+        var deleted;
+        var id;
+        console.log(this.posts.length);
+        console.log(jsonData.posts.length);
+        for (
+          var i = 0;
+          i < this.posts_alreadyBuilt.length &&
+          this.posts_alreadyBuilt.length > jsonData.posts.length &&
+          !deleted;
+          i++
+        ) {
+          this.id = this.posts_alreadyBuilt[i];
+          this.posts_alreadyBuilt.splice(i, 1);
+          this.deleteFriendPost(this.id);
+          deleted = true;
+        }
 
         return jsonData;
       })
-      .then(() => {
+      .then((jsonData) => {
+        this.posts = jsonData.posts;
+        console.log(this.posts);
+
         if (this.props.path === "/study") {
           this.buildFriendsList();
           this.buildNotifications();
           if (this.state.friendID_selected) this.RetrievingMySendingMessages();
+          if (!this.posts_updated) this.BuildingPosts();
         }
       })
+      .then(() => {})
       .catch((err) => {
         if (err.message === "Cannot read property 'credentials' of null")
           console.log("Error", err.message);
@@ -1964,7 +2056,7 @@ class App extends React.Component {
     ul.innerHTML = "";
     ul_term.innerHTML = "";
     //..................................
-    this.state.posts.forEach((post) => {
+    this.posts.forEach((post) => {
       if (keyword !== "$" && subject === "$" && category === "$") {
         if (
           String(post.note).toLowerCase() === keyword.toLowerCase() ||

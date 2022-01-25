@@ -89,6 +89,7 @@ const Terminology = (props) => {
             <option value="" disabled selected hidden>
               System
             </option>
+            <option value="General Principles">Schedule</option>
             <option value="General Principles">General Principles</option>
             <option value="Behavioral health system">
               Behavioral health system

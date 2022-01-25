@@ -105,8 +105,8 @@ const Login = () => {
               friends: userdata.user.friends,
               friend_requests: userdata.user.friend_requests,
               notifications: userdata.user.notifications,
+              posts: userdata.user.posts,
             });
-
             setLogin_ok(true);
           } else {
             setLogin_ok(false);
