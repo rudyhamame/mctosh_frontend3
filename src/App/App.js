@@ -1341,12 +1341,12 @@ class App extends React.Component {
     fetch(req).then((response) => {
       if (response.status === 201) {
         this.deletePost_enabled = true;
-        document.getElementById(post_id).parentElement.parentElement.remove();
+        // document.getElementById(post_id).parentElement.parentElement.remove();
         this.serverReply("post deleted");
-        for (var i = 0; i < this.posts_alreadyBuilt.length; i++) {
-          if (post_id === this.posts_alreadyBuilt[i])
-            this.posts_alreadyBuilt.splice(i, 1);
-        }
+        // for (var i = 0; i < this.posts_alreadyBuilt.length; i++) {
+        //   if (post_id === this.posts_alreadyBuilt[i])
+        //     this.posts_alreadyBuilt.splice(i, 1);
+        // }
       } else {
         this.serverReply("delete failed");
       }
@@ -1784,7 +1784,6 @@ class App extends React.Component {
         });
 
         var deleted;
-        var id;
         console.log(this.posts.length);
         console.log(jsonData.posts.length);
         for (
@@ -1794,12 +1793,12 @@ class App extends React.Component {
           !deleted;
           i++
         ) {
-          this.id = this.posts_alreadyBuilt[i];
-          this.posts_alreadyBuilt.splice(i, 1);
-          this.deleteFriendPost(this.id);
-          deleted = true;
+          if (this.posts_alreadyBuilt[i] !== jsonData.posts[i]._id) {
+            this.posts_alreadyBuilt.splice(i, 1);
+            this.deleteFriendPost(this.posts_alreadyBuilt[i]);
+            deleted = true;
+          }
         }
-
         return jsonData;
       })
       .then((jsonData) => {
