@@ -125,7 +125,7 @@ class App extends React.Component {
   //...........................................Preperation..................................................
   preparingChat = () => {
     let url =
-      "https://web-production-e88a.up.railway.app/api/chat/prepareChat/" +
+      "https://backendstep.onrender.com/api/chat/prepareChat/" +
       this.state.my_id;
     let options = {
       method: "POST",
@@ -663,7 +663,7 @@ class App extends React.Component {
   ////////////////////////////Delete terminology////////////////////////////
   deleteTerminology = (term_id) => {
     let url =
-      "https://web-production-e88a.up.railway.app/api/user/deleteTerminology/" +
+      "https://backendstep.onrender.com/api/user/deleteTerminology/" +
       term_id +
       "/" +
       this.state.my_id;
@@ -789,7 +789,7 @@ class App extends React.Component {
         app_is_loading: true,
       });
       let url =
-        "https://web-production-e88a.up.railway.app/api/user/newTerminology/" +
+        "https://backendstep.onrender.com/api/user/newTerminology/" +
         this.state.my_id;
       let options = {
         method: "POST",
@@ -893,7 +893,7 @@ class App extends React.Component {
         });
     } else {
       let url =
-        "https://web-production-e88a.up.railway.app/api/user/editTerminology/" +
+        "https://backendstep.onrender.com/api/user/editTerminology/" +
         this.termIdSelected +
         "/" +
         this.state.my_id;
@@ -972,7 +972,7 @@ class App extends React.Component {
     //     )
     //   ) {
     //     let url =
-    //       "https://web-production-e88a.up.railway.app/api/posts/updatePost/" +
+    //       "https://backendstep.onrender.com/api/posts/updatePost/" +
     //       this.targetIDEditPost;
     //     let options = {
     //       method: "PUT",
@@ -1121,7 +1121,7 @@ class App extends React.Component {
     this.setState({
       app_is_loading: true,
     });
-    let url = "https://web-production-e88a.up.railway.app/api/posts/addNew";
+    let url = "https://backendstep.onrender.com/api/posts/addNew";
     let options = {
       method: "POST",
       mode: "cors",
@@ -1161,7 +1161,7 @@ class App extends React.Component {
           //.........................................
           this.state.friends.forEach((friend) => {
             let url_2 =
-              "https://web-production-e88a.up.railway.app/api/posts/postAdd/" +
+              "https://backendstep.onrender.com/api/posts/postAdd/" +
               friend._id +
               "/" +
               result._id;
@@ -1182,7 +1182,7 @@ class App extends React.Component {
       })
       .then((result) => {
         let url_2 =
-          "https://web-production-e88a.up.railway.app/api/posts/postAdd/" +
+          "https://backendstep.onrender.com/api/posts/postAdd/" +
           this.state.my_id +
           "/" +
           result._id;
@@ -1329,7 +1329,7 @@ class App extends React.Component {
   deletePost_enabled = false;
   deletePost = (post_id) => {
     let url =
-      "https://web-production-e88a.up.railway.app/api/posts/deletePost/" + post_id;
+      "https://backendstep.onrender.com/api/posts/deletePost/" + post_id;
     let options = {
       method: "DELETE",
       mode: "cors",
@@ -1392,7 +1392,7 @@ class App extends React.Component {
   postComment = (event, post_id, input_id) => {
     if (event.which === 13) {
       let url =
-        "https://web-production-e88a.up.railway.app/api/posts/commentPost/" +
+        "https://backendstep.onrender.com/api/posts/commentPost/" +
         post_id.slice(10, post_id.length) +
         "/" +
         document.getElementById(input_id).value;
@@ -1421,7 +1421,7 @@ class App extends React.Component {
     textarea.style.height = "70px";
     if (message && message.trim() !== "") {
       let url =
-        "https://web-production-e88a.up.railway.app/api/chat/sendMessage/" +
+        "https://backendstep.onrender.com/api/chat/sendMessage/" +
         this.state.friendID_selected +
         "/" +
         this.state.my_id;
@@ -1457,7 +1457,7 @@ class App extends React.Component {
     document.getElementById("server_answer_message").textContent = "Adding ...";
     document.getElementById("server_answer").style.width = "fit-content";
     let url =
-      "https://web-production-e88a.up.railway.app/api/user/acceptFriend/" +
+      "https://backendstep.onrender.com/api/user/acceptFriend/" +
       this.state.my_id +
       "/" +
       friend_trim;
@@ -1476,7 +1476,7 @@ class App extends React.Component {
           "You're now friends!";
 
         let url =
-          "https://web-production-e88a.up.railway.app/api/user/editUserInfo/" +
+          "https://backendstep.onrender.com/api/user/editUserInfo/" +
           this.state.my_id +
           "/" +
           friend_trim;
@@ -1518,7 +1518,7 @@ class App extends React.Component {
     let friend_trim = friend.slice(12, friend.length);
     alert(friend_trim);
     let url =
-      "https://web-production-e88a.up.railway.app/api/user/editUserInfo/" +
+      "https://backendstep.onrender.com/api/user/editUserInfo/" +
       this.state.my_id +
       "/" +
       friend_trim;
@@ -1551,7 +1551,7 @@ class App extends React.Component {
 
   addFriend = (friend_username) => {
     let url =
-      "https://web-production-e88a.up.railway.app/api/user/addFriend/" +
+      "https://backendstep.onrender.com/api/user/addFriend/" +
       friend_username;
     let options = {
       method: "POST",
@@ -1598,7 +1598,7 @@ class App extends React.Component {
   searchUsers = (target) => {
     let ul = document.getElementById("AddFriend_addFriend_results");
     let url =
-      "https://web-production-e88a.up.railway.app/api/user/searchUsers/" + target;
+      "https://backendstep.onrender.com/api/user/searchUsers/" + target;
     let options = {
       method: "GET",
       mode: "cors",
@@ -1766,7 +1766,7 @@ class App extends React.Component {
   ////////////////////////////Update State//////////DONE/////////////////////
   updateUserInfo = () => {
     let url =
-      "https://web-production-e88a.up.railway.app/api/user/update/" + this.state.my_id;
+      "https://backendstep.onrender.com/api/user/update/" + this.state.my_id;
     let req = new Request(url, {
       method: "GET",
       mode: "cors",
@@ -1919,7 +1919,7 @@ class App extends React.Component {
   ////////////////////////////////////////////////////UPDATE isConnect on databae////////////////////////////////
   dbUpdate_user_connected = (isConnected) => {
     let url =
-      "https://web-production-e88a.up.railway.app/api/user/isOnline/" +
+      "https://backendstep.onrender.com/api/user/isOnline/" +
       this.state.my_id;
     let options = {
       method: "PUT",
@@ -1949,7 +1949,7 @@ class App extends React.Component {
 
   updateBeforeLeave = () => {
     let url =
-      "https://web-production-e88a.up.railway.app/api/user/updateBeforeLeave/" +
+      "https://backendstep.onrender.com/api/user/updateBeforeLeave/" +
       this.state.my_id;
     let options = {
       method: "PUT",
