@@ -42,10 +42,10 @@ class App extends React.Component {
       token: JSON.parse(sessionStorage.getItem("state")).token,
       isConnected: true,
       isOnline: false,
-      friends: [],
+      friends: JSON.parse(sessionStorage.getItem("state")).friends,
       chat: [],
       terminology: [],
-      posts:JSON.parse(sessionStorage.getItem("state")).posts,
+      posts: JSON.parse(sessionStorage.getItem("state")).posts,
       app_is_loading: false,
       friend_target: null,
       server_answer: null,
@@ -72,7 +72,6 @@ class App extends React.Component {
   // posts = [];
   /////////////////////////////////////////////////////Lifecycle//////////////////////////
   componentDidMount() {
-    console.log(this.state.posts);
     if (this.props.path === "/study") {
       this.counter();
     }
@@ -87,9 +86,12 @@ class App extends React.Component {
     this.preparingChat();
     setInterval(() => {
       this.updateUserInfo();
-    }, 1000);
+    }, 5000);
   }
   componentDidUpdate() {
+    this.buildFriendsList();
+    this.buildNotifications();
+    this.RetrievingMySendingMessages(this.state.friendID_selected);
     if (this.state.timer && this.state.isConnected)
       sessionStorage.setItem(
         "Header_timer_h1",
@@ -154,7 +156,8 @@ class App extends React.Component {
       if (
         this.state.posts[i]._id !== this.state.posts_alreadyBuilt[i] ||
         (this.state.posts[i]._id === this.state.posts_alreadyBuilt[i] &&
-          this.state.posts[i].comments.length !== this.state.posts_comments[i]) ||
+          this.state.posts[i].comments.length !==
+            this.state.posts_comments[i]) ||
         this.state.posts_deleted
       ) {
         if (
@@ -177,7 +180,9 @@ class App extends React.Component {
             let li = document.createElement("li");
             li.setAttribute("class", "comment_li");
             li.textContent =
-              this.state.posts[i].comments[this.state.posts[i].comments.length - 1];
+              this.state.posts[i].comments[
+                this.state.posts[i].comments.length - 1
+              ];
             commentlist_ul.prepend(li);
             comments_div.appendChild(commentlist_ul);
             this.state.posts_comments[i] = this.state.posts[i].comments.length;
@@ -185,7 +190,9 @@ class App extends React.Component {
             let li = document.createElement("li");
             li.setAttribute("class", "comment_li");
             li.textContent =
-              this.state.posts[i].comments[this.state.posts[i].comments.length - 1];
+              this.state.posts[i].comments[
+                this.state.posts[i].comments.length - 1
+              ];
             commentlist_ul.prepend(li);
             this.state.posts_comments[i] = this.state.posts[i].comments.length;
           }
@@ -249,7 +256,9 @@ class App extends React.Component {
             options_div.setAttribute("id", this.state.posts[i]._id);
           } else {
             postername_p.textContent =
-              this.state.posts[i].firstname + " " + this.state.posts[i].lastname;
+              this.state.posts[i].firstname +
+              " " +
+              this.state.posts[i].lastname;
           }
           //........................................................................
 
@@ -264,7 +273,8 @@ class App extends React.Component {
             time_string;
           category_p.textContent = "System: " + this.state.posts[i].category;
           subject_p.textContent = "Discipline: " + this.state.posts[i].subject;
-          reference_p.textContent = "Reference: " + this.state.posts[i].reference;
+          reference_p.textContent =
+            "Reference: " + this.state.posts[i].reference;
           page_p.textContent = "Page #: " + this.state.posts[i].page_num;
           date_p.className = "MountPosts_date";
           details_div.appendChild(date_p);
@@ -277,8 +287,14 @@ class App extends React.Component {
           let commentlist_ul = document.createElement("ul");
           comments_div.appendChild(comment_input);
           comments_div.setAttribute("class", "fc comments_div");
-          comments_div.setAttribute("id", "commentDiv" + this.state.posts[i]._id);
-          comment_input.setAttribute("id", "comment_input" + this.state.posts[i]._id);
+          comments_div.setAttribute(
+            "id",
+            "commentDiv" + this.state.posts[i]._id
+          );
+          comment_input.setAttribute(
+            "id",
+            "comment_input" + this.state.posts[i]._id
+          );
           comment_input.setAttribute("class", "comment_input");
           commentlist_ul.setAttribute(
             "id",
@@ -299,7 +315,10 @@ class App extends React.Component {
           //.....................................................
 
           if (
-            !(this.state.posts[i].reference === "" && this.state.posts[i].page_num !== null)
+            !(
+              this.state.posts[i].reference === "" &&
+              this.state.posts[i].page_num !== null
+            )
           ) {
             if (this.state.posts[i].reference !== "")
               details_div.appendChild(reference_p);
@@ -336,7 +355,8 @@ class App extends React.Component {
           if (this.state.posts[i]._id !== this.profilePosts[i]) {
             if (
               this.state.posts[i]._id === this.profilePosts[i] &&
-              this.state.posts[i].comments.length !== this.state.posts_comments[i]
+              this.state.posts[i].comments.length !==
+                this.state.posts_comments[i]
             ) {
               let commentlist_ul = document.getElementById(
                 "commentlist_ul" + this.state.posts[i]._id
@@ -354,17 +374,23 @@ class App extends React.Component {
                 let li = document.createElement("li");
                 li.setAttribute("class", "comment_li");
                 li.textContent =
-                  this.state.posts[i].comments[this.state.posts[i].comments.length - 1];
+                  this.state.posts[i].comments[
+                    this.state.posts[i].comments.length - 1
+                  ];
                 commentlist_ul.prepend(li);
                 comments_div.appendChild(commentlist_ul);
-                this.state.posts_comments[i] = this.state.posts[i].comments.length;
+                this.state.posts_comments[i] =
+                  this.state.posts[i].comments.length;
               } else {
                 let li = document.createElement("li");
                 li.setAttribute("class", "comment_li");
                 li.textContent =
-                  this.state.posts[i].comments[this.state.posts[i].comments.length - 1];
+                  this.state.posts[i].comments[
+                    this.state.posts[i].comments.length - 1
+                  ];
                 commentlist_ul.prepend(li);
-                this.state.posts_comments[i] = this.state.posts[i].comments.length;
+                this.state.posts_comments[i] =
+                  this.state.posts[i].comments.length;
               }
             } else {
               this.setState({
@@ -435,9 +461,11 @@ class App extends React.Component {
                 date_string +
                 ", " +
                 time_string;
-              category_p.textContent = "Category: " + this.state.posts[i].category;
+              category_p.textContent =
+                "Category: " + this.state.posts[i].category;
               subject_p.textContent = "Subject: " + this.state.posts[i].subject;
-              reference_p.textContent = "Reference: " + this.state.posts[i].reference;
+              reference_p.textContent =
+                "Reference: " + this.state.posts[i].reference;
               page_p.textContent = "Page #: " + this.state.posts[i].page_num;
               date_p.className = "MountPosts_date";
               details_div.appendChild(date_p);
@@ -450,7 +478,10 @@ class App extends React.Component {
               let commentlist_ul = document.createElement("ul");
               comments_div.appendChild(comment_input);
               comments_div.setAttribute("class", "fc comments_div");
-              comments_div.setAttribute("id", "commentDiv" + this.state.posts[i]._id);
+              comments_div.setAttribute(
+                "id",
+                "commentDiv" + this.state.posts[i]._id
+              );
               comment_input.setAttribute(
                 "id",
                 "comment_input" + this.state.posts[i]._id
@@ -740,13 +771,15 @@ class App extends React.Component {
   };
 
   //////////////////////////Retrieving Messages ////////////////////////////////
-  messages = [];
-  RetrievingMySendingMessages = () => {
+
+  RetrievingMySendingMessages = (friend_id) => {
+    var messages = [];
     let ul = document.getElementById("Chat_messages");
+    ul.innerHTML = "";
     for (var i = 0; i < this.state.chat.length; i++) {
       if (
-        this.messages[i] !== this.state.chat[i].date &&
-        this.state.chat[i]._id === this.state.friendID_selected
+        messages[i] !== this.state.chat[i].date &&
+        friend_id === this.state.chat[i]._id
       ) {
         document
           .getElementById("Chat_messages")
@@ -775,11 +808,8 @@ class App extends React.Component {
           ul.appendChild(div);
         }
       }
-      this.messages[i] = this.state.chat[i].date;
+      messages[i] = this.state.chat[i].date;
     }
-    // this.setState({
-    //   retrievingChat_DONE: true,
-    // });
   };
   //................................................................................................
   ////////////////////////////Posting a terminology////////////////////////
@@ -1440,7 +1470,6 @@ class App extends React.Component {
       fetch(req).then((result) => {
         if (result.status === 201) {
           document.getElementById("Chat_textarea_input").value = "";
-          return result.json();
         }
       });
     } else {
@@ -1452,7 +1481,6 @@ class App extends React.Component {
 
   acceptFriend = (friend) => {
     let friend_trim = friend.slice(11, friend.length);
-    alert(friend_trim);
     document.getElementById(friend_trim).style.backgroundColor = "var(--black)";
     document.getElementById("server_answer_message").textContent = "Adding ...";
     document.getElementById("server_answer").style.width = "fit-content";
@@ -1551,8 +1579,7 @@ class App extends React.Component {
 
   addFriend = (friend_username) => {
     let url =
-      "https://backendstep.onrender.com/api/user/addFriend/" +
-      friend_username;
+      "https://backendstep.onrender.com/api/user/addFriend/" + friend_username;
     let options = {
       method: "POST",
       mode: "cors",
@@ -1597,8 +1624,7 @@ class App extends React.Component {
   ////////////////////////SEARCH USER/////////////////////////
   searchUsers = (target) => {
     let ul = document.getElementById("AddFriend_addFriend_results");
-    let url =
-      "https://backendstep.onrender.com/api/user/searchUsers/" + target;
+    let url = "https://backendstep.onrender.com/api/user/searchUsers/" + target;
     let options = {
       method: "GET",
       mode: "cors",
@@ -1606,64 +1632,16 @@ class App extends React.Component {
     let req = new Request(url, options);
     fetch(req)
       .then((results) => {
-        return results.json(results);
+        return results.json();
       })
       .then((users) => {
-        console.log(users);
-        for (var i = 0; i < users.array.length; i++) {
-          var already_friend;
+        for (
+          var i = 0;
+          i < users.array.length && users.array[i]._id !== this.state.my_id;
+          i++
+        ) {
           if (this.state.friends.length > 0) {
-            for (
-              var j = 0;
-              j < this.state.friends.length &&
-              users.array[i]._id !== this.state.my_id;
-              j++
-            ) {
-              if (users.array[i]._id === this.state.friends[j]._id) {
-                already_friend = true;
-              }
-              if (already_friend) {
-                let p = document.createElement("p");
-                let li = document.createElement("li");
-                let ul = document.getElementById("AddFriend_addFriend_results");
-                let icon = document.createElement("i");
-                p.textContent =
-                  users.array[i].info.firstname +
-                  " " +
-                  users.array[i].info.lastname;
-                li.appendChild(p);
-                li.setAttribute("id", users.array[i].info.username);
-                li.setAttribute("class", "fr");
-
-                icon.setAttribute("class", " fas fa-user-plus");
-                icon.addEventListener("click", () => {
-                  this.addFriend(li.id);
-                });
-                li.appendChild(icon);
-                ul.appendChild(li);
-              } else {
-                let p = document.createElement("p");
-                let p2 = document.createElement("p");
-                let li = document.createElement("li");
-                let ul = document.getElementById("AddFriend_addFriend_results");
-                p.textContent =
-                  users.array[i].info.firstname +
-                  " " +
-                  users.array[i].info.lastname;
-                p2.textContent = "already friends";
-                p2.style.fontSize = "10pt";
-                li.appendChild(p);
-                li.appendChild(p2);
-                li.setAttribute("id", users.array[i].info.username);
-                li.setAttribute("class", "fr");
-                ul.appendChild(li);
-              }
-              if (users.array[i]._id === this.state.friends[j]._id) {
-                break;
-              }
-            }
-          } else {
-            if (users.array[i]._id !== this.state.my_id) {
+            if (users.array[i]._id !== this.state.friends[i]._id) {
               let p = document.createElement("p");
               let li = document.createElement("li");
               let ul = document.getElementById("AddFriend_addFriend_results");
@@ -1682,7 +1660,42 @@ class App extends React.Component {
               });
               li.appendChild(icon);
               ul.appendChild(li);
+            } else {
+              let p = document.createElement("p");
+              let p2 = document.createElement("p");
+              let li = document.createElement("li");
+              let ul = document.getElementById("AddFriend_addFriend_results");
+              p.textContent =
+                users.array[i].info.firstname +
+                " " +
+                users.array[i].info.lastname;
+              p2.textContent = "already friends";
+              p2.style.fontSize = "10pt";
+              li.appendChild(p);
+              li.appendChild(p2);
+              li.setAttribute("id", users.array[i].info.username);
+              li.setAttribute("class", "fr");
+              ul.appendChild(li);
             }
+          } else {
+            let p = document.createElement("p");
+            let li = document.createElement("li");
+            let ul = document.getElementById("AddFriend_addFriend_results");
+            let icon = document.createElement("i");
+            p.textContent =
+              users.array[i].info.firstname +
+              " " +
+              users.array[i].info.lastname;
+            li.appendChild(p);
+            li.setAttribute("id", users.array[i].info.username);
+            li.setAttribute("class", "fr");
+
+            icon.setAttribute("class", " fas fa-user-plus");
+            icon.addEventListener("click", () => {
+              this.addFriend(li.id);
+            });
+            li.appendChild(icon);
+            ul.appendChild(li);
           }
         }
       });
@@ -1692,55 +1705,78 @@ class App extends React.Component {
   app_friends = [];
 
   buildFriendsList = () => {
-    let ul = document.getElementById("FriendsList_friends_list");
-
-    for (var i = 0; i < this.state.friends.length; i++) {
-      //For every friend
-      if (this.app_friends[i] !== this.state.friends[i]._id) {
-        //If a friend is new to the app add it to the friends list with respect to the online status and to the app memory
-        let p = document.createElement("p");
-        let li = document.createElement("li");
-        let icon = document.createElement("i");
-
-        p.textContent =
-          this.state.friends[i].info.firstname +
-          " " +
-          this.state.friends[i].info.lastname;
-        p.setAttribute("id", [i]);
-        li.appendChild(p);
-        li.setAttribute("id", this.state.friends[i]._id);
-        li.addEventListener("click", () => {
-          this.get_current_friend_chat_id(li.id);
-          this.RetrievingMySendingMessages(li.id);
-          document.getElementById("DropHorizontally_article").style.display =
-            "none";
-        });
-        li.setAttribute("class", "fr");
-        li.setAttribute("title", this.state.friends[i].info.firstname);
-        icon.setAttribute("id", "online_icon" + this.state.friends[i]._id);
-        icon.setAttribute("class", "fas fa-circle");
-        li.appendChild(icon);
-        ul.appendChild(li);
-        if (this.state.friends[i].status.isConnected) {
-          icon.style.color = "#32cd32";
-        } else {
-          icon.style.color = "var(--black)";
+    //...START FETCHING FRIENDS
+    let url =
+      "https://backendstep.onrender.com/api/user/update/" + this.state.my_id;
+    let req = new Request(url, {
+      method: "GET",
+      mode: "cors",
+      headers: {
+        Authorization: "Bearer " + this.state.token,
+      },
+    });
+    fetch(req)
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
         }
-        this.app_friends[i] = this.state.friends[i]._id;
-      }
-      if (this.app_friends[i] === this.state.friends[i]._id) {
-        // if we already have this friend in the memory app just check their online status and change it
-        if (this.state.friends[i].status.isConnected) {
-          document.getElementById(
-            "online_icon" + this.state.friends[i]._id
-          ).style.color = "#32cd32";
-        } else {
-          document.getElementById(
-            "online_icon" + this.state.friends[i]._id
-          ).style.color = "var(--black)";
+      })
+      .then((jsonData) => {
+        //...END FETCHING FRIENDS
+        let ul = document.getElementById("FriendsList_friends_list");
+
+        for (var i = 0; i < jsonData.friends.length; i++) {
+          this.setState({
+            friends: jsonData.friends,
+          });
+          //For every friend
+          if (this.app_friends[i] !== jsonData.friends[i]._id) {
+            //If a friend is new to the app add it to the friends list with respect to the online status and to the app memory
+            let p = document.createElement("p");
+            let li = document.createElement("li");
+            let icon = document.createElement("i");
+
+            p.textContent =
+              jsonData.friends[i].info.firstname +
+              " " +
+              jsonData.friends[i].info.lastname;
+            p.setAttribute("id", [i]);
+            li.appendChild(p);
+            li.setAttribute("id", jsonData.friends[i]._id);
+            li.addEventListener("click", () => {
+              this.get_current_friend_chat_id(li.id);
+
+              document.getElementById(
+                "DropHorizontally_article"
+              ).style.display = "none";
+            });
+            li.setAttribute("class", "fr");
+            li.setAttribute("title", jsonData.friends[i].info.firstname);
+            icon.setAttribute("id", "online_icon" + jsonData.friends[i]._id);
+            icon.setAttribute("class", "fas fa-circle");
+            li.appendChild(icon);
+            ul.appendChild(li);
+            if (jsonData.friends[i].status.isConnected) {
+              icon.style.color = "#32cd32";
+            } else {
+              icon.style.color = "var(--black)";
+            }
+            this.app_friends[i] = jsonData.friends[i]._id;
+          }
+          // if (this.app_friends[i] === jsonData.friends[i]._id) {
+          //   // if we already have this friend in the memory app just check their online status and change it
+          //   if (jsonData.friends[i].status.isConnected) {
+          //     document.getElementById(
+          //       "online_icon" + jsonData.friends[i]._id
+          //     ).style.color = "#32cd32";
+          //   } else {
+          //     document.getElementById(
+          //       "online_icon" + jsonData.friends[i]._id
+          //     ).style.color = "var(--black)";
+          //   }
+          // }
         }
-      }
-    }
+      });
   };
 
   ////////////////////////////Select friend id to chat //////////////////////////////////////////////////
@@ -1757,6 +1793,8 @@ class App extends React.Component {
     document.getElementById("Chat_goback_icon").style.display = "inline";
     document.getElementById("Chat_article").style.height = "100%";
     document.getElementById("FriendsList_article").style.height = "0";
+
+    this.RetrievingMySendingMessages(friendID);
   };
 
   ///DeleteFriendPost
@@ -1789,9 +1827,10 @@ class App extends React.Component {
           study_session: jsonData.study_session,
           isOnline: jsonData.isOnline,
         });
+        //.....
         var deleted = false;
         var id;
-
+        //....
         for (
           var i = 0;
           i < this.state.posts_alreadyBuilt.length &&
@@ -1799,7 +1838,6 @@ class App extends React.Component {
           i++
         ) {
           for (var j = 0; j < jsonData.posts.length; j++) {
-            alert(j);
             if (this.state.posts_alreadyBuilt[i] !== jsonData.posts[j]._id) {
               console.log("Posts= " + this.state.posts.length);
               console.log("Posts database= " + jsonData.posts.length);
@@ -1815,13 +1853,8 @@ class App extends React.Component {
         return jsonData;
       })
       .then((jsonData) => {
+        alert("Df");
         this.state.posts = jsonData.posts;
-        if (this.props.path === "/study") {
-          this.buildFriendsList();
-          this.buildNotifications();
-          if (this.state.friendID_selected) this.RetrievingMySendingMessages();
-          this.BuildingPosts();
-        }
       })
       .catch((err) => {
         if (err.message === "Cannot read property 'credentials' of null")
@@ -1919,8 +1952,7 @@ class App extends React.Component {
   ////////////////////////////////////////////////////UPDATE isConnect on databae////////////////////////////////
   dbUpdate_user_connected = (isConnected) => {
     let url =
-      "https://backendstep.onrender.com/api/user/isOnline/" +
-      this.state.my_id;
+      "https://backendstep.onrender.com/api/user/isOnline/" + this.state.my_id;
     let options = {
       method: "PUT",
       mode: "cors",
