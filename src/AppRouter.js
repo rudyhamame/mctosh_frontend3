@@ -10,6 +10,9 @@ const AppRouter = () => {
       <Route exact path="/study">
         <App path="/study" />
       </Route>
+      <Route exact path="/studyplanner">
+        <App path="/studyplanner" />
+      </Route>
       {/* <Route exact path="/profile">
         <App authReport={props.authReport} path="/profile" />
       </Route> */}

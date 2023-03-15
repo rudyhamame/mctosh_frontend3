@@ -5,10 +5,10 @@ import React from "react";
 import "./App.css";
 import "./Footer/footer.css";
 import "./Header/header.css";
-import "./Main/Friends/AddFriend/add_friend.css";
+import "./Parts/Friends/AddFriend/add_friend.css";
 import "./Main/Posts/posts.css";
 import "./Main/main.css";
-import "./Main/Friends/friends.css";
+import "./Parts/Friends/friends.css";
 import "./Header/SearchUsers/search_users.css";
 import "./Main/Posts/InputPost/SearchPosts/search_posts.css";
 import "./Header/Logo/logo.css";
@@ -17,17 +17,18 @@ import "./Header/Nav/nav.css";
 import "./Main/Posts/InputPost/inputPosts.css";
 import "./Main/Posts/MountPosts/mount_posts.css";
 import "./Header/Nav/Menu/menu.css";
-import "./Main/Friends/FriendsList/friendslist.css";
-import "./Main/Friends/Chat/chat.css";
+import "./Parts/Friends/FriendsList/friendslist.css";
+import "./SubApps/Chat/chat.css";
 import "./Main/Terminology/terminology.css";
 import "./Main/Greeting/greeting.css";
 import { Route } from "react-router-dom";
 import Terminology from "./Main/Terminology/Terminology";
 import Posts from "./Main/Posts/Posts";
-import Friends from "./Main/Friends/Friends";
 import Greeting from "./Main/Greeting/Greeting";
 import SearchPosts from "./Main/Posts/InputPost/SearchPosts/SearchPosts";
 import Header from "./Header/Header";
+import Chat from "./SubApps/Chat/Chat";
+import StudyPlanner from "./SubApps/StudyPlannner/StudyPlanner";
 //...........component..................
 class App extends React.Component {
   //..........states...........
@@ -72,9 +73,6 @@ class App extends React.Component {
   // posts = [];
   /////////////////////////////////////////////////////Lifecycle//////////////////////////
   componentDidMount() {
-    if (this.props.path === "/study") {
-      this.counter();
-    }
     this.setState({
       my_id: JSON.parse(sessionStorage.getItem("state")).my_id,
       username: JSON.parse(sessionStorage.getItem("state")).username,
@@ -83,15 +81,13 @@ class App extends React.Component {
       dob: JSON.parse(sessionStorage.getItem("state")).dob,
       token: JSON.parse(sessionStorage.getItem("state")).token,
     });
-    this.preparingChat();
     setInterval(() => {
       this.updateUserInfo();
     }, 5000);
   }
   componentDidUpdate() {
-    this.buildFriendsList();
     this.buildNotifications();
-    this.RetrievingMySendingMessages(this.state.friendID_selected);
+    // this.RetrievingMySendingMessages(this.state.friendID_selected);
     if (this.state.timer && this.state.isConnected)
       sessionStorage.setItem(
         "Header_timer_h1",
@@ -108,10 +104,8 @@ class App extends React.Component {
       this.state.retrievingStudySessions_DONE === false &&
       this.props.path === "/"
     )
-      this.RetrievingMyStudySessions();
-
-    if (this.state.profile === true && this.props.path === "/study")
-      this.BuildingPostsProfile();
+      if (this.state.profile === true && this.props.path === "/study")
+        this.BuildingPostsProfile();
   }
   componentWillUnmount() {
     if (this.props.path === "/study") {
@@ -121,25 +115,42 @@ class App extends React.Component {
       if (input) this.updateBeforeLeave();
     }
     if (this.props.path === "/") {
-      this.dbUpdate_user_connected(false);
+      this.availableToChat(false);
     }
   }
-  //...........................................Preperation..................................................
-  preparingChat = () => {
+
+  //......MAKE YOURSELF AVAILABLE TO CHAT......
+  availableToChat = (isConnected) => {
     let url =
-      "https://backendstep.onrender.com/api/chat/prepareChat/" +
-      this.state.my_id;
+      "https://backendstep.onrender.com/api/user/isOnline/" + this.state.my_id;
     let options = {
-      method: "POST",
+      method: "PUT",
       mode: "cors",
       headers: {
-        Authorization: "Bearer " + this.state.token,
         "Content-Type": "application/json",
       },
+      body: JSON.stringify({
+        isConnected: isConnected,
+      }),
     };
+
     let req = new Request(url, options);
-    fetch(req);
+    fetch(req)
+      .then((response) => {
+        if (response.status === 201 && this.state.isConnected === false) {
+          sessionStorage.removeItem("Header_timer_h1");
+          sessionStorage.removeItem("state");
+          window.location.reload();
+          return response.json();
+        }
+      })
+      .catch((err) => {
+        console.log("error:", err.message);
+      });
   };
+
+  //......END OF MAKE YOURSELF AVAILABLE TO CHAT......
+
   //............................................Retrieving Area..........................................................................
   posts_alreadyBuilt = [];
   posts_comments = [];
@@ -770,47 +781,6 @@ class App extends React.Component {
     }
   };
 
-  //////////////////////////Retrieving Messages ////////////////////////////////
-
-  RetrievingMySendingMessages = (friend_id) => {
-    var messages = [];
-    let ul = document.getElementById("Chat_messages");
-    ul.innerHTML = "";
-    for (var i = 0; i < this.state.chat.length; i++) {
-      if (
-        messages[i] !== this.state.chat[i].date &&
-        friend_id === this.state.chat[i]._id
-      ) {
-        document
-          .getElementById("Chat_messages")
-          .scrollBy(0, document.getElementById("Chat_messages").scrollHeight);
-
-        if (this.state.chat[i].from === "me") {
-          let p = document.createElement("p");
-          let li = document.createElement("li");
-          let div = document.createElement("div");
-          p.textContent = this.state.chat[i].message;
-          li.setAttribute("class", "sentMessagesLI");
-          li.appendChild(p);
-          div.setAttribute("class", "sentMessagesDIV fc");
-          div.appendChild(li);
-          ul.appendChild(div);
-        }
-        if (this.state.chat[i].from === "them") {
-          let p = document.createElement("p");
-          let li = document.createElement("li");
-          let div = document.createElement("div");
-          p.textContent = this.state.chat[i].message;
-          li.setAttribute("class", "receivedMessagesLI");
-          li.appendChild(p);
-          div.setAttribute("class", "receivedMessagesDIV fc");
-          div.appendChild(li);
-          ul.appendChild(div);
-        }
-      }
-      messages[i] = this.state.chat[i].date;
-    }
-  };
   //................................................................................................
   ////////////////////////////Posting a terminology////////////////////////
   postingTerminology = (term, meaning, category, subject) => {
@@ -1575,131 +1545,6 @@ class App extends React.Component {
       }
     });
   };
-  ////////////////////////ADD FRIEND/////////////////////////////////////////////
-
-  addFriend = (friend_username) => {
-    let url =
-      "https://backendstep.onrender.com/api/user/addFriend/" + friend_username;
-    let options = {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        Authorization: "Bearer " + this.state.token,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        id: this.state.my_id,
-        message:
-          this.state.firstname +
-          " " +
-          this.state.lastname +
-          " wants to add you as a friend",
-      }),
-    };
-    let req = new Request(url, options);
-    fetch(req).then((response) => {
-      if (response.status === 201) {
-        response.json().then((result) => {
-          document.getElementById("server_answer").style.width = "fit-content";
-          document.getElementById("server_answer_message").textContent =
-            result.message;
-          setTimeout(() => {
-            document.getElementById("server_answer").style.width = "0";
-            document.getElementById("server_answer_message").textContent = "";
-          }, 5000);
-        });
-        document.getElementById(friend_username).children[1].remove(); //So the icon will disappear
-      } else {
-        document.getElementById("server_answer").style.width = "fit-content";
-        document.getElementById("server_answer_message").textContent =
-          "Request failed";
-        setTimeout(() => {
-          document.getElementById("server_answer").style.width = "0";
-          document.getElementById("server_answer_message").textContent = "";
-        }, 5000);
-      }
-    });
-  };
-
-  ////////////////////////SEARCH USER/////////////////////////
-  searchUsers = (target) => {
-    let ul = document.getElementById("AddFriend_addFriend_results");
-    let url = "https://backendstep.onrender.com/api/user/searchUsers/" + target;
-    let options = {
-      method: "GET",
-      mode: "cors",
-    };
-    let req = new Request(url, options);
-    fetch(req)
-      .then((results) => {
-        return results.json();
-      })
-      .then((users) => {
-        for (
-          var i = 0;
-          i < users.array.length && users.array[i]._id !== this.state.my_id;
-          i++
-        ) {
-          if (this.state.friends.length > 0) {
-            if (users.array[i]._id !== this.state.friends[i]._id) {
-              let p = document.createElement("p");
-              let li = document.createElement("li");
-              let ul = document.getElementById("AddFriend_addFriend_results");
-              let icon = document.createElement("i");
-              p.textContent =
-                users.array[i].info.firstname +
-                " " +
-                users.array[i].info.lastname;
-              li.appendChild(p);
-              li.setAttribute("id", users.array[i].info.username);
-              li.setAttribute("class", "fr");
-
-              icon.setAttribute("class", " fas fa-user-plus");
-              icon.addEventListener("click", () => {
-                this.addFriend(li.id);
-              });
-              li.appendChild(icon);
-              ul.appendChild(li);
-            } else {
-              let p = document.createElement("p");
-              let p2 = document.createElement("p");
-              let li = document.createElement("li");
-              let ul = document.getElementById("AddFriend_addFriend_results");
-              p.textContent =
-                users.array[i].info.firstname +
-                " " +
-                users.array[i].info.lastname;
-              p2.textContent = "already friends";
-              p2.style.fontSize = "10pt";
-              li.appendChild(p);
-              li.appendChild(p2);
-              li.setAttribute("id", users.array[i].info.username);
-              li.setAttribute("class", "fr");
-              ul.appendChild(li);
-            }
-          } else {
-            let p = document.createElement("p");
-            let li = document.createElement("li");
-            let ul = document.getElementById("AddFriend_addFriend_results");
-            let icon = document.createElement("i");
-            p.textContent =
-              users.array[i].info.firstname +
-              " " +
-              users.array[i].info.lastname;
-            li.appendChild(p);
-            li.setAttribute("id", users.array[i].info.username);
-            li.setAttribute("class", "fr");
-
-            icon.setAttribute("class", " fas fa-user-plus");
-            icon.addEventListener("click", () => {
-              this.addFriend(li.id);
-            });
-            li.appendChild(icon);
-            ul.appendChild(li);
-          }
-        }
-      });
-  };
 
   //////////////////////////////BUILD FRIENDS LIST////////////////
   app_friends = [];
@@ -1950,34 +1795,6 @@ class App extends React.Component {
   };
 
   ////////////////////////////////////////////////////UPDATE isConnect on databae////////////////////////////////
-  dbUpdate_user_connected = (isConnected) => {
-    let url =
-      "https://backendstep.onrender.com/api/user/isOnline/" + this.state.my_id;
-    let options = {
-      method: "PUT",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        isConnected: isConnected,
-      }),
-    };
-
-    let req = new Request(url, options);
-    fetch(req)
-      .then((response) => {
-        if (response.status === 201 && this.state.isConnected === false) {
-          sessionStorage.removeItem("Header_timer_h1");
-          sessionStorage.removeItem("state");
-          window.location.reload();
-          return response.json();
-        }
-      })
-      .catch((err) => {
-        console.log("error:", err.message);
-      });
-  };
 
   updateBeforeLeave = () => {
     let url =
@@ -2402,133 +2219,94 @@ class App extends React.Component {
   //.....Reander Login HTML..........
   render() {
     return (
-      <article id="app_page" className="fc">
-        {this.props.path === "/study" && (
-          <Header
+      <React.Fragment>
+        <Route exact path="/">
+          <article id="app_page" className="fc">
+            <main id="Main_article" className="fr">
+              <Greeting state={this.state} />
+            </main>
+          </article>
+        </Route>
+        <Route exact path="/studyplanner">
+          <StudyPlanner
             state={this.state}
             logOut={this.logOut}
             acceptFriend={this.acceptFriend}
             type={this.type}
             show_profile={this.show_profile}
           />
-        )}
-        <main id="Main_article" className="fr">
-          <Route exact path="/">
-            <Greeting state={this.state} />
-          </Route>
-          <Route exact path="/study">
-            {parseInt(
-              window.getComputedStyle(document.querySelector("#root")).width
-            ) > 1200 && (
-              <Terminology
-                state={this.state}
-                postingTerminology={this.postingTerminology}
-              />
-            )}
-            {this.state.profile === false && (
-              <Posts
-                state={this.state}
-                postingPost={this.postingPost}
-                RetrievingMyPosts={this.RetrievingMyPosts}
-                searchPosts={this.searchPosts}
-                prepare_searchPosts={this.prepare_searchPosts}
-                logOut={this.logOut}
-                acceptFriend={this.acceptFriend}
-                type={this.type}
-                counter={this.counter}
-                updateBeforeLeave={this.updateBeforeLeave}
-                app_posts_sorted={this.app_posts_sorted}
-                path="/study"
-                profilePosts={this.profilePosts}
-              />
-            )}
-            {this.state.profile === true && (
-              <Posts
-                state={this.state}
-                postingPost={this.postingPost}
-                RetrievingMyPosts={this.RetrievingMyPosts}
-                searchPosts={this.searchPosts}
-                prepare_searchPosts={this.prepare_searchPosts}
-                logOut={this.logOut}
-                acceptFriend={this.acceptFriend}
-                type={this.type}
-                counter={this.counter}
-                updateBeforeLeave={this.updateBeforeLeave}
-                app_posts_sorted={this.app_posts_sorted}
-                path="/study"
-                profilePosts={this.profilePosts}
-              />
-            )}
-            {this.props.path === "/study" &&
-              parseInt(
+        </Route>
+        <Route exact path="/study">
+          <article id="app_page" className="fc">
+            <Header
+              state={this.state}
+              logOut={this.logOut}
+              acceptFriend={this.acceptFriend}
+              type={this.type}
+              show_profile={this.show_profile}
+            />
+            <main id="Main_article" className="fr">
+              {parseInt(
                 window.getComputedStyle(document.querySelector("#root")).width
               ) > 1200 && (
-                <Friends
-                  state={this.state}
-                  searchUsers={this.searchUsers}
-                  addFriend={this.addFriend}
-                  RetrievingMySendingMessages={this.RetrievingMySendingMessages}
-                  sendToMeMessage={this.sendToMeMessage}
-                  sendToThemMessage={this.sendToThemMessage}
-                  dbUpdate_user_connected={this.dbUpdate_user_connected}
-                  path="/"
-                />
+                <React.Fragment>
+                  {/* <Terminology
+                    state={this.state}
+                    postingTerminology={this.postingTerminology}
+                  /> */}
+                  {/* <Chat
+                    state={this.state}
+                    availableToChat={this.availableToChat}
+                    path="/"
+                  /> */}
+                  {/* <section
+                    onClick={this.openNotesAside}
+                    className="fr"
+                    id="Friends_control_door"
+                    title="unclicked"
+                  >
+                    {this.state.isOnline === true && (
+                      <i
+                        id="chat_icon"
+                        style={{ color: "#32cd32" }}
+                        class="fas fa-users"
+                      ></i>
+                    )}
+                    {this.state.isOnline === false && (
+                      <i id="chat_icon" class="fas fa-users"></i>
+                    )}
+                  </section> */}
+                  {/* <Posts /> */}
+                </React.Fragment>
               )}
-          </Route>
-
-          {this.props.path === "/" &&
-            parseInt(
-              window.getComputedStyle(document.querySelector("#root")).width
-            ) > 1200 && (
-              <Friends
-                state={this.state}
-                searchUsers={this.searchUsers}
-                addFriend={this.addFriend}
-                RetrievingMySendingMessages={this.RetrievingMySendingMessages}
-                sendToMeMessage={this.sendToMeMessage}
-                sendToThemMessage={this.sendToThemMessage}
-                dbUpdate_user_connected={this.dbUpdate_user_connected}
-                path="/"
-              />
-            )}
-        </main>
-        <section style={{ order: "4" }}>
-          {this.props.path === "/study" &&
-            parseInt(
-              window.getComputedStyle(document.querySelector("#root")).width
-            ) <= 1200 && (
-              <Friends
-                state={this.state}
-                searchUsers={this.searchUsers}
-                addFriend={this.addFriend}
-                RetrievingMySendingMessages={this.RetrievingMySendingMessages}
-                sendToMeMessage={this.sendToMeMessage}
-                sendToThemMessage={this.sendToThemMessage}
-                dbUpdate_user_connected={this.dbUpdate_user_connected}
-                path="/study"
-                serverReply={this.serverReply}
-              />
-            )}
-          {this.props.path === "/study" &&
-            parseInt(
-              window.getComputedStyle(document.querySelector("#root")).width
-            ) <= 1200 && (
-              <Terminology
-                state={this.state}
-                postingTerminology={this.postingTerminology}
-              />
-            )}
-        </section>
-        {this.props.path === "/study" && (
-          <SearchPosts
-            type="posts_search"
-            searchPosts={this.searchPosts}
-            prepare_searchPosts={this.prepare_searchPosts}
-            posts_alreadyBuilt={this.state.posts_alreadyBuilt}
-            posts_comments={this.state.posts_comments}
-            state={this.state}
-          />
-        )}
+              {/* {parseInt(
+                window.getComputedStyle(document.querySelector("#root")).width
+              ) <= 1200 && (
+                <React.Fragment>
+                  <Friends
+                    state={this.state}
+              
+                    dbUpdate_user_connected={this.dbUpdate_user_connected}
+                    path="/study"
+                    serverReply={this.serverReply}
+                  />
+                  <Terminology
+                    state={this.state}
+                    postingTerminology={this.postingTerminology}
+                  />
+                </React.Fragment>
+              )} */}
+            </main>
+            {/* <SearchPosts
+              type="posts_search"
+              searchPosts={this.searchPosts}
+              prepare_searchPosts={this.prepare_searchPosts}
+              posts_alreadyBuilt={this.state.posts_alreadyBuilt}
+              posts_comments={this.state.posts_comments}
+              state={this.state}
+            /> */}
+          </article>
+        </Route>
         <div
           id="server_answer"
           onClick={() => {
@@ -2563,7 +2341,7 @@ class App extends React.Component {
             />
           </div>
         )}
-      </article>
+      </React.Fragment>
     );
   }
 }

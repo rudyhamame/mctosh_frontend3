@@ -10,11 +10,17 @@ const Greeting = (props) => {
         <div className="fc" style={{ alignItems: "center" }}>
           <h1>Hello {props.state.firstname},</h1>
           <h2>Let's start a new study session!</h2>
-          <button id="Greeting_preStart_button" className="fr">
+          {/* <button id="Greeting_preStart_button" className="fr">
             <Link to="/study">
-              <i class="fas fa-stopwatch"></i> Start timer
+              <i class="fas fa-stopwatch"></i> Start Timer
+            </Link>
+          </button> */}
+          <button id="Greeting_preStart_button" className="fr">
+          <Link to="/studyplanner">
+              <i class="fas fa-stopwatch"></i> Study Planner
             </Link>
           </button>
+       
         </div>
 
         <div id="Greeting_preStart_reportDiv">
@@ -29,7 +35,6 @@ const Greeting = (props) => {
         </div>
       </section>
       <Nav path="/" />
-      <Footer />
     </article>
   );
 };

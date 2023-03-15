@@ -5,7 +5,7 @@ const FriendsList = (props) => {
     <section id="FriendsList_article" className="fc">
       <section id="FriendsList_content_container" className="fc">
         <ul className="fc" id="FriendsList_friends_list">
-          {props.state.friends.length === 0 && (
+          {props.friends_count === 0 && (
             <h1
               style={{
                 fontSize: "12pt",

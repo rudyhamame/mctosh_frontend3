@@ -43,6 +43,7 @@ const Notifications = (props) => {
           class="fas fa-bell"
           title="Notifications"
         ></i>
+
       </div>
 
       <section id="Notifications_content_container">

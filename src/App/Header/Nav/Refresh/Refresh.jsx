@@ -1,5 +1,6 @@
 import React from "react";
 
+
 const Refresh = () => {
   const refresh = () => {
     window.location.reload();
