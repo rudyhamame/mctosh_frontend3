@@ -4,6 +4,7 @@ import Footer from "../../Footer/Footer";
 import Nav from "../../Header/Nav/Nav";
 
 const Greeting = (props) => {
+  console.log(props.state)
   return (
     <article id="Greeting_studysessions_article" className="fc">
       <section id="Greeting_preStart" className="fc slide-top">
@@ -15,9 +16,14 @@ const Greeting = (props) => {
               <i class="fas fa-stopwatch"></i> Start Timer
             </Link>
           </button> */}
-          <button id="Greeting_preStart_button" className="fr">
+          <button id="Greeting_preStart_button1" className="fr">
+          <Link to="/study">
+              <i class="fas fa-stopwatch"></i> Study tool
+            </Link>
+          </button>
+          <button id="Greeting_preStart_button2" className="fr">
           <Link to="/studyplanner">
-              <i class="fas fa-stopwatch"></i> Study Planner
+              <i class="fas fa-stopwatch"></i> Study organizer
             </Link>
           </button>
        

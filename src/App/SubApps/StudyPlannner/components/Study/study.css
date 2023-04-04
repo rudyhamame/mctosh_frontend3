@@ -1,0 +1,106 @@
+/* Wrapper */
+#study_writing_aside{
+    background-color: var(--white);
+    box-shadow: 0px 10px 5px rgba(0, 0, 0, 0.237);
+    display: none;
+
+}
+#study_reading_section{
+    background-color: #3d3d3d;
+    order: 2;
+    flex-grow: 1;
+
+}
+/* content tags */
+#study_writing_content_div{
+    flex-grow: 1;
+    overflow: scroll;
+    box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.237);
+}
+#study_reading_content_div{
+    flex-grow: 1;
+}
+/* buttons */
+#study_writing_aside button{
+    border-radius: 0;
+    color: var(--white);
+    background-color: var(--green2);
+    box-shadow: 0px 10px 100px rgba(0, 0, 0, 0.237);
+
+}
+#study_reading_section button{
+    border-radius: 0;
+    color: var(--white);
+    width: 100%;
+    background-color: var(--green2);
+    box-shadow: 0px 10px 100px rgba(0, 0, 0, 0.237);
+    
+}
+/* Reading Nav */
+#study_reading_content_nav{
+    justify-content: start;
+    align-items: start; 
+    background-color: var(--green2);
+
+}
+#study_reading_content_nav button{
+    width: min-content;
+}
+#study_reading_content_div{
+   
+}
+
+#study_reading_content_div label{
+    text-align: center;
+}
+
+#study_reading_content_div_title, #study_writing_content_div_title{
+    background-color: var(--green2);
+    text-align: center;
+    padding: 10px;
+    font-size: 16px;
+    box-shadow: 10px 1px 10px rgba(0, 0, 0, 0.272);
+    z-index: 1;
+}
+
+
+#study_writing_content_div input,#study_writing_content_div select {
+font-size: 10px;
+text-align: start;
+
+}
+#study_writing_statement_form p{
+    padding: 10px;
+    font-size: 14px;
+    color: var(--white2);
+    background-color: #f07a78;
+}
+.study_writing_content_subjectProperties_section{
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+#study_writing_keyword_form p{
+    padding: 10px;
+    font-size: 14px;
+    color: var(--white2);
+    background-color: #09498f;
+    box-shadow: 0 4px 10px black;
+    
+}
+#study_reading_writingDoor_div{
+justify-content: center;
+z-index: 10;
+background-color: #01978b;
+box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.048);
+}
+#study_reading_writingDoor_div i{
+    padding: 10px;
+    color:var(--white2)
+}
+
+/* Viewing Reading */
+#study_reading_content_view{
+    display: grid;
+    grid-template-rows: 3;
+    overflow: scroll;
+}

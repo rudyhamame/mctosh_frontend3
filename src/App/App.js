@@ -28,7 +28,9 @@ import Greeting from "./Main/Greeting/Greeting";
 import SearchPosts from "./Main/Posts/InputPost/SearchPosts/SearchPosts";
 import Header from "./Header/Header";
 import Chat from "./SubApps/Chat/Chat";
-import StudyPlanner from "./SubApps/StudyPlannner/StudyPlanner";
+import Study from "./SubApps/StudyPlannner/components/Study/Study";
+import SchoolPlanner from "./SubApps/StudyPlannner/components/SchoolPlanner/SchoolPlanner";
+import axios from "axios";
 //...........component..................
 class App extends React.Component {
   //..........states...........
@@ -47,6 +49,7 @@ class App extends React.Component {
       chat: [],
       terminology: [],
       posts: JSON.parse(sessionStorage.getItem("state")).posts,
+      lectures: JSON.parse(sessionStorage.getItem("state")).lectures,
       app_is_loading: false,
       friend_target: null,
       server_answer: null,
@@ -67,10 +70,15 @@ class App extends React.Component {
       friendAddedSuccessfully: null,
       posts_updated: false,
       posts_deleted: false,
+      image: null,
     };
   }
   ////////////////////////////////////////Variables//////////////
   // posts = [];
+  // lectures = [];
+  memory = {
+    courses: [],
+  };
   /////////////////////////////////////////////////////Lifecycle//////////////////////////
   componentDidMount() {
     this.setState({
@@ -83,8 +91,9 @@ class App extends React.Component {
     });
     setInterval(() => {
       this.updateUserInfo();
-    }, 5000);
+    }, 1000);
   }
+
   componentDidUpdate() {
     this.buildNotifications();
     // this.RetrievingMySendingMessages(this.state.friendID_selected);
@@ -108,15 +117,15 @@ class App extends React.Component {
         this.BuildingPostsProfile();
   }
   componentWillUnmount() {
-    if (this.props.path === "/study") {
-      let input = window.confirm(
-        "Do you want this study session to be counted?"
-      );
-      if (input) this.updateBeforeLeave();
-    }
-    if (this.props.path === "/") {
-      this.availableToChat(false);
-    }
+    // if (this.props.path === "/study") {
+    //   let input = window.confirm(
+    //     "Do you want this study session to be counted?"
+    //   );
+    //   if (input) this.updateBeforeLeave();
+    // }
+    // if (this.props.path === "/") {
+    //   this.availableToChat(false);
+    // }
   }
 
   //......MAKE YOURSELF AVAILABLE TO CHAT......
@@ -962,397 +971,6 @@ class App extends React.Component {
     }
   };
 
-  //////////////////////////Posting POSTS////////////////////////////////
-  postingPost = () => {
-    // if (this.enableEditPost === true) {
-    //   if (
-    //     !(
-    //       document.getElementById("InputPost_resourse").value === "" &&
-    //       document.getElementById("InputPost_page").value !== ""
-    //     )
-    //   ) {
-    //     let url =
-    //       "https://backendstep.onrender.com/api/posts/updatePost/" +
-    //       this.targetIDEditPost;
-    //     let options = {
-    //       method: "PUT",
-    //       mode: "cors",
-    //       headers: {
-    //         Authorization: "Bearer " + this.state.token,
-    //         "Content-Type": "application/json",
-    //       },
-    //       body: JSON.stringify({
-    //         note: document.getElementById("InputPost_textarea").value,
-    //         category: document.getElementById("InputPost_category").value,
-    //         subject: document.getElementById("InputPost_subject").value,
-    //         reference: document.getElementById("InputPost_resourse").value,
-    //         page_num: document.getElementById("InputPost_page").value,
-    //       }),
-    //     };
-    //     if (
-    //       document.getElementById("InputPost_textarea").value &&
-    //       document.getElementById("InputPost_category").value &&
-    //       document.getElementById("InputPost_subject").value
-    //     ) {
-    //       let req = new Request(url, options);
-    //       fetch(req)
-    //         .then((response) => {
-    // if (response.status === 201) {
-    //   //..............
-    //   //.............
-    //   document.getElementById(
-    //     this.targetIDEditPost
-    //   ).children[1].style.backgroundColor = "var(--red)";
-    //   document.getElementById(
-    //     this.targetIDEditPost
-    //   ).children[1].textContent = "Edit";
-    //   this.serverReply("post modified");
-    //   //...............note-realtime-edit
-    //   document.getElementById(
-    //     this.targetIDEditPost
-    //   ).parentElement.parentElement.children[1].children[0].textContent =
-    //     document.getElementById("InputPost_textarea").value;
-    //   //................................
-    //   //...............details-realtime-edit
-    //   document.getElementById(
-    //     this.targetIDEditPost
-    //   ).parentElement.parentElement.children[0].children[2].textContent =
-    //     "System: " +
-    //     document.getElementById("InputPost_category").value;
-    //   document.getElementById(
-    //     this.targetIDEditPost
-    //   ).parentElement.parentElement.children[0].children[3].textContent =
-    //     "Discipline: " +
-    //     document.getElementById("InputPost_subject").value;
-    //   if (
-    //     document.getElementById(this.targetIDEditPost).parentElement
-    //       .parentElement.children[0].children[4]
-    //   ) {
-    //     if (
-    //       document.getElementById("InputPost_resourse").value !== ""
-    //     ) {
-    //       document.getElementById(
-    //         this.targetIDEditPost
-    //       ).parentElement.parentElement.children[0].children[4].textContent =
-    //         "Reference: " +
-    //         document.getElementById("InputPost_resourse").value;
-    //     } else {
-    //       document
-    //         .getElementById(this.targetIDEditPost)
-    //         .parentElement.parentElement.children[0].children[4].remove();
-    //     }
-    //   } else {
-    //     if (
-    //       document.getElementById("InputPost_resourse").value !== ""
-    //     ) {
-    //       let p_reference = document.createElement("p");
-    //       p_reference.textContent =
-    //         "Reference: " +
-    //         document.getElementById("InputPost_resourse").value;
-    //       document
-    //         .getElementById(this.targetIDEditPost)
-    //         .parentElement.parentElement.children[0].appendChild(
-    //           p_reference
-    //         );
-    //     }
-    //   }
-    //   if (
-    //     document.getElementById(this.targetIDEditPost).parentElement
-    //       .parentElement.children[0].children[5]
-    //   ) {
-    //     if (document.getElementById("InputPost_page").value !== "") {
-    //       document.getElementById(
-    //         this.targetIDEditPost
-    //       ).parentElement.parentElement.children[0].children[5].textContent =
-    //         "Page#: " +
-    //         document.getElementById("InputPost_page").value;
-    //     } else {
-    //       document
-    //         .getElementById(this.targetIDEditPost)
-    //         .parentElement.parentElement.children[0].children[5].remove();
-    //     }
-    //   } else {
-    //     if (document.getElementById("InputPost_page").value !== "") {
-    //       let p_page = document.createElement("p");
-    //       p_page.textContent =
-    //         "Page #: " +
-    //         document.getElementById("InputPost_page").value;
-    //       document
-    //         .getElementById(this.targetIDEditPost)
-    //         .parentElement.parentElement.children[0].appendChild(
-    //           p_page
-    //         );
-    //     }
-    //   }
-    //   //..................
-    //   document.getElementById("InputPost_post_button").innerHTML =
-    //     "Post";
-    // } else {
-    //   this.serverReply("modify failed");
-    // }
-    //       })
-    //       .then(() => {
-    //         document.getElementById("InputPost_textarea").value = "";
-    //         document.getElementById("InputPost_category").value = "";
-    //         document.getElementById("InputPost_subject").value = "";
-    //         document.getElementById("InputPost_resourse").value = "";
-    //         document.getElementById("InputPost_page").value = "";
-    //       });
-    //   } else {
-    //     this.serverReply(
-    //       "Modifying failed. Please make sure you select a category and/or a subject for your note"
-    //     );
-    //   }
-    // } else {
-    //   this.serverReply(
-    //     "Modifying failed. You can't enter a page number without a reference."
-    //   );
-    // }
-    // this.enableEditPost = false;
-    // } else {
-    // if (
-    //   !(
-    //     document.getElementById("InputPost_resourse").value === "" &&
-    //     document.getElementById("InputPost_page").value !== ""
-    //   )
-    // ) {
-    // let posting_check = 0;
-    document.getElementById("InputPost_textarea").style.height = "0";
-    this.setState({
-      app_is_loading: true,
-    });
-    let url = "https://backendstep.onrender.com/api/posts/addNew";
-    let options = {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        Authorization: "Bearer " + this.state.token,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        id: this.state.my_id,
-        firstname: this.state.firstname,
-        lastname: this.state.lastname,
-        note: document.getElementById("InputPost_textarea").value,
-        category: document.getElementById("InputPost_category").value,
-        subject: document.getElementById("InputPost_subject").value,
-        reference: document.getElementById("InputPost_resourse").value,
-        page_num: document.getElementById("InputPost_page").value,
-        comments: [],
-        date: new Date(),
-      }),
-    };
-    let req = new Request(url, options);
-    fetch(req)
-      .then((result) => {
-        if (result.status === 201) {
-          // let ul = document.getElementById("MountPosts_content_container");
-          // ul.innerHTML = "";
-          return result.json(result);
-        }
-      })
-      .then((result) => {
-        if (result) {
-          document.getElementById("InputPost_textarea").value = "";
-          document.getElementById("InputPost_category").value = "";
-          document.getElementById("InputPost_subject").value = "";
-          document.getElementById("InputPost_resourse").value = "";
-          document.getElementById("InputPost_page").value = "";
-          //.........................................
-          this.state.friends.forEach((friend) => {
-            let url_2 =
-              "https://backendstep.onrender.com/api/posts/postAdd/" +
-              friend._id +
-              "/" +
-              result._id;
-            let options_2 = {
-              method: "POST",
-              mode: "cors",
-              headers: {
-                Authorization: "Bearer " + this.state.token,
-                "Content-Type": "application/json",
-              },
-            };
-            let req_2 = new Request(url_2, options_2);
-            fetch(req_2);
-          });
-
-          return result;
-        }
-      })
-      .then((result) => {
-        let url_2 =
-          "https://backendstep.onrender.com/api/posts/postAdd/" +
-          this.state.my_id +
-          "/" +
-          result._id;
-        let options_2 = {
-          method: "POST",
-          mode: "cors",
-          headers: {
-            Authorization: "Bearer " + this.state.token,
-            "Content-Type": "application/json",
-          },
-        };
-        let req_2 = new Request(url_2, options_2);
-        fetch(req_2);
-        return result;
-      });
-    // .then((result) => {
-    //   let ul = document.getElementById("MountPosts_content_container");
-    //   let date_p = document.createElement("p");
-    //   let category_p = document.createElement("p");
-    //   let subject_p = document.createElement("p");
-    //   let reference_p = document.createElement("p");
-    //   let page_p = document.createElement("p");
-    //   let li = document.createElement("li");
-    //   let details_div = document.createElement("div");
-    //   let note_options_div = document.createElement("div");
-    //   //.............................comments.......................
-
-    //   //............date.................................
-    //   let date = result.date;
-    //   let date_timezone = new Date(date);
-    //   let date_string = date_timezone.toDateString();
-    //   let time_string = date_timezone.toLocaleTimeString();
-    //   //.............................................
-    //   //...............................note..................................
-    //   let note_p = document.createElement("p");
-    //   note_p.textContent = result.note;
-    //   note_p.setAttribute("class", "note_p");
-    //   note_options_div.setAttribute("class", "fr note_options_div");
-    //   note_options_div.setAttribute("id", "note_options_div" + "new");
-    //   note_options_div.appendChild(note_p);
-    //   //.......................Options....................................
-    //   let options_div = document.createElement("div");
-    //   //............................Poster name.......................
-    //   let postername_p = document.createElement("p");
-    //   postername_p.setAttribute("class", "postername_p");
-    //   details_div.appendChild(postername_p);
-    //   //..................................
-
-    //   if (result.id === this.state.my_id) {
-    //     postername_p.textContent = "Mine";
-    //     let p_delete = document.createElement("p");
-    //     let p_edit = document.createElement("p");
-    //     p_delete.style.cursor = "pointer";
-    //     p_edit.style.cursor = "pointer";
-    //     p_delete.textContent = "Delete";
-    //     p_edit.textContent = "Edit";
-    //     options_div.appendChild(p_delete);
-    //     options_div.appendChild(p_edit);
-    //     p_delete.addEventListener("click", () =>
-    //       this.deletePost(options_div.id)
-    //     );
-    //     p_edit.addEventListener("click", () => this.editPost(options_div.id));
-    //     note_options_div.appendChild(options_div);
-    //     options_div.setAttribute(
-    //       "class",
-    //       "fc MountPosts_postOptionsContainer"
-    //     );
-    //     options_div.setAttribute("id", result._id);
-    //   } else {
-    //     postername_p.textContent = result.firstname + " " + result.lastname;
-    //   }
-    //   //........................................................................
-
-    //   //.....................................................................
-    //   li.className = "fc";
-
-    //   date_p.innerHTML =
-    //     "<i class='far fa-clock'></i>" +
-    //     "  " +
-    //     date_string +
-    //     ", " +
-    //     time_string;
-    //   category_p.textContent = "System: " + result.category;
-    //   subject_p.textContent = "Discipline: " + result.subject;
-    //   reference_p.textContent = "Reference: " + result.reference;
-    //   page_p.textContent = "Page #: " + result.page_num;
-    //   date_p.className = "MountPosts_date";
-    //   details_div.appendChild(date_p);
-    //   details_div.appendChild(category_p);
-    //   details_div.appendChild(subject_p);
-    //   details_div.setAttribute("class", "fr details_div");
-    //   //...................comments...............
-    //   let comments_div = document.createElement("div");
-    //   let comment_input = document.createElement("input");
-    //   let commentlist_ul = document.createElement("ul");
-    //   comments_div.appendChild(comment_input);
-    //   comments_div.setAttribute("class", "fc comments_div");
-    //   comments_div.setAttribute("id", "commentDiv" + result._id);
-    //   comment_input.setAttribute("id", "comment_input" + result._id);
-    //   comment_input.setAttribute("class", "comment_input");
-    //   commentlist_ul.setAttribute("id", "commentlist_ul" + result._id);
-    //   comment_input.setAttribute("placeholder", "Enter a comment");
-    //   comment_input.addEventListener("keypress", (event) => {
-    //     this.postComment(event, comments_div.id, comment_input.id);
-    //   });
-    //   result.comments.forEach((comment) => {
-    //     let comment_li = document.createElement("li");
-    //     comment_li.textContent = comment;
-    //     comment_li.setAttribute("class", "comment_li");
-    //     commentlist_ul.setAttribute("class", "fc commentlist_ul");
-    //     commentlist_ul.prepend(comment_li);
-    //     comments_div.appendChild(commentlist_ul);
-    //   });
-    //   //.....................................................
-
-    //   if (!(result.reference === "" && result.page_num !== null)) {
-    //     if (result.reference !== "") details_div.appendChild(reference_p);
-    //     if (result.page_num !== null) details_div.appendChild(page_p);
-    //   }
-    //   li.setAttribute("id", "li" + result._id);
-    //   li.appendChild(details_div);
-    //   li.appendChild(note_options_div);
-    //   li.appendChild(comments_div);
-    //   ul.appendChild(li);
-
-    //   //   this.serverReply(
-    //   //     "Posting failed. Please make sure you select a category and/or a subject for your note"
-    //   //   );
-    //   this.setState({
-    //     app_is_loading: false,
-    //   });
-    //   // } else {
-    //   //   this.serverReply("Posted successfully!");
-    //   // }
-    // });
-    // } else {
-    //   this.serverReply(
-    //     "Posting failed. You can't enter a page number without a reference."
-    //   );
-
-    //.........................................
-  };
-  ////////////////////////////////Deleting Post///////////////////////////////////////////
-  deletePost_enabled = false;
-  deletePost = (post_id) => {
-    let url =
-      "https://backendstep.onrender.com/api/posts/deletePost/" + post_id;
-    let options = {
-      method: "DELETE",
-      mode: "cors",
-      headers: {
-        Authorization: "Bearer " + this.state.token,
-        "Content-Type": "application/json",
-      },
-    };
-    let req = new Request(url, options);
-    fetch(req).then((response) => {
-      if (response.status === 201) {
-        this.deletePost_enabled = true;
-        // document.getElementById(post_id).parentElement.parentElement.remove();
-        this.serverReply("post deleted");
-        // for (var i = 0; i < this.state.posts_alreadyBuilt.length; i++) {
-        //   if (post_id === this.state.posts_alreadyBuilt[i])
-        //     this.state.posts_alreadyBuilt.splice(i, 1);
-        // }
-      } else {
-        this.serverReply("delete failed");
-      }
-    });
-  };
   ////////////////////////////////Edit Post///////////////////////////////////////////
   enableEditPost = false;
   targetIDEditPost;
@@ -1653,9 +1271,6 @@ class App extends React.Component {
     let req = new Request(url, {
       method: "GET",
       mode: "cors",
-      headers: {
-        Authorization: "Bearer " + this.state.token,
-      },
     });
     fetch(req)
       .then((response) => {
@@ -1666,40 +1281,17 @@ class App extends React.Component {
       .then((jsonData) => {
         this.setState({
           friends: jsonData.friends,
+          posts: jsonData.posts,
           chat: jsonData.chat,
           notifications: jsonData.notifications,
           terminology: jsonData.terminology,
           study_session: jsonData.study_session,
           isOnline: jsonData.isOnline,
         });
-        //.....
-        var deleted = false;
-        var id;
-        //....
-        for (
-          var i = 0;
-          i < this.state.posts_alreadyBuilt.length &&
-          this.state.posts_alreadyBuilt.length > jsonData.posts.length;
-          i++
-        ) {
-          for (var j = 0; j < jsonData.posts.length; j++) {
-            if (this.state.posts_alreadyBuilt[i] !== jsonData.posts[j]._id) {
-              console.log("Posts= " + this.state.posts.length);
-              console.log("Posts database= " + jsonData.posts.length);
-              console.log(
-                "Posts already built= " + this.state.posts_alreadyBuilt.length
-              );
-              id = this.state.posts_alreadyBuilt[i];
-              this.state.posts_alreadyBuilt.splice(i, 1);
-              this.deleteFriendPost(id);
-            }
-          }
+        for (var i = 0; i < jsonData.SchoolPlanner.courses.length; i++) {
+          this.memory.courses.push(jsonData.SchoolPlanner.courses[i]);
+          console.log(this.memory.courses[i]);
         }
-        return jsonData;
-      })
-      .then((jsonData) => {
-        alert("Df");
-        this.state.posts = jsonData.posts;
       })
       .catch((err) => {
         if (err.message === "Cannot read property 'credentials' of null")
@@ -2227,85 +1819,29 @@ class App extends React.Component {
             </main>
           </article>
         </Route>
-        <Route exact path="/studyplanner">
-          <StudyPlanner
+        <Route path="/study">
+          <article id="app_page" className="fc">
+            <main id="Main_article" className="fr">
+              <Study
+                state={this.state}
+                logOut={this.logOut}
+                acceptFriend={this.acceptFriend}
+                type={this.type}
+                show_profile={this.show_profile}
+              />{" "}
+            </main>
+          </article>
+        </Route>
+        <Route path="/studyplanner">
+          <SchoolPlanner
             state={this.state}
             logOut={this.logOut}
             acceptFriend={this.acceptFriend}
             type={this.type}
             show_profile={this.show_profile}
+            memory={this.memory}
+            serverReply={this.serverReply}
           />
-        </Route>
-        <Route exact path="/study">
-          <article id="app_page" className="fc">
-            <Header
-              state={this.state}
-              logOut={this.logOut}
-              acceptFriend={this.acceptFriend}
-              type={this.type}
-              show_profile={this.show_profile}
-            />
-            <main id="Main_article" className="fr">
-              {parseInt(
-                window.getComputedStyle(document.querySelector("#root")).width
-              ) > 1200 && (
-                <React.Fragment>
-                  {/* <Terminology
-                    state={this.state}
-                    postingTerminology={this.postingTerminology}
-                  /> */}
-                  {/* <Chat
-                    state={this.state}
-                    availableToChat={this.availableToChat}
-                    path="/"
-                  /> */}
-                  {/* <section
-                    onClick={this.openNotesAside}
-                    className="fr"
-                    id="Friends_control_door"
-                    title="unclicked"
-                  >
-                    {this.state.isOnline === true && (
-                      <i
-                        id="chat_icon"
-                        style={{ color: "#32cd32" }}
-                        class="fas fa-users"
-                      ></i>
-                    )}
-                    {this.state.isOnline === false && (
-                      <i id="chat_icon" class="fas fa-users"></i>
-                    )}
-                  </section> */}
-                  {/* <Posts /> */}
-                </React.Fragment>
-              )}
-              {/* {parseInt(
-                window.getComputedStyle(document.querySelector("#root")).width
-              ) <= 1200 && (
-                <React.Fragment>
-                  <Friends
-                    state={this.state}
-              
-                    dbUpdate_user_connected={this.dbUpdate_user_connected}
-                    path="/study"
-                    serverReply={this.serverReply}
-                  />
-                  <Terminology
-                    state={this.state}
-                    postingTerminology={this.postingTerminology}
-                  />
-                </React.Fragment>
-              )} */}
-            </main>
-            {/* <SearchPosts
-              type="posts_search"
-              searchPosts={this.searchPosts}
-              prepare_searchPosts={this.prepare_searchPosts}
-              posts_alreadyBuilt={this.state.posts_alreadyBuilt}
-              posts_comments={this.state.posts_comments}
-              state={this.state}
-            /> */}
-          </article>
         </Route>
         <div
           id="server_answer"

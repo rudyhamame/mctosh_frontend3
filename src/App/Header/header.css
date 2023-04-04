@@ -4,8 +4,7 @@
   font-family: "Pacifico", cursive;
   order: 1;
   margin: center;
-  border-bottom: solid rgba(0, 0, 0, 0.671) 1px;
-  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.137);
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.705);
 }
 
 /*header content container*/

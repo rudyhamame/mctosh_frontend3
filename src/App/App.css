@@ -25,24 +25,30 @@
   background-color: var(--blue);
 }
 
+
 :root {
   --brightestWhite: #ffffff;
   --blue: #1877f2;
   --blue2: #6fa7dc;
   --white: #f0f2f5;
+  --white2:#fffafa;
   --gray: rgb(224, 214, 214);
   --gray_for_read: #696969;
   --pacifico: "Pacifico", cursive;
   --orange: #c73a13;
   --green: #5d7e4d;
+  --green2:#01796f;
+  --green3:#2f847c;
   --black: #18191a;
   --black2: #3a3b3c;
   --black3: #242526;
   --black_for_appform: black;
   --special_black: #302e2e;
-  --newBlack: #;
-  --red: #ff2f2d;
+  --special_black2:#3d3d3d;
+  --red: rgba(255, 0, 0, 0.795);
+  --red2:#ff007c;
   --background_menu: rgba(0, 0, 0, 0.459);
+  --yellow:#ffff00
 }
 #root {
   height: 100vh;

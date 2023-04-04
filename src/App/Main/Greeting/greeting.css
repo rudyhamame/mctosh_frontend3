@@ -54,15 +54,14 @@
   font-size: 30pt;
   background-color: white;
 }
-#Greeting_preStart_button {
+#Greeting_preStart_button1,#Greeting_preStart_button2 {
   justify-content: center;
   align-content: center;
   gap: 10px;
   font-family: "Roboto", sans-serif;
   padding: 10px 20px;
   text-align: center;
-  font-size: 16pt;
-  width: 40%;
+  font-size: 14pt;
   background-color: #01796f;
   color: var(--white);
   border-radius: 40px;

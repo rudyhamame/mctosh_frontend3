@@ -5,7 +5,7 @@ import ReactDOM from "react-dom";
 import { Redirect, BrowserRouter as Router, Route } from "react-router-dom";
 
 const Login = () => {
-  //.........................STATE.....................................//
+  //.........................STATE............................//
   const [is_loading, setIs_loading] = useState(null);
   const [signup_ok, setSignup_ok] = useState(null);
   const [login_ok, setLogin_ok] = useState(null);
@@ -17,7 +17,7 @@ const Login = () => {
       sessionStorage.setItem("state", JSON.stringify(authReport));
     }
   });
-  // //.................................Declaration......................//
+  //.........................DECLARATION......................//
 
   //.........................formControl & formControl (functions)..........................//
 
@@ -106,6 +106,8 @@ const Login = () => {
               friend_requests: userdata.user.friend_requests,
               notifications: userdata.user.notifications,
               posts: userdata.user.posts,
+              courses:userdata.user.schoolPlanner.courses,
+              lectures:userdata.user.schoolPlanner.lectures
             });
             setLogin_ok(true);
           } else {
@@ -162,6 +164,7 @@ const Login = () => {
   //.............................................................................................................
   ////////////////////////////////////////////SIGN UP AS USER AND PROFILE//////////////////////////////////////
   const signup = (event) => {
+
     event.preventDefault();
     setIs_loading(true);
     let Login_username_input = document.getElementById("Login_username_input");
@@ -201,12 +204,11 @@ const Login = () => {
           if (response.status === 201) {
             setIs_loading(false);
             setSignup_ok(true);
-            document.getElementById("Login_loginFrom_form").reset();
-            return response.json(response);
+            return response.json()
+            // document.getElementById("Login_loginFrom_form").reset();
           } else {
             setIs_loading(false);
             setSignup_ok(false);
-            return response.json(response);
           }
         })
         .catch((err) => {

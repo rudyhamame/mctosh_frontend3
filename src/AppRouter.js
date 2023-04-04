@@ -7,6 +7,9 @@ const AppRouter = () => {
       <Route exact path="/">
         <App path="/" />
       </Route>
+      <Route exact path="/cooporation">
+        <App path="/cooporation" />
+      </Route>
       <Route exact path="/study">
         <App path="/study" />
       </Route>
