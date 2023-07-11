@@ -39,7 +39,7 @@ const Study = (props) => {
   const deleteCustomize=(customizeID,type)=>{
     setIs_loading(true)
     let url =
-    "http://localhost:4000/api/user/deleteCustomize/" +
+    "https://backendstep.onrender.com/api/user/deleteCustomize/" +
     props.state.my_id+"/"+customizeID+"/"+type;
   let options = {
     method: "DELETE",
@@ -61,7 +61,7 @@ const Study = (props) => {
   const editCustomize=(object,propertyObjectID,type)=>{
     setIs_loading(true)
     let url =
-    "http://localhost:4000/api/user/editCustomize/" +
+    "https://backendstep.onrender.com/api/user/editCustomize/" +
     props.state.my_id+"/"+propertyObjectID+"/"+type;
   let options = {
     method: "PUT",
@@ -96,7 +96,7 @@ const Study = (props) => {
   const editPropertyObjectAndUnitCustomize=(object)=>{
     setIs_loading(true)
     let url =
-    "http://localhost:4000/api/user/editPropertyObjectAndUnitCustomize/" +
+    "https://backendstep.onrender.com/api/user/editPropertyObjectAndUnitCustomize/" +
     props.state.my_id+"/"+object.propertyObject._id;
   let options = {
     method: "PUT",
@@ -123,7 +123,7 @@ const Study = (props) => {
   //..........addCustomize
   const addCustomize=(object,type)=>{
     let url =
-    "http://localhost:4000/api/user/addCustomize/" +
+    "https://backendstep.onrender.com/api/user/addCustomize/" +
     props.state.my_id+"/"+type;
   let options = {
     method: "POST",
@@ -154,7 +154,7 @@ const Study = (props) => {
    //..........addMemory
    const addMemory=(object,type)=>{
     let url =
-    "http://localhost:4000/api/user/addMemory/" +
+    "https://backendstep.onrender.com/api/user/addMemory/" +
     props.state.my_id+"/"+type;
   let options = {
     method: "POST",
@@ -186,7 +186,7 @@ const Study = (props) => {
   //..........addMemory
   const deleteMemory=(memoryID,type)=>{
     let url =
-    "http://localhost:4000/api/user/deleteMemory/" +
+    "https://backendstep.onrender.com/api/user/deleteMemory/" +
     props.state.my_id+"/"+memoryID+"/"+type;
     let options = {
       method: "DELETE",
@@ -207,7 +207,7 @@ const Study = (props) => {
   const editMemory=(object,memoryID,type)=>{
     setIs_loading(true)
     let url =
-    "http://localhost:4000/api/user/editMemory/" +
+    "https://backendstep.onrender.com/api/user/editMemory/" +
     props.state.my_id+"/"+memoryID+"/"+type;
     let options = {
       method: "PUT",
@@ -234,7 +234,7 @@ const Study = (props) => {
   const updateFunctionStructureProperties= async (functionKeywordID)=>{
     let keyword_structureArray=[]
     let url =
-    "http://localhost:4000/api/user/update/" +
+    "https://backendstep.onrender.com/api/user/update/" +
     props.state.my_id;
   let options = {
     method: "GET",
@@ -345,7 +345,7 @@ const Study = (props) => {
   //.................DELETE STRUCTURE KEYWORD
   const deleteStrucutreKeywordProperty =(keywordID,keywordStructurePropertyID)=>{
     let url =
-    "http://localhost:4000/api/user/deleteKeywordStructureProperty/" +
+    "https://backendstep.onrender.com/api/user/deleteKeywordStructureProperty/" +
     props.state.my_id+"/"+keywordID+"/"+keywordStructurePropertyID;
   let options = {
     method: "POST",
@@ -370,7 +370,7 @@ const Study = (props) => {
    const editKeywordStructurePropertiesForOneStructure = async(keyword_structureArray)=>{
     setIs_loading(true)
     let url =
-    "http://localhost:4000/api/user/editKeywordStructureAfterChangingFunctionName/" +
+    "https://backendstep.onrender.com/api/user/editKeywordStructureAfterChangingFunctionName/" +
     props.state.my_id;
   let options = {
     method: "POST",
@@ -408,7 +408,7 @@ const Study = (props) => {
 
   
     let url =
-    "http://localhost:4000/api/user/editKeywordStructureProperty/" +
+    "https://backendstep.onrender.com/api/user/editKeywordStructureProperty/" +
     props.state.my_id+"/"+keyword._id+"/"+keywordStructurePropertyID;
   let options = {
     method: "POST",
@@ -460,7 +460,7 @@ const Study = (props) => {
     var editButtonkeywordFunction=document.getElementById("study_keywordFunction_edit_i")
 
     let url =
-      "http://localhost:4000/api/user/editKeyword/" +
+      "https://backendstep.onrender.com/api/user/editKeyword/" +
       props.state.my_id+"/"+keywordID+"/"+type;
     let options = {
       method: "POST",
@@ -511,7 +511,7 @@ const Study = (props) => {
   //.............DELETE KEYWORD STRUCTURE.................
   const deleteKeyword = (type,keywordID) => {
     let url =
-      "http://localhost:4000/api/user/deleteKeyword/" +
+      "https://backendstep.onrender.com/api/user/deleteKeyword/" +
       props.state.my_id+"/"+keywordID+"/"+type;
     let options = {
       method: "POST",
@@ -537,7 +537,7 @@ const Study = (props) => {
 
     if(needFetch===true){
       let url =
-        "http://localhost:4000/api/user/update/" +
+        "https://backendstep.onrender.com/api/user/update/" +
         props.state.my_id;
       let options = {
         method: "GET",
@@ -1305,7 +1305,7 @@ const Study = (props) => {
     let keyword_propertyUnit =document.getElementById("study_keywordPropertyUnit");
     var body
     let url =
-    "http://localhost:4000/api/user/addKeywordStructureProperties/" +
+    "https://backendstep.onrender.com/api/user/addKeywordStructureProperties/" +
     props.state.my_id+"/"+ keyword._id;
        body={
         _id:keyword._id+"_property_"+Date.now(),
@@ -1348,7 +1348,7 @@ const Study = (props) => {
     let keyword_propertyUnit =document.getElementById("study_keywordPropertyUnit");
     var body
     let url =
-    "http://localhost:4000/api/user/addKeywordFunctionProperties/" +
+    "https://backendstep.onrender.com/api/user/addKeywordFunctionProperties/" +
     props.state.my_id+"/"+ keyword._id;
        body={
         _id:keyword._id+"_property_"+Date.now(),
@@ -1751,7 +1751,7 @@ const Study = (props) => {
   var editButtonkeywordFunction=document.getElementById("study_keywordFunction_edit_i")
 
   let url =
-    "http://localhost:4000/api/user/addKeyword/"+ props.state.my_id+"/"+type;
+    "https://backendstep.onrender.com/api/user/addKeyword/"+ props.state.my_id+"/"+type;
   let options = {
     method: "POST",
     mode: "cors",
