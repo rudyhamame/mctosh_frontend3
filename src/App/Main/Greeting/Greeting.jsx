@@ -83,7 +83,7 @@ const Greeting=(props)=>{
             document.getElementById("Greeting_userMenu_content_div").style.display="none"
           }
         }}>
-        <i class="fi fi-bs-user" id="Greeting_userMenu_i"></i>
+        <i class="fi fi-rr-user" id="Greeting_userMenu_i"></i>
         </button>
         <div id="Greeting_userMenu_content_div" className="fc">
           <div id="Greeting_userMenu_personalInfo_div">

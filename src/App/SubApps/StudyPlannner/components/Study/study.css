@@ -453,8 +453,8 @@ box-shadow: 1px 4px 10px rgba(0, 0, 0, 0.4);
 }
 .menuLi_div {
     background-color: var(--white);
-    border: none !important;
-    border-bottom:solid 0.01px rgba(0, 0, 0, 0.084) !important
+    border-bottom:solid 0.01px rgba(0, 0, 0, 0.221) !important;
+    position: relative;
 }
 
 .keywordsTable_menu_subdiv {

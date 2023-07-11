@@ -48,15 +48,21 @@
     border-radius: 0;
     border: 0;
 }
-
+#schoolPlanner_lectures_labelsUl_container{
+    transform: scale(0.9);
+    box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.249);
+}
 #schoolPlanner_coursesDoor_div {
-    background-color: var(--green2);
+    background-color: var(--green3);
     justify-content: center;
     align-items: center;
-    box-shadow: 1px 4px 10px rgba(0, 0, 0, 0.292);
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.475);
     z-index: 10;
     padding: 10px;
 
+}
+#schoolPlanner_coursesDoor_div i{
+color: var(--white);
 }
 #schoolPlanner_planDoor_div {
     background-color: var(--green2);
@@ -81,6 +87,7 @@
     flex-direction: column;
     overflow: scroll;
     flex-grow: 1;
+    height: 400px;
 }
 
 .schoolPlanner_lectures_div_pLi {
@@ -88,7 +95,10 @@
     grid-auto-flow: column;
     grid-auto-columns: 150px;
     align-items: center;
-    justify-content: center;}
+    justify-content: center;
+    flex-grow: 1;
+    padding-right:5px;
+}
 
 .schoolPlanner_lectures_editSection {
     padding: 10px;
@@ -108,30 +118,28 @@
     flex-grow: 1;
     background-color: #fffafa;
     gap:10px;
-    padding: 10px;
+    padding-top:5px;
+    padding-bottom:5px;
  
 }
 
 .div_outline{
     width: 100%;
     gap: 5px;
-    
 }
 .div_outline p{
     width: 100% !important;
-    text-align: right;
+    text-align: right !important;
     direction: rtl;
+    padding-right: 10px;
 }
 
 #schoolPlanner_lectures_tableLabels_section{
-    display: flex;
-    flex-direction: row;
-    background-color: #2f847c;
+    background-color: var(--green3);
     align-items: center;
-    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.39);
-    z-index: 2;
+    z-index: 10;
     padding-left: 35.33px;
-    padding-right: 24.33px;
+    padding-right: 29px;
 }
 #schoolPlanner_courses_ulLabels_div {
     display: flex;
@@ -151,12 +159,15 @@
     display: grid;
     grid-auto-flow: column;
     grid-auto-columns: 150px;
-    flex-grow: 1;
-    padding-right: 10px;
-    padding-left: 10px;
     align-items: center;
     justify-content: center;
+    flex-grow: 1;
 
+}
+#schoolPlanner_lectures_tableLabel_lectureName{
+    width: 150px;
+    text-align: center;
+    font-size: 10px;
 }
 #schoolPlanner_lectures_tableLabels_div p{
     text-align: center;
@@ -202,7 +213,7 @@
 
 #schoolPlanner_addLecture_div label,
 #schoolPlanner_addCourse_div label {
-    background-color: var(--red2);
+    background-color: var(--green4);
     padding: 10px;
     width: fit-content;
     font-size: 10px;
@@ -221,10 +232,12 @@
 .lecuturesTable_menu_subdiv {
     width: 0;
     background-color: var(--green2);
-    justify-content: space-between;
+    justify-content: end;
     order: 0;
     align-items: center;
-
+    overflow: hidden;
+    position: absolute;
+    left: 0;
 }
 
 .lecuturesTable_menu_subdiv i {
@@ -239,8 +252,6 @@
     justify-content: center;
     background-color: var(--white2);
     border-right: solid rgba(0, 0, 0, 0.073) 1px;
-
-
 }
 
 .lecuturesTable_menu_div i {
@@ -252,7 +263,6 @@
 }
 
 .menuLi_div {
-    border: solid 1px var(--green2);
     position: relative;
 }
 
@@ -287,11 +297,28 @@
     text-align: center;
     color: var(--white);
 }
+#schoolPlanner_addCourse_form{
+background-color: var(--green4);
+border-right:5px solid var(--green4);
+border-left:5px solid var(--green4);
+}
+#schoolPlanner_addLecture_form{
+    border-right:solid var(--green4) 5px;
+    border-left:solid var(--green4) 5px;
+}
 #schoolPlanner_addCourse_form select,
 #schoolPlanner_addLecture_form select {
-    font-size: 12px;
-    width: 50vw;
+    font-size: 10px;
+    width: 100%;
+    
 
+}
+#schoolPlanner_addCourse_examTime_input{
+}
+#schoolPlanner_addCourse_form input,
+#schoolPlanner_addLecture_form input {
+    font-size: 10px;
+    width: 100%;
 }
 
 .schoolPlanner_courses_li {
@@ -320,7 +347,6 @@
 
 }
 .schoolPlanner_courses_div_pLi{
-    flex-grow: 1;
 }
 .schoolPlanner_courses_div_pLi div {
     display: grid;
@@ -337,13 +363,13 @@
 #schoolPlanner_addCourse_dayAndTime_div,
 #schoolPlanner_addCourse_instructorsNames_div {
     align-items: center;
-    background-color: var(--red2);
+    background-color: var(--green4);
 }
 
 #schoolPlanner_addLecture_outlines_div {
     justify-content: center;
     align-items: center;
-    background-color: var(--red2);
+    background-color: var(--green4);
 }
 
 
@@ -388,8 +414,9 @@
 #schoolPlanner_lectures_num_div{
     background-color: var(--green3);
     gap:5px;
-    padding:10px;
     overflow: hidden;
+    align-items: center;
+    padding: 10px;
     
 }
 #schoolPlanner_lectures_num_div label{
@@ -400,13 +427,11 @@
     color: var(--white);
 }
 .div_progression{
-gap: 5px;
-background-color: var(--white2);
-color: var(--black);
-border-radius: 30px;
-box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.046);
-cursor: pointer;
-align-items: center;
+    gap: 5px;
+    background-color: var(--white2);
+    color: var(--black);
+    cursor: pointer;
+    align-items: center;
 
 }
 .div_indicator_progression{
@@ -512,4 +537,50 @@ justify-content: space-between;
     top:50%;
     left:50%;
     padding: 10px;
+    box-shadow: 1px 4px 1px rgba(99, 96, 96, 0.292);
+
+}
+.div_p_lectureName{
+    background-color: var(--white);
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    font-size: 10px;
+    color: black; 
+}
+.div_p_lectureName p{
+    padding: 10px;
+    text-align: center;
+}
+/* INPUT CHECKBOX */
+ input[type=checkbox] {
+    position: relative;
+      cursor: pointer;
+}
+input[type=checkbox]:before {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    top: 0;
+    left: 0;
+    border: 2px solid var(--green3);
+    border-radius: 3px;
+    background-color: var(--white2);
+}
+input[type=checkbox]:checked:after {
+    content: "";
+    display: block;
+    width: 4px;
+    height: 6px;
+    border: solid var(--green3);
+    border-width: 0 2px 2px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+    position: absolute;
+    top: 2px;
+    left: 4px;
 }

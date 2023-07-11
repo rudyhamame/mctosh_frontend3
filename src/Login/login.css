@@ -11,12 +11,21 @@
 
 /*......Header and Loginform Container.......*/
 #Login_main {
-  gap: 50px;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr 1fr 1fr;
   flex-grow: 1;
   padding: 20px;
+  align-items: center;
+  justify-content: center;
+  transform: scale(0.8);
+
   /* padding: 0 30px; */
+}
+#Login_column1_container,
+#Login_column2_container,
+#Login_column3_container {
+
 }
 #Login_signupShow_text {
   cursor: pointer;
@@ -60,7 +69,6 @@
   border-radius: 10px;
   text-align: center;
   box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.486);
-  width: 450px;
   overflow: hidden;
 }
 

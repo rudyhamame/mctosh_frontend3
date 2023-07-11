@@ -18,6 +18,7 @@ var target_editCourse;
 var selectedLecture
 var course_pages = []
 var lectureInEdit={}
+var lecturesShownNum
 
 var timezone = (new Date()).getTimezoneOffset()
 var todayDate = Date.now() - timezone*60000
@@ -42,12 +43,9 @@ export default class SchoolPlanner extends Component {
     this.retrieveCourses()
   }
 
-  setPageFinishLecture=async(lecture,pageNum,boolean)=>{
+  setPageFinishLecture=async(lecture,pageNum)=>{
     let div_progression= document.getElementById("div_progression")
-    this.setState({
-      lecture_isLoading:true
-    })
-    let url = "http://localhost:4000/api/user/setPageFinishLecture/"+ this.props.state.my_id+"/"+lecture._id+"/"+boolean;
+    let url = "http://localhost:4000/api/user/setPageFinishLecture/"+ this.props.state.my_id+"/"+lecture._id;
     let options = {
       method: "PUT",
       mode: "cors",
@@ -65,17 +63,29 @@ export default class SchoolPlanner extends Component {
         return result.json()
       }
     }).then((result)=>{
-          let lecture = result.lectureFound
+          let lectureFound = result.lectureFound
+          let pagenumber = result.pagenumber
+          let index = result.index
           this.setState({
-            lecture_isLoading:false
+            div_progression_isLoading:false
           })
           let p_progression = div_progression.children[1]
           let div_indicator_progression = div_progression.children[2].children[0]
-          let progression_percent=Number(lecture.lecture_progress*100/lecture.lecture_length).toFixed(0)
+          let ul_pages_finished = div_progression.children[3]
+          if(index>-1){
+            ul_pages_finished.children[pagenumber-1].style.backgroundColor="var(--white2)"
+            ul_pages_finished.children[pagenumber-1].style.color="black"
+            ul_pages_finished.children[pagenumber-1].style.fontWeight="normal" 
+          }else{
+            ul_pages_finished.children[pagenumber-1].style.backgroundColor="var(--green4)"
+            ul_pages_finished.children[pagenumber-1].style.color="var(--white)"
+            ul_pages_finished.children[pagenumber-1].style.fontWeight="bold"    
+          }
+          let progression_percent=Number(lectureFound.lecture_progress*100/lectureFound.lecture_length).toFixed(0)
           let progressionPercent_indicatorWidth_Ratio=150*progression_percent/100
-          p_progression.textContent = String(Number(lecture.lecture_length)+" ("+Number(lecture.lecture_progress)+" : "+Number(lecture.lecture_length - lecture.lecture_progress)+" | "+progression_percent+"%)");
+          p_progression.textContent = String(Number(lectureFound.lecture_length)+" ("+Number(lectureFound.lecture_progress)+" : "+Number(lectureFound.lecture_length - lectureFound.lecture_progress)+" | "+progression_percent+"%)");
           div_indicator_progression.style.width=progressionPercent_indicatorWidth_Ratio+"px"
-          if(progression_percent<50) div_indicator_progression.style.backgroundColor="var(--red2)"     
+          if(progression_percent<50) div_indicator_progression.style.backgroundColor="var(--red2)" 
     })
   }
   hideUncheckedLectures=()=>{
@@ -129,13 +139,15 @@ export default class SchoolPlanner extends Component {
 
   calculateLectureNum=()=>{
     let ul_lectures_array =document.getElementById("schoolPlanner_lectures_ul").children
-    let p_num = document.getElementById("schoolPlanner_lectures_num_p")
-    p_num.textContent=Number(ul_lectures_array.length)
+    let lecturesShown_p=document.getElementById("schoolPlanner_lectures_num_p")
+    lecturesShownNum = Number(ul_lectures_array.length)
+    lecturesShown_p.textContent=lecturesShownNum
   }
 
   openAddLectureForm = (object) => {
   document.getElementById("schoolPlanner_addLecture_div").style.display ="flex";
   document.getElementById("schoolPlanner_addLecture_addButton_label").textContent = object.buttonName;
+  document.getElementById("schoolPlanner_lectures_labelsUl_container").style.opacity=0
   //.........
   if(object.buttonName==="Add"){
     lectureOutlines=[]
@@ -166,8 +178,11 @@ export default class SchoolPlanner extends Component {
    closeAddLectureForm = () => {
     document.getElementById("schoolPlanner_addLecture_div").style.display =
       "none";
+    document.getElementById("schoolPlanner_lectures_labelsUl_container").style.opacity=1
+
   };
    openAddCourseForm = (object) => {
+    document.getElementById("schoolPlanner_lectures_labelsUl_container").style.opacity=0
     document.getElementById("schoolPlanner_addCourse_div").style.display =
       "flex";
     document.getElementById("schoolPlanner_addCourse_addButton_label").textContent =
@@ -217,6 +232,7 @@ export default class SchoolPlanner extends Component {
    closeAddCourseForm = () => {
     document.getElementById("schoolPlanner_addCourse_div").style.display =
       "none";
+    document.getElementById("schoolPlanner_lectures_labelsUl_container").style.opacity=1
   };
   addCourseDayAndTime=(object)=>{
     if(object.day && object.time){
@@ -245,20 +261,20 @@ export default class SchoolPlanner extends Component {
     for(var i=0;i<courseDayAndTime.length;i++){
       let p=document.createElement("p")
       let deleteIcon = document.createElement("i")
-      let div_dayAndTime= document.createElement("div")
+      let sec_dayAndTime= document.createElement("div")
 
       p.textContent=courseDayAndTime[i].day+" "+courseDayAndTime[i].time
 
       deleteIcon.setAttribute("class","fa fa-close");
       deleteIcon.setAttribute("id",i+"DIdayAndTime")
-      div_dayAndTime.setAttribute("class","schoolPlanner_addCourse_dayAndTime_div fr")
+      sec_dayAndTime.setAttribute("class","schoolPlanner_addCourse_dayAndTime_div fr")
 
       deleteIcon.addEventListener("click",()=>{
         deleteIcon.parentElement.remove()
         courseDayAndTime.splice(parseInt(deleteIcon.id),1)
       })
-      div_dayAndTime.append(deleteIcon,p)
-      courseDayAndTime_ul.appendChild(div_dayAndTime)
+      sec_dayAndTime.append(deleteIcon,p)
+      courseDayAndTime_ul.appendChild(sec_dayAndTime)
     }
   }
   retrieveLectureOutlines=()=>{
@@ -288,20 +304,20 @@ export default class SchoolPlanner extends Component {
     for(var i=0;i<courseInstructorsNames.length;i++){
       let p=document.createElement("p")
       let deleteIcon = document.createElement("i")
-      let div_instructorsNames= document.createElement("div")
+      let sec_instructorsNames= document.createElement("div")
 
       p.textContent=courseInstructorsNames[i]
 
       deleteIcon.setAttribute("class","fa fa-close");
       deleteIcon.setAttribute("id",i+"DIinstructorsNames")
-      div_instructorsNames.setAttribute("class","schoolPlanner_addCourse_instructorsNames_div fr")
+      sec_instructorsNames.setAttribute("class","schoolPlanner_addCourse_instructorsNames_div fr")
       
       deleteIcon.addEventListener("click",()=>{
         deleteIcon.parentElement.remove()
         courseInstructorsNames.splice(parseInt(deleteIcon.id),1)
       })
-      div_instructorsNames.append(deleteIcon,p)
-      courseInstructorsNames_ul.appendChild(div_instructorsNames)
+      sec_instructorsNames.append(deleteIcon,p)
+      courseInstructorsNames_ul.appendChild(sec_instructorsNames)
     }
   }
 
@@ -335,115 +351,195 @@ export default class SchoolPlanner extends Component {
               String(lecture.lecture_instructor).includes(searchKeyword) ||
               String(lecture.lecture_outlines).includes(searchKeyword)
                 ){
-                    let progression_percent=Number(lecture.lecture_progress*100/lecture.lecture_length).toFixed(0)
-                    lecture_courses.push(lecture.lecture_course)
-                    let p1 = document.createElement("p");
-                    let p2 = document.createElement("p");
-                    let p3 = document.createElement("p");
-                    let p4 = document.createElement("p");
-                    let p5 = document.createElement("p");
-          
-                    let p_progression = document.createElement("p");
-                    let div_indicatorBox_progression = document.createElement("div")
-                    let div_indicator_progression = document.createElement("div")
-                    let ul_pages_finished = document.createElement("ul")
-                    let div_progression = document.createElement("div")
-
-          
-                    let div_outline = document.createElement("div");
-                    let checkBox_partOfPlan = document.createElement("input")
-                    let div_partOfPlan = document.createElement("div")
-                    let div_pLi=document.createElement("div");
-                   
-                    let li = document.createElement("li");
-                    let menu_div=document.createElement("div");
-                    let menu_subdiv=document.createElement("div");
-                    let menu_showIcon= document.createElement("i");
-                    let menu_selectIcon= document.createElement("i");
-                    let menu_deleteIcon= document.createElement("i");
-                    let menu_editIcon= document.createElement("i");
-                    let menuLi_div=document.createElement("div");
-          
-                    p1.textContent = lecture.lecture_name;
-                    p2.textContent = lecture.lecture_course;
-                    p3.textContent = lecture.lecture_instructor;
-                    p4.textContent = lecture.lecture_writer;
-                    p5.textContent = lecture.lecture_date;
-                    p_progression.textContent = String(Number(lecture.lecture_length)+" ("+Number(lecture.lecture_progress)+" : "+Number(lecture.lecture_length - lecture.lecture_progress)+" | "+progression_percent+"%)");
-          
-                      for(var i=0;i<lecture.lecture_outlines.length;i++){
-                        let p=document.createElement("p")
-                        p.textContent=Number(i+1)+") "+lecture.lecture_outlines[i]
-                        div_outline.append(p)
-                      }
-                    div_pLi.setAttribute("class", "schoolPlanner_lectures_div_pLi");
-                   
-                    li.setAttribute("class","schoolPlanner_lectures_li fc")
-                    li.setAttribute("id", lecture._id + "li");
-                    menu_showIcon.setAttribute("class","fa fa-sharp fa-solid fa-bars");
-                    menu_showIcon.setAttribute("id", lecture._id + "menu_showIcon");
-                    menu_showIcon.setAttribute("title","")
-                    menu_editIcon.setAttribute("title","")
-                    menu_selectIcon.setAttribute("class","fa fa-sharp fa-solid fa-check");
-                    menu_selectIcon.setAttribute("title","");
-                    menu_selectIcon.setAttribute("id",lecture._id+"menu_selectIcon")
-                    menu_deleteIcon.setAttribute("class","fa fa-sharp fa-solid fa-trash");
-                    menu_editIcon.setAttribute("class","fa fa-sharp fa-solid fa-pencil");
-                    div_outline.setAttribute("class","div_outline fc")
-          
-                    checkBox_partOfPlan.type="checkbox"
-                    div_partOfPlan.setAttribute("class","div_partOfPlan fc")
-                    checkBox_partOfPlan.setAttribute("id",lecture._id +"checkBox_partOfPlan")
-          
-                    if(lecture.lecture_partOfPlan===true) checkBox_partOfPlan.checked=true
+                  let progression_percent=Number(lecture.lecture_progress*100/lecture.lecture_length).toFixed(0)
+                  lecture_courses.push(lecture.lecture_course)
+                  if(lecture.lecture_hidden===false){
+                  let p1 = document.createElement("p");
+                  let div_p1 = document.createElement("p");
+        
+                  let p2 = document.createElement("p");
+                  let p3 = document.createElement("p");
+                  let p4 = document.createElement("p");
+                  let p5 = document.createElement("p");
                   
-                      
-                    div_indicatorBox_progression.setAttribute("class","div_indicatorBox_progression")
-                    div_indicator_progression.setAttribute("class","div_indicator_progression")
-                    div_indicator_progression.setAttribute("id",lecture._id+"div_indicator_progression")
-                    ul_pages_finished.setAttribute("class","ul_pages_finished")
-                    div_progression.setAttribute("class","div_progression fc")
-                    
-                    menu_div.setAttribute("class","fr lecuturesTable_menu_div");
-                    menu_subdiv.setAttribute("class","fr lecuturesTable_menu_subdiv");
-                    menu_subdiv.setAttribute("id",lecture._id+"menu_subdiv");
-                    menuLi_div.setAttribute("class","menuLi_div fr")
-                    menuLi_div.setAttribute("id", lecture._id + "menuLi_div");
-                    menu_editIcon.setAttribute("id",lecture._id+"menu_editIcon")
-          
-                    //........Progression logic
-                    let progressionPercent_indicatorWidth_Ratio=150*progression_percent/100
-                    div_indicator_progression.style.width=progressionPercent_indicatorWidth_Ratio+"px"
-                    if(progression_percent<50) div_indicator_progression.style.backgroundColor="var(--red2)"
-                    //........  
-                    //.......PagesFinished Logic
-                    for(var i = 0;i<lecture.lecture_length;i++){
-                      let p_num = document.createElement("p")
-                      p_num.textContent=Number(i+1)
-                      p_num.addEventListener("click",()=>{
-                      let p_num_color = getComputedStyle(p_num).color
-                        alert(p_num_color)
-                      })
-                      ul_pages_finished.append(p_num)
+                  let p_progression = document.createElement("p");
+                  let div_indicatorBox_progression = document.createElement("div")
+                  let div_indicator_progression = document.createElement("div")
+                  let ul_pages_finished = document.createElement("ul")
+                  let div_progression = document.createElement("div")
+        
+                  let div_outline = document.createElement("div");
+                  let checkBox_partOfPlan = document.createElement("input")
+                  let div_partOfPlan = document.createElement("div")
+                  let div_pLi=document.createElement("div");
+                 
+                  let li = document.createElement("li");
+                  let menu_div=document.createElement("div");
+                  let menu_subdiv=document.createElement("div");
+                  let menu_showIcon= document.createElement("i");
+                  let menu_selectIcon= document.createElement("i");
+                  let menu_deleteIcon= document.createElement("i");
+                  let menu_editIcon= document.createElement("i");
+                  let menuLi_div=document.createElement("div");
+        
+                  p1.textContent = lecture.lecture_name;
+                  p2.textContent = lecture.lecture_course;
+                  p3.textContent = lecture.lecture_instructor;
+                  p4.textContent = lecture.lecture_writer;
+                  p5.textContent = lecture.lecture_date;
+                  p_progression.textContent = String(Number(lecture.lecture_length)+" ("+Number(lecture.lecture_progress)+" : "+Number(lecture.lecture_length - lecture.lecture_progress)+" | "+progression_percent+"%)");
+        
+                    for(var i=0;i<lecture.lecture_outlines.length;i++){
+                      let p=document.createElement("p")
+                      p.textContent=Number(i+1)+") "+lecture.lecture_outlines[i]
+                      div_outline.append(p)
                     }
-                    //...........
-                    menu_showIcon.addEventListener("click",()=>{
-                    let menu_showIcon = document.getElementById(lecture._id + "menu_showIcon");
-                    let menu_subdiv = document.getElementById(lecture._id + "menu_subdiv");
-                      if(menu_showIcon.title ===""){
-                        menu_subdiv.style.width="15%"
-                        menu_showIcon.title="clicked"
-                      }else{
-                        menu_subdiv.style.width="0"
-                        menu_showIcon.title=""
-                      }
+        
+                  div_p1.setAttribute("class","div_p_lectureName fc")
+                  div_pLi.setAttribute("class", "schoolPlanner_lectures_div_pLi");
+                  li.setAttribute("class","schoolPlanner_lectures_li fc")
+                  li.setAttribute("id", lecture._id + "li");
+                  menu_showIcon.setAttribute("class","fa fa-sharp fa-solid fa-bars");
+                  menu_showIcon.setAttribute("id", lecture._id + "menu_showIcon");
+                  menu_showIcon.setAttribute("title","")
+                  menu_editIcon.setAttribute("title","")
+                  menu_selectIcon.setAttribute("class","fa fa-sharp fa-solid fa-check");
+                  menu_selectIcon.setAttribute("title","");
+                  menu_selectIcon.setAttribute("id",lecture._id+"menu_selectIcon")
+                  menu_deleteIcon.setAttribute("class","fa fa-sharp fa-solid fa-trash");
+                  menu_editIcon.setAttribute("class","fa fa-sharp fa-solid fa-pencil");
+                  div_outline.setAttribute("class","div_outline fc")
+        
+                  checkBox_partOfPlan.type="checkbox"
+                  div_partOfPlan.setAttribute("class","div_partOfPlan fc")
+                  checkBox_partOfPlan.setAttribute("id",lecture._id +"checkBox_partOfPlan")
+        
+                  if(lecture.lecture_partOfPlan===true) checkBox_partOfPlan.checked=true
+                
+        
+        
+                  div_indicatorBox_progression.setAttribute("class","div_indicatorBox_progression")
+                  div_indicatorBox_progression.setAttribute("id",lecture._id+"div_indicatorBox_progression")
+                  div_indicator_progression.setAttribute("class","div_indicator_progression")
+                  div_indicator_progression.setAttribute("id",lecture._id+"div_indicator_progression")
+                  ul_pages_finished.setAttribute("class","ul_pages_finished")
+                  div_progression.setAttribute("class","div_progression fc")
+                  
+                  menu_div.setAttribute("class","fr lecuturesTable_menu_div");
+                  menu_subdiv.setAttribute("class","fr lecuturesTable_menu_subdiv");
+                  menu_subdiv.setAttribute("id",lecture._id+"menu_subdiv");
+                  menuLi_div.setAttribute("class","menuLi_div fr")
+                  menuLi_div.setAttribute("id", lecture._id + "menuLi_div");
+                  menu_editIcon.setAttribute("id",lecture._id+"menu_editIcon")
+        
+                  //........Progression logic
+                  let progressionPercent_indicatorWidth_Ratio=150*progression_percent/100
+                  div_indicator_progression.style.width=progressionPercent_indicatorWidth_Ratio+"px"
+                  if(progression_percent<50) div_indicator_progression.style.backgroundColor="var(--red2)"
+                  //........  
+                 //.......PagesFinished Logic
+                 for(var i = 0;i<lecture.lecture_length;i++){
+                  let pagenumber=Number(i+1)
+                  let p_num = document.createElement("p")
+                  p_num.textContent=pagenumber
+                  p_num.addEventListener("click",()=>{
+                    this.setState({
+                      div_progression_isLoading:true
                     })
-          
-                    //.............EDIT FUNCTION
-                    menu_editIcon.addEventListener("click", () => {
-                      document.getElementById(lecture._id + "menu_subdiv").style.width="0"
-                      this.openAddLectureForm({
-                        buttonName:"Edit",
+                    setTimeout(()=>{
+                      console.log(lecture.lecture_pagesFinished)
+                      if(lecture.lecture_pagesFinished.indexOf(pagenumber)==-1){
+                        this.setPageFinishLecture(lecture,pagenumber)
+                      }else{
+                        this.setPageFinishLecture(lecture,pagenumber)
+                      }
+                },1000)
+                })
+                for(var j = 0;j<lecture.lecture_pagesFinished.length;j++){
+                  if(lecture.lecture_pagesFinished.indexOf(pagenumber)!==-1){
+                    p_num.style.backgroundColor="var(--green4)"
+                    p_num.style.color="var(--white)"
+                    p_num.style.fontWeight="bold"
+                  }
+                }
+                ul_pages_finished.append(p_num)
+              }
+                //...........  
+                  menu_showIcon.addEventListener("click",()=>{
+                  let menu_showIcon = document.getElementById(lecture._id + "menu_showIcon");
+                  let menu_subdiv = document.getElementById(lecture._id + "menu_subdiv");
+                    if(menu_showIcon.title ===""){
+                      menu_subdiv.style.width="15%"
+                      menu_showIcon.title="clicked"
+                    }else{
+                      menu_subdiv.style.width="0"
+                      menu_showIcon.title=""
+                    }
+                  })
+        
+                  //.............EDIT FUNCTION
+                  menu_editIcon.addEventListener("click", () => {
+                    lectureInEdit=lecture
+                    document.getElementById(lecture._id + "menu_subdiv").style.width="0"
+                    this.openAddLectureForm({
+                      buttonName:"Edit",
+                      _id:lecture._id,
+                      lecture_name:lecture.lecture_name,
+                      lecture_course:lecture.lecture_course,
+                      lecture_instructor:lecture.lecture_instructor,
+                      lecture_writer:lecture.lecture_writer,
+                      lecture_date:lecture.lecture_date,
+                      lecture_length:lecture.lecture_length,
+                      lecture_progress:lecture.lecture_progress,
+                      lecture_outlines:lecture.lecture_outlines,
+                      lecture_partOfPlan:lecture.lecture_partOfPlan,
+                      lecture_hidden:lecture.lecture_hidden
+                    })
+                  })
+        
+                  //................DELETE ONE LECTURE..........
+                  menu_deleteIcon.addEventListener("click", () => {
+                    checkedLectures.push(lecture._id)
+                    this.deleteLecture()
+                   
+                  })
+                 
+        
+                  
+                  menu_selectIcon.addEventListener("click", () => {
+                    let menu_selectIcon = document.getElementById(lecture._id + "menu_selectIcon");
+                    let li = document.getElementById(lecture._id + "li");
+                    if (menu_selectIcon.title === "") {
+                      li.style.backgroundColor = "var(--yellow)";
+                      menu_selectIcon.style.color = "var(--yellow)";
+                      menu_selectIcon.title = "clicked";
+                      if (checkedLectures.length > 0) {
+                        for (var i = 0; i < checkedLectures.length; i++) {
+                          if (checkedLectures[i] === lecture._id) {
+                            checkedLectures.splice(i, 1);
+                          } else {
+                            checkedLectures.push(lecture._id);
+                            break;
+                          }
+                        }
+                      } else {
+                        checkedLectures.push(lecture._id);
+                      }
+                    } else {
+                      li.style.backgroundColor = "var(--white2)";
+                      menu_selectIcon.style.color = "var(--white2)";
+                      menu_selectIcon.title = "";
+                      for (var i = 0; i < checkedLectures.length; i++) {
+                        if (checkedLectures[i] === lecture._id) {
+                          checkedLectures.splice(i, 1);
+                        }
+                      }
+                    }
+                  });
+                  //.......Check box
+                  checkBox_partOfPlan.addEventListener("click",()=>{
+                    if(checkBox_partOfPlan.checked===true){
+                      this.editLecture({
                         _id:lecture._id,
                         lecture_name:lecture.lecture_name,
                         lecture_course:lecture.lecture_course,
@@ -452,100 +548,64 @@ export default class SchoolPlanner extends Component {
                         lecture_date:lecture.lecture_date,
                         lecture_length:lecture.lecture_length,
                         lecture_progress:lecture.lecture_progress,
+                        lecture_pagesFinished:lecture.lecture_pagesFinished,
                         lecture_outlines:lecture.lecture_outlines,
-                        lecture_partOfPlan:lecture.lecture_partOfPlan,
+                        lecture_partOfPlan:true,
                         lecture_hidden:lecture.lecture_hidden
                       })
-                    })
-          
-                    //................DELETE ONE LECTURE..........
-                    menu_deleteIcon.addEventListener("click", () => {
-                      checkedLectures.push(lecture._id)
-                      this.deleteLecture()
-                     
-                    })
-                   
-          
-                    
-                    menu_selectIcon.addEventListener("click", () => {
-                      let menu_selectIcon = document.getElementById(lecture._id + "menu_selectIcon");
-                      let li = document.getElementById(lecture._id + "li");
-                      if (menu_selectIcon.title === "") {
-                        li.style.backgroundColor = "var(--yellow)";
-                        menu_selectIcon.style.color = "var(--yellow)";
-                        menu_selectIcon.title = "clicked";
-                        if (checkedLectures.length > 0) {
-                          for (var i = 0; i < checkedLectures.length; i++) {
-                            if (checkedLectures[i] === lecture._id) {
-                              checkedLectures.splice(i, 1);
-                            } else {
-                              checkedLectures.push(lecture._id);
-                              break;
-                            }
-                          }
-                        } else {
-                          checkedLectures.push(lecture._id);
-                        }
-                      } else {
-                        li.style.backgroundColor = "var(--white2)";
-                        menu_selectIcon.style.color = "var(--white2)";
-                        menu_selectIcon.title = "";
-                        for (var i = 0; i < checkedLectures.length; i++) {
-                          if (checkedLectures[i] === lecture._id) {
-                            checkedLectures.splice(i, 1);
-                          }
-                        }
-                      }
-                    });
-                    //.......Check box
-                    checkBox_partOfPlan.addEventListener("click",()=>{
-                      if(checkBox_partOfPlan.checked===true){
-                        this.editLecture({
-                          _id:lecture._id,
-                          lecture_name:lecture.lecture_name,
-                          lecture_course:lecture.lecture_course,
-                          lecture_instructor:lecture.lecture_instructor,
-                          lecture_writer:lecture.lecture_writer,
-                          lecture_date:lecture.lecture_date,
-                          lecture_length:lecture.lecture_length,
-                          lecture_progress:lecture.lecture_progress,
-                          lecture_pagesFinished:lecture.lecture_pagesFinished,
-                          lecture_outlines:lecture.lecture_outlines,
-                          lecture_partOfPlan:true,
-                          lecture_hidden:lecture.lecture_hidden
-                        })
-                      }else{
-                        this.editLecture({
-                          _id:lecture._id,
-                          lecture_name:lecture.lecture_name,
-                          lecture_course:lecture.lecture_course,
-                          lecture_instructor:lecture.lecture_instructor,
-                          lecture_writer:lecture.lecture_writer,
-                          lecture_date:lecture.lecture_date,
-                          lecture_length:lecture.lecture_length,
-                          lecture_progress:lecture.lecture_progress,
-                          lecture_pagesFinished:lecture.lecture_pagesFinished,
-                          lecture_outlines:lecture.lecture_outlines,
-                          lecture_partOfPlan:false,
-                          lecture_hidden:lecture.lecture_hidden
-                        })
-                      }
-                   
-                    })
-                    //.................
-                    menu_subdiv.append(menu_deleteIcon,menu_editIcon,menu_selectIcon);
-                    menu_div.append(menu_showIcon);
-                    div_pLi.append(p1,p2,p3,p4,p5,div_progression)
-                    div_indicatorBox_progression.append(div_indicator_progression)
-                    div_progression.append(p_progression, div_indicatorBox_progression,ul_pages_finished)
-                    li.append(div_pLi);
-                    div_partOfPlan.appendChild(checkBox_partOfPlan)
-                    if(lecture.lecture_outlines.length>0) li.append(div_outline)
-                    menuLi_div.append(menu_subdiv,menu_div,li,div_partOfPlan);
-                    ul.prepend(menuLi_div);
+                    }else{
+                      this.editLecture({
+                        _id:lecture._id,
+                        lecture_name:lecture.lecture_name,
+                        lecture_course:lecture.lecture_course,
+                        lecture_instructor:lecture.lecture_instructor,
+                        lecture_writer:lecture.lecture_writer,
+                        lecture_date:lecture.lecture_date,
+                        lecture_length:lecture.lecture_length,
+                        lecture_progress:lecture.lecture_progress,
+                        lecture_pagesFinished:lecture.lecture_pagesFinished,
+                        lecture_outlines:lecture.lecture_outlines,
+                        lecture_partOfPlan:false,
+                        lecture_hidden:lecture.lecture_hidden
+                      })
+                    }
+                 
+                  })
+                  //.........
+                  div_progression.addEventListener("click",()=>{
+                    let div_progressionInHTML=document.getElementById("div_progression")
+                      let i_close=document.createElement("i")
+                      i_close.setAttribute("class","fi fi-rr-cross-circle")
+                      div_progressionInHTML.innerHTML=""
+                      i_close.addEventListener("click",()=>{
+                        document.getElementById("div_progression").style.display="none"
+                        ul.style.opacity="1"
+                        ul_pages_finished.style.padding="0px"
+                        div_progression.append(p_progression, div_indicatorBox_progression)
+                      })
+                      ul.style.opacity="0"
+                      ul_pages_finished.style.height="fit-content"
+                      ul_pages_finished.style.padding="10px"
+                      div_progressionInHTML.style.display="flex"
+                      div_progressionInHTML.append(i_close,p_progression, div_indicatorBox_progression,ul_pages_finished)
+                  })
+                  //...........
+                  //.................
+                  menu_subdiv.append(menu_deleteIcon,menu_editIcon,menu_selectIcon);
+                  menu_div.append(menu_showIcon);
+                  div_p1.append(p1)
+                  div_pLi.append(p2,p3,p4,p5,div_progression)
+                  div_indicatorBox_progression.append(div_indicator_progression)
+                  div_progression.append(p_progression, div_indicatorBox_progression,ul_pages_finished)
+                  li.append(div_pLi);
+                  div_partOfPlan.appendChild(checkBox_partOfPlan)
+                  if(lecture.lecture_outlines.length>0) li.append(div_outline)
+                  menuLi_div.append(menu_subdiv,menu_div,div_p1,li,div_partOfPlan);
+                  ul.prepend(menuLi_div);
                 }
-            }
-          });
+                }
+              }
+            });
         }).then(()=>{
           this.calculateLectureNum()
         })
@@ -579,6 +639,8 @@ export default class SchoolPlanner extends Component {
           lecture_courses.push(lecture.lecture_course)
           if(lecture.lecture_hidden===false){
           let p1 = document.createElement("p");
+          let div_p1 = document.createElement("p");
+
           let p2 = document.createElement("p");
           let p3 = document.createElement("p");
           let p4 = document.createElement("p");
@@ -616,8 +678,9 @@ export default class SchoolPlanner extends Component {
               p.textContent=Number(i+1)+") "+lecture.lecture_outlines[i]
               div_outline.append(p)
             }
+
+          div_p1.setAttribute("class","div_p_lectureName fc")
           div_pLi.setAttribute("class", "schoolPlanner_lectures_div_pLi");
-         
           li.setAttribute("class","schoolPlanner_lectures_li fc")
           li.setAttribute("id", lecture._id + "li");
           menu_showIcon.setAttribute("class","fa fa-sharp fa-solid fa-bars");
@@ -662,29 +725,19 @@ export default class SchoolPlanner extends Component {
          for(var i = 0;i<lecture.lecture_length;i++){
           let pagenumber=Number(i+1)
           let p_num = document.createElement("p")
-          p_num.textContent=Number(i+1)
+          p_num.textContent=pagenumber
           p_num.addEventListener("click",()=>{
             this.setState({
-              lecture_isLoading:true
+              div_progression_isLoading:true
             })
             setTimeout(()=>{
-              console.log(lecture.lecture_pagesFinished.indexOf(pagenumber))
-              // let p_num_fontWeight = getComputedStyle(p_num).fontWeight
+              console.log(lecture.lecture_pagesFinished)
               if(lecture.lecture_pagesFinished.indexOf(pagenumber)==-1){
-              // if(p_num_fontWeight==="400"){
-                this.setPageFinishLecture(lecture,pagenumber,true)
-                p_num.style.backgroundColor="var(--green4)"
-                p_num.style.color="var(--white)"
-                p_num.style.fontWeight="bold"
+                this.setPageFinishLecture(lecture,pagenumber)
               }else{
-                this.setPageFinishLecture(lecture,p_num.textContent,false)
-                p_num.style.backgroundColor="var(--white2)"
-                p_num.style.color="black"
-                p_num.style.fontWeight="normal"
-              
+                this.setPageFinishLecture(lecture,pagenumber)
               }
-          // }
-        },3000)
+        },1000)
         })
         for(var j = 0;j<lecture.lecture_pagesFinished.length;j++){
           if(lecture.lecture_pagesFinished.indexOf(pagenumber)!==-1){
@@ -700,7 +753,7 @@ export default class SchoolPlanner extends Component {
           let menu_showIcon = document.getElementById(lecture._id + "menu_showIcon");
           let menu_subdiv = document.getElementById(lecture._id + "menu_subdiv");
             if(menu_showIcon.title ===""){
-              menu_subdiv.style.width="15%"
+              menu_subdiv.style.width="16%"
               menu_showIcon.title="clicked"
             }else{
               menu_subdiv.style.width="0"
@@ -824,13 +877,14 @@ export default class SchoolPlanner extends Component {
           //.................
           menu_subdiv.append(menu_deleteIcon,menu_editIcon,menu_selectIcon);
           menu_div.append(menu_showIcon);
-          div_pLi.append(p1,p2,p3,p4,p5,div_progression)
+          div_p1.append(p1)
+          div_pLi.append(p2,p3,p4,p5,div_progression)
           div_indicatorBox_progression.append(div_indicator_progression)
           div_progression.append(p_progression, div_indicatorBox_progression,ul_pages_finished)
           li.append(div_pLi);
           div_partOfPlan.appendChild(checkBox_partOfPlan)
           if(lecture.lecture_outlines.length>0) li.append(div_outline)
-          menuLi_div.append(menu_subdiv,menu_div,li,div_partOfPlan);
+          menuLi_div.append(menu_subdiv,menu_div,div_p1,li,div_partOfPlan);
           ul.prepend(menuLi_div);
         }
         });
@@ -911,29 +965,29 @@ export default class SchoolPlanner extends Component {
             courses_partOfPlan.push(course)
           }
           //..........................................
-          var div_dayAndTime=document.createElement("div")
+          var sec_dayAndTime=document.createElement("section")
           if(course.course_dayAndTime.length>0){
           var p_dayAndTime=[];
           for(var i=0;i<course.course_dayAndTime.length;i++){
             p_dayAndTime[i]  = document.createElement("p");
             p_dayAndTime[i].textContent=course.course_dayAndTime[i].day+" "+course.course_dayAndTime[i].time
-            div_dayAndTime.append(p_dayAndTime[i]) 
+            sec_dayAndTime.append(p_dayAndTime[i]) 
           }
         }else{
           p_dayAndTime = document.createElement("p");
           p_dayAndTime.textContent="-"
-          div_dayAndTime.append(p_dayAndTime) 
+          sec_dayAndTime.append(p_dayAndTime) 
         }
           let p1 = document.createElement("p");
           let p3 = document.createElement("p");
           let p4 = document.createElement("p");
           let p5 = document.createElement("p");
           
-          let div_instructors=document.createElement("div");
+          let sec_instructors=document.createElement("section");
           for(var i=0;i<course.course_instructors.length;i++){
             let p6 = document.createElement("p");
             p6.textContent=course.course_instructors[i]
-            div_instructors.append(p6)
+            sec_instructors.append(p6)
           }
 
           let p7 = document.createElement("p");
@@ -1030,9 +1084,9 @@ export default class SchoolPlanner extends Component {
           li.setAttribute("class","schoolPlanner_courses_li fr")
           li.setAttribute("id", course._id + "li");
 
-          div_dayAndTime.setAttribute("id","schoolPlanner_courses_dayAndTime_div")
-          div_dayAndTime.setAttribute("class","schoolPlanner_courses_dayAndTime_div")
-          div_instructors.setAttribute("class","fc schoolPlanner_courses_instructors_div")
+          sec_dayAndTime.setAttribute("id","schoolPlanner_courses_dayAndTime_div")
+          sec_dayAndTime.setAttribute("class","schoolPlanner_courses_dayAndTime_div")
+          sec_instructors.setAttribute("class","fc schoolPlanner_courses_instructors_div")
           menu_selectIcon.setAttribute("class","fa fa-sharp fa-solid fa-check");
           menu_selectIcon.setAttribute("title","");
           menu_selectIcon.setAttribute("id",course._id+"menu_selectIcon")
@@ -1108,11 +1162,11 @@ export default class SchoolPlanner extends Component {
           });
 
           div_pLi1.append(label1,p1)
-          div_pLi2.append(label2,div_dayAndTime)
+          div_pLi2.append(label2,sec_dayAndTime)
           div_pLi3.append(label3,p3)
           div_pLi4.append(label4,p4)
           div_pLi5.append(label5,p5)
-          div_pLi6.append(label6,div_instructors)
+          div_pLi6.append(label6,sec_instructors)
           div_pLi7.append(label7,p7)
           div_pLi8.append(label8,p8)
           div_pLi9.append(label9,p9)
@@ -1199,8 +1253,6 @@ export default class SchoolPlanner extends Component {
   //...............................................
   //..............EDIT COURSE....................
   editCourse = (object) => {
-    document.getElementById("schoolPlanner_addCourse_div").style.display =
-      "none";
       let url =
         "http://localhost:4000/api/user/editCourse/"+ this.props.state.my_id +"/" + target_editCourse;
       let options = {
@@ -1231,6 +1283,9 @@ export default class SchoolPlanner extends Component {
       fetch(req).then((result)=>{
         if(result.status===201){
           this.retrieveLectures()
+          document.getElementById("schoolPlanner_addCourse_div").style.display =
+          "none";
+          document.getElementById("schoolPlanner_lectures_labelsUl_container").style.opacity=1
       }
       });
   };
@@ -1334,6 +1389,7 @@ editCoursePages = async () => {
         })
         lectureInEdit={}
         document.getElementById("schoolPlanner_addLecture_div").style.display="none"
+        document.getElementById("schoolPlanner_lectures_labelsUl_container").style.opacity=1
         this.retrieveLectures()
       }})
   };
@@ -1362,6 +1418,7 @@ editCoursePages = async () => {
     fetch(req).then((lecture)=>{
       if(lecture.status===201){ 
         document.getElementById("schoolPlanner_addLecture_div").style.display="none"
+        document.getElementById("schoolPlanner_lectures_labelsUl_container").style.opacity=1
         this.retrieveLectures()
       }})
   };
@@ -1404,6 +1461,7 @@ editCoursePages = async () => {
     fetch(req).then((course)=>{
       if(course.status===201){ 
         document.getElementById("schoolPlanner_addCourse_div").style.display="none";
+        document.getElementById("schoolPlanner_lectures_labelsUl_container").style.opacity=1
         document.getElementById("schoolPlanner_courses_ul").innerHTML="";
         this.retrieveCourses()
       }})
@@ -1439,13 +1497,18 @@ editCoursePages = async () => {
         {}
       </aside>
       <div id="schoolPlanner_coursesDoor_div" className='fc'>
+        <i class="fi fi-rr-angle-left" id="schoolPlanner_coursesDoor_open_button" onClick={()=>{
+          document.getElementById("schoolPlanner_courses_aside").style.width=0
+          document.getElementById("schoolPlanner_coursesDoor_open_button").style.display="none"
+          document.getElementById("schoolPlanner_coursesDoor_close_button").style.display="inline"
+        }}></i> 
+        <i class="fi fi-rr-angle-right" style={{display:"none"}} id="schoolPlanner_coursesDoor_close_button" onClick={()=>{
+          document.getElementById("schoolPlanner_courses_aside").style.width="inherit"
+          document.getElementById("schoolPlanner_coursesDoor_open_button").style.display="inline"
+          document.getElementById("schoolPlanner_coursesDoor_close_button").style.display="none"
+        }}></i>
       </div>
       <section id="schoolPlanner_lectures_section">
-       {this.state.lecture_isLoading === true && (
-              <div id="lecture_loaderImg" className="loaderImg_div fc">
-                <img src="/img/loader.gif" alt="" width="50px" />
-              </div>
-            )}
               <nav id="schoolPlanner_lectures_nav" className="fr">
                 <button onClick={()=>this.openAddLectureForm({
                     buttonName:"Add"
@@ -1457,6 +1520,59 @@ editCoursePages = async () => {
                 </button>
                 <button id="schoolPlanner_lectures_hideUnchecked_button" onClick={()=>this.hideUncheckedLectures()}>Hide unchecked lectures</button>
                 <button id="schoolPlanner_lectures_unhideUnchecked_button" onClick={()=>this.unhideUncheckedLectures()}>Unhide unchecked lectures</button>
+                <button id="schoolPlanner_lectures_rtl_button" onClick={()=>{
+                  let schoolPlanner_lectures_tableLabels_section = document.getElementById("schoolPlanner_lectures_tableLabels_section")
+                  let schoolPlanner_lectures_ul = document.getElementById("schoolPlanner_lectures_ul")
+                  if(getComputedStyle(schoolPlanner_lectures_tableLabels_section).paddingRight==="29px"){
+                    schoolPlanner_lectures_tableLabels_section.style.paddingRight="35.33px"
+                    schoolPlanner_lectures_tableLabels_section.style.paddingLeft="29px"
+                    for (var i = 0;i<schoolPlanner_lectures_tableLabels_section.children.length;i++){
+                      schoolPlanner_lectures_tableLabels_section.children[i].style.order=schoolPlanner_lectures_tableLabels_section.children.length-Number(1+i)
+                    }
+                    for (var i = 0;i<schoolPlanner_lectures_tableLabels_section.children[1].children.length;i++){
+                      schoolPlanner_lectures_tableLabels_section.children[1].children[i].style.order=schoolPlanner_lectures_tableLabels_section.children[1].children.length-Number(1+i)
+                    }
+                    for (var i = 0;i<schoolPlanner_lectures_ul.children.length;i++){
+                      console.log(schoolPlanner_lectures_ul.children[i].children[0])
+                      schoolPlanner_lectures_ul.children[i].children[0].style.left="inherit"
+                      schoolPlanner_lectures_ul.children[i].children[0].style.right=0
+                      schoolPlanner_lectures_ul.children[i].children[0].style.paddingLeft="0px"
+                      schoolPlanner_lectures_ul.children[i].children[0].style.paddingRight="30px"
+                      schoolPlanner_lectures_ul.children[i].children[0].style.justifyContent="start"
+                      for(var j = 0;j<  schoolPlanner_lectures_ul.children[i].children.length;j++){
+                        schoolPlanner_lectures_ul.children[i].children[j].style.order= schoolPlanner_lectures_ul.children[i].children.length-Number(1+j)
+                        for(var z = 0;z< schoolPlanner_lectures_ul.children[i].children[3].children.length;z++){
+                          schoolPlanner_lectures_ul.children[i].children[3].children[z].style.order= schoolPlanner_lectures_ul.children[i].children[3].children.length-Number(1+z)
+                        }
+                      }
+                    }
+                  }else{
+                    schoolPlanner_lectures_tableLabels_section.style.paddingRight="29px"
+                    schoolPlanner_lectures_tableLabels_section.style.paddingLeft="35.33px"
+                    for (var i = 0;i<schoolPlanner_lectures_tableLabels_section.children.length;i++){
+                      schoolPlanner_lectures_tableLabels_section.children[i].style.order=i
+                    }
+                    for (var i = 0;i<schoolPlanner_lectures_tableLabels_section.children[1].children.length;i++){
+                      schoolPlanner_lectures_tableLabels_section.children[1].children[i].style.order=i
+                    }
+                    for (var i = 0;i<schoolPlanner_lectures_ul.children.length;i++){
+                      console.log(schoolPlanner_lectures_ul.children[i].children[0])
+                      schoolPlanner_lectures_ul.children[i].children[0].style.left=0
+                      schoolPlanner_lectures_ul.children[i].children[0].style.right="inherit"
+                      schoolPlanner_lectures_ul.children[i].children[0].style.paddingLeft="30px"
+                      schoolPlanner_lectures_ul.children[i].children[0].style.paddingRight="0px"
+                      schoolPlanner_lectures_ul.children[i].children[0].style.justifyContent="end"
+                      for(var j = 0;j<  schoolPlanner_lectures_ul.children[i].children.length;j++){
+                        schoolPlanner_lectures_ul.children[i].children[j].style.order= j
+                        for(var z = 0;z< schoolPlanner_lectures_ul.children[i].children[3].children.length;z++){
+                          schoolPlanner_lectures_ul.children[i].children[3].children[z].style.order= z
+                        }
+                      }
+                    }
+                  }
+                }}>
+                Right to Left
+                </button>
                 <div id="schoolPlanner_lectures_search_div" className='fr'>
                 <input placeholder='search' id="schoolPlanner_lectures_search_input" 
                 onKeyUp={(event)=>{
@@ -1476,17 +1592,24 @@ editCoursePages = async () => {
                 </button>
                 </div>
               </nav>
-              <section id="schoolPlanner_lectures_tableLabels_section">
-                <div id="schoolPlanner_lectures_tableLabels_div">
-                  <label>Lecture title</label>
-                  <label>Lecture course</label>
-                  <label>Instructor name</label>
-                  <label>Writer name</label>
-                  <label>Date</label>
-                  <label>Progression</label>
-                </div>
+              <section id="schoolPlanner_lectures_labelsUl_container" className='fc'>
+                {this.state.lecture_isLoading === true && (
+                  <div id="lecture_loaderImg" className="loaderImg_div fc">
+                    <img src="/img/loader.gif" alt="" width="50px" />
+                  </div>
+                )}
+                <section id="schoolPlanner_lectures_tableLabels_section" className='fr'>
+                  <label id="schoolPlanner_lectures_tableLabel_lectureName">Lecture title</label>
+                  <div id="schoolPlanner_lectures_tableLabels_div">
+                      <label>Lecture course</label>
+                      <label>Instructor name</label>
+                      <label>Writer name</label>
+                      <label>Date</label>
+                      <label>Progression</label>
+                  </div>
+                </section>
+                <ul id="schoolPlanner_lectures_ul"></ul>
               </section>
-              <ul id="schoolPlanner_lectures_ul"></ul>
               <div id="schoolPlanner_lectures_num_div" className='fr'>
                 <label id="schoolPlanner_lectures_num_label">
                   Number of lectures shown:
@@ -1906,6 +2029,11 @@ editCoursePages = async () => {
               </label>
       </div>
       <div id="div_progression" className='div_progression fc'>
+      {this.state.div_progression_isLoading === true && (
+                <div id="div_progression_loaderImg" className="loaderImg_div fc">
+                  <img src="/img/loader.gif" alt="" width="50px" />
+                </div>
+              )}
       </div>
     </article>
   </React.Fragment>

@@ -3,6 +3,7 @@ import AppRouter from "../AppRouter";
 import "../Login/login.css";
 import ReactDOM from "react-dom";
 import { Redirect, BrowserRouter as Router, Route } from "react-router-dom";
+import MTProto from "telegram-mtproto";
 
 const Login = () => {
   //.........................STATE............................//
@@ -219,14 +220,16 @@ const Login = () => {
       setSignup_ok(false);
     }
   };
-
   ////////////////////////////////////////////Create PROFILE//////////////////////////////////////
 
   return (
     <Router>
       <Route exact path="/">
         <article id="Login_article" className="fc">
-          <main id="Login_main" className="fc">
+          <main id="Login_main">
+            <section id="Login_column1_container">
+            </section>
+            <section className="fc" id="Login_column2_container">
             <section id="Login_loginLogo_container">
               <h1 id="Login_loginLogo_text">MCTOSH</h1>
               <h4 id="Login_subLoginLogo_text">Virtual Medicine</h4>
@@ -265,17 +268,17 @@ const Login = () => {
                     }
                   }}
                 />
-                <input
+                {/* <input
                   id="Login_email_input"
                   type="email"
                   placeholder="email address"
                   style={{ display: "none" }}
-                />
-                <input
+                /> */}
+                {/* <input
                   id="Login_dob_input"
                   type="date"
                   style={{ display: "none" }}
-                />
+                /> */}
                 <button id="Login_login_button" onClick={login}>
                   Log in
                 </button>
@@ -309,6 +312,9 @@ const Login = () => {
                 </h4>
               </section>
             </section>
+            </section>
+            <section id="Login_column3_container">
+            </section>
           </main>
           <footer id="Login_footer">
             <section id="Login_copyright_container">
@@ -320,6 +326,9 @@ const Login = () => {
               <img src="/img/loader.gif" alt="" width="100px" />
             </div>
           )}
+        </article>
+        <article id="test">
+
         </article>
       </Route>
       <Redirect to="/" />
