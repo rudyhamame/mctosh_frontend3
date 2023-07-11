@@ -27,8 +27,8 @@ const Login = () => {
       "Login_firstname_input"
     );
     let Login_lastname_input = document.getElementById("Login_lastname_input");
-    let Login_email_input = document.getElementById("Login_email_input");
-    let Login_dob_input = document.getElementById("Login_dob_input");
+    // let Login_email_input = document.getElementById("Login_email_input");
+    // let Login_dob_input = document.getElementById("Login_dob_input");
     let Login_signup_button = document.getElementById("Login_signup_button");
     let Login_login_button = document.getElementById("Login_login_button");
     let Login_loginShow_text = document.getElementById("Login_loginShow_text");
@@ -40,8 +40,8 @@ const Login = () => {
         setLogin_ok(null);
         Login_firstname_input.style.display = "initial";
         Login_lastname_input.style.display = "initial";
-        Login_email_input.style.display = "initial";
-        Login_dob_input.style.display = "initial";
+        // Login_email_input.style.display = "initial";
+        // Login_dob_input.style.display = "initial";
         Login_signup_button.style.display = "initial";
         Login_login_button.style.display = "none";
         Login_loginShow_text.style.display = "initial";
@@ -53,8 +53,8 @@ const Login = () => {
         Login_signup_button.style.display = "none";
         Login_signupShow_text.style.display = "initial";
         Login_login_button.style.display = "initial";
-        Login_email_input.style.display = "none";
-        Login_dob_input.style.display = "none";
+        // Login_email_input.style.display = "none";
+        // Login_dob_input.style.display = "none";
         Login_loginShow_text.style.display = "none";
         Login_firstname_input.style.display = "none";
         Login_lastname_input.style.display = "none";
@@ -174,15 +174,15 @@ const Login = () => {
       "Login_firstname_input"
     );
     let Login_lastname_input = document.getElementById("Login_lastname_input");
-    let Login_email_input = document.getElementById("Login_email_input");
-    let Login_dob_input = document.getElementById("Login_dob_input");
+    // let Login_email_input = document.getElementById("Login_email_input");
+    // let Login_dob_input = document.getElementById("Login_dob_input");
     //................................user....................................................
     if (
       Login_username_input.value &&
       Login_password_input.value &&
       Login_firstname_input.value &&
-      Login_lastname_input.value &&
-      Login_email_input.value
+      Login_lastname_input.value 
+      // Login_email_input.value
       // Login_dob_input.value
     ) {
       const url = "/api/user/signup";
@@ -195,8 +195,8 @@ const Login = () => {
           password: Login_password_input.value,
           firstname: Login_firstname_input.value,
           lastname: Login_lastname_input.value,
-          email: Login_email_input.value,
-          dob: Login_dob_input.value,
+          // email: Login_email_input.value,
+          // dob: Login_dob_input.value,
         }),
       };
       let req = new Request(url, options);
