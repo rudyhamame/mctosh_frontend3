@@ -45,7 +45,7 @@ export default class SchoolPlanner extends Component {
 
   setPageFinishLecture=async(lecture,pageNum)=>{
     let div_progression= document.getElementById("div_progression")
-    let url = "http://localhost:4000/api/user/setPageFinishLecture/"+ this.props.state.my_id+"/"+lecture._id;
+    let url = "https://backendstep.onrender.com/api/user/setPageFinishLecture/"+ this.props.state.my_id+"/"+lecture._id;
     let options = {
       method: "PUT",
       mode: "cors",
@@ -92,7 +92,7 @@ export default class SchoolPlanner extends Component {
     this.setState({
       lecture_isLoading:true
     })
-    let url = "http://localhost:4000/api/user/hideUncheckedLectures/"+ this.props.state.my_id;
+    let url = "https://backendstep.onrender.com/api/user/hideUncheckedLectures/"+ this.props.state.my_id;
     let options = {
       method: "PUT",
       mode: "cors",
@@ -116,7 +116,7 @@ export default class SchoolPlanner extends Component {
     this.setState({
       lecture_isLoading:true
     })
-    let url = "http://localhost:4000/api/user/unhideUncheckedLectures/"+ this.props.state.my_id;
+    let url = "https://backendstep.onrender.com/api/user/unhideUncheckedLectures/"+ this.props.state.my_id;
     let options = {
       method: "PUT",
       mode: "cors",
@@ -331,7 +331,7 @@ export default class SchoolPlanner extends Component {
       })
       let ul = document.getElementById("schoolPlanner_lectures_ul");
       ul.innerHTML=""
-      let url = "http://localhost:4000/api/user/update/" + this.props.state.my_id;
+      let url = "https://backendstep.onrender.com/api/user/update/" + this.props.state.my_id;
       let req = new Request(url, {
         method: "GET",
         mode: "cors",
@@ -620,7 +620,7 @@ export default class SchoolPlanner extends Component {
     })
     let ul = document.getElementById("schoolPlanner_lectures_ul");
     ul.innerHTML=""
-    let url = "http://localhost:4000/api/user/update/" + this.props.state.my_id;
+    let url = "https://backendstep.onrender.com/api/user/update/" + this.props.state.my_id;
     let req = new Request(url, {
       method: "GET",
       mode: "cors",
@@ -944,7 +944,7 @@ export default class SchoolPlanner extends Component {
     let ul = document.getElementById("schoolPlanner_courses_ul");
     ul.innerHTML=""
     document.getElementById("schoolPlanner_courses_ul").innerHTML="";
-    let url = "http://localhost:4000/api/user/update/" + this.props.state.my_id;
+    let url = "https://backendstep.onrender.com/api/user/update/" + this.props.state.my_id;
     let req = new Request(url, {
       method: "GET",
       mode: "cors",
@@ -1232,7 +1232,7 @@ export default class SchoolPlanner extends Component {
     for (var i = 0; i < checkedLectures.length; i++) {
       console.log(checkedLectures[i])
       let url =
-        "http://localhost:4000/api/user/deleteLecture/"+ this.props.state.my_id +"/" + checkedLectures[i];
+        "https://backendstep.onrender.com/api/user/deleteLecture/"+ this.props.state.my_id +"/" + checkedLectures[i];
       let options = {
         method: "DELETE", 
         mode: "cors",
@@ -1258,7 +1258,7 @@ export default class SchoolPlanner extends Component {
     //......DELETEING item FROM itemS DB
     for (var i = 0; i < checkedCourses.length; i++) {
       let url =
-        "http://localhost:4000/api/user/deleteCourse/"+ this.props.state.my_id +"/" + checkedCourses[i];
+        "https://backendstep.onrender.com/api/user/deleteCourse/"+ this.props.state.my_id +"/" + checkedCourses[i];
       let options = {
         method: "DELETE", 
         mode: "cors",
@@ -1281,7 +1281,7 @@ export default class SchoolPlanner extends Component {
   //..............EDIT COURSE....................
   editCourse = (object) => {
       let url =
-        "http://localhost:4000/api/user/editCourse/"+ this.props.state.my_id +"/" + target_editCourse;
+        "https://backendstep.onrender.com/api/user/editCourse/"+ this.props.state.my_id +"/" + target_editCourse;
       let options = {
         method: "POST", 
         mode: "cors",
@@ -1321,7 +1321,7 @@ export default class SchoolPlanner extends Component {
     document.getElementById("schoolPlanner_addCourse_div").style.display =
       "none";
       let url =
-        "http://localhost:4000/api/user/editCourse/"+ this.props.state.my_id +"/" + target_editCourse;
+        "https://backendstep.onrender.com/api/user/editCourse/"+ this.props.state.my_id +"/" + target_editCourse;
       let options = {
         method: "POST", 
         mode: "cors",
@@ -1363,7 +1363,7 @@ editCoursePages = async () => {
   })
   for(var i = 0;i<course_pages.length;i++){
     let url =
-      "http://localhost:4000/api/user/editCoursePages/"+ this.props.state.my_id +"/" + course_pages[i].course_name;
+      "https://backendstep.onrender.com/api/user/editCoursePages/"+ this.props.state.my_id +"/" + course_pages[i].course_name;
     let options = {
       method: "POST", 
       mode: "cors",
@@ -1398,7 +1398,7 @@ editCoursePages = async () => {
     this.setState({
       lecture_isLoading:true
     })
-    let url = "http://localhost:4000/api/user/editLecture/"+ this.props.state.my_id+"/"+object._id;
+    let url = "https://backendstep.onrender.com/api/user/editLecture/"+ this.props.state.my_id+"/"+object._id;
     let options = {
       method: "POST",
       mode: "cors",
@@ -1430,7 +1430,7 @@ editCoursePages = async () => {
     if (!object.lecture_date)  object.lecture_date="-"
     if (!object.lecture_length)  object.lecture_length=0
     if (!object.lecture_progress)  object.lecture_progress=0
-    let url = "http://localhost:4000/api/user/addLecture/"+ this.props.state.my_id;
+    let url = "https://backendstep.onrender.com/api/user/addLecture/"+ this.props.state.my_id;
     let options = {
       method: "POST",
       mode: "cors",
@@ -1460,7 +1460,7 @@ editCoursePages = async () => {
     if (object.course_class==="Course classification")  object.course_class="-"
     if (object.course_status==="Course status")  object.course_status="-"
 
-    let url = "http://localhost:4000/api/user/addCourse/"+ this.props.state.my_id;
+    let url = "https://backendstep.onrender.com/api/user/addCourse/"+ this.props.state.my_id;
     let options = {
       method: "POST",
       mode: "cors",
