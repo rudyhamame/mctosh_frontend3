@@ -45,7 +45,7 @@ export default class SchoolPlanner extends Component {
 
   setPageFinishLecture=async(lecture,pageNum)=>{
     let div_progression= document.getElementById("div_progression")
-    let url = "https://backendstep.onrender.com/api/user/setPageFinishLecture/"+ this.props.state.my_id+"/"+lecture._id;
+    let url = "http://localhost:4000/api/user/setPageFinishLecture/"+ this.props.state.my_id+"/"+lecture._id;
     let options = {
       method: "PUT",
       mode: "cors",
@@ -92,7 +92,7 @@ export default class SchoolPlanner extends Component {
     this.setState({
       lecture_isLoading:true
     })
-    let url = "https://backendstep.onrender.com/api/user/hideUncheckedLectures/"+ this.props.state.my_id;
+    let url = "http://localhost:4000/api/user/hideUncheckedLectures/"+ this.props.state.my_id;
     let options = {
       method: "PUT",
       mode: "cors",
@@ -116,7 +116,7 @@ export default class SchoolPlanner extends Component {
     this.setState({
       lecture_isLoading:true
     })
-    let url = "https://backendstep.onrender.com/api/user/unhideUncheckedLectures/"+ this.props.state.my_id;
+    let url = "http://localhost:4000/api/user/unhideUncheckedLectures/"+ this.props.state.my_id;
     let options = {
       method: "PUT",
       mode: "cors",
@@ -140,8 +140,12 @@ export default class SchoolPlanner extends Component {
   calculateLectureNum=()=>{
     let ul_lectures_array =document.getElementById("schoolPlanner_lectures_ul").children
     let lecturesShown_p=document.getElementById("schoolPlanner_lectures_num_p")
+    if(!document.getElementById("p_noLectures")){
     lecturesShownNum = Number(ul_lectures_array.length)
     lecturesShown_p.textContent=lecturesShownNum
+  }else{
+    lecturesShown_p.textContent="0"
+  }
   }
 
   openAddLectureForm = (object) => {
@@ -327,7 +331,7 @@ export default class SchoolPlanner extends Component {
       })
       let ul = document.getElementById("schoolPlanner_lectures_ul");
       ul.innerHTML=""
-      let url = "https://backendstep.onrender.com/api/user/update/" + this.props.state.my_id;
+      let url = "http://localhost:4000/api/user/update/" + this.props.state.my_id;
       let req = new Request(url, {
         method: "GET",
         mode: "cors",
@@ -616,7 +620,7 @@ export default class SchoolPlanner extends Component {
     })
     let ul = document.getElementById("schoolPlanner_lectures_ul");
     ul.innerHTML=""
-    let url = "https://backendstep.onrender.com/api/user/update/" + this.props.state.my_id;
+    let url = "http://localhost:4000/api/user/update/" + this.props.state.my_id;
     let req = new Request(url, {
       method: "GET",
       mode: "cors",
@@ -888,6 +892,18 @@ export default class SchoolPlanner extends Component {
           ul.prepend(menuLi_div);
         }
         });
+        if(lecture_sorted.length==0){
+          let p = document.createElement("p")
+          p.textContent="There is no lectures available to show at this time"
+          ul.style.alignItems="center"
+          ul.style.justifyContent="center"
+          p.style.color="var(--white)"
+          p.style.fontSize="12px"
+          p.style.padding="10px"
+          p.setAttribute("id","p_noLectures")
+          ul.append(p);
+        }
+
         return {
           lecture_courses:lecture_courses,
           jsonData:jsonData
@@ -928,7 +944,7 @@ export default class SchoolPlanner extends Component {
     let ul = document.getElementById("schoolPlanner_courses_ul");
     ul.innerHTML=""
     document.getElementById("schoolPlanner_courses_ul").innerHTML="";
-    let url = "https://backendstep.onrender.com/api/user/update/" + this.props.state.my_id;
+    let url = "http://localhost:4000/api/user/update/" + this.props.state.my_id;
     let req = new Request(url, {
       method: "GET",
       mode: "cors",
@@ -1179,6 +1195,17 @@ export default class SchoolPlanner extends Component {
           li.append(div_pLi,menu_div);
           ul.prepend(li);
         })
+        if(jsonData.schoolPlanner.courses.length==0){
+          let p = document.createElement("p")
+          p.textContent="There is no courses available to show at this time"
+          ul.style.alignItems="center"
+          ul.style.justifyContent="center"
+          p.style.color="var(--white)"
+          p.style.fontSize="12px"
+          p.style.textAlign="center"
+          p.style.padding="10px"
+          ul.append(p);
+        }
       }).then(()=>{
         console.log(courses_partOfPlan)
         //....TO ADD COURSE NAMES OPTIONS TO SELECT COURSE IN LECTURE ADD FORM 
@@ -1205,7 +1232,7 @@ export default class SchoolPlanner extends Component {
     for (var i = 0; i < checkedLectures.length; i++) {
       console.log(checkedLectures[i])
       let url =
-        "https://backendstep.onrender.com/api/user/deleteLecture/"+ this.props.state.my_id +"/" + checkedLectures[i];
+        "http://localhost:4000/api/user/deleteLecture/"+ this.props.state.my_id +"/" + checkedLectures[i];
       let options = {
         method: "DELETE", 
         mode: "cors",
@@ -1231,7 +1258,7 @@ export default class SchoolPlanner extends Component {
     //......DELETEING item FROM itemS DB
     for (var i = 0; i < checkedCourses.length; i++) {
       let url =
-        "https://backendstep.onrender.com/api/user/deleteCourse/"+ this.props.state.my_id +"/" + checkedCourses[i];
+        "http://localhost:4000/api/user/deleteCourse/"+ this.props.state.my_id +"/" + checkedCourses[i];
       let options = {
         method: "DELETE", 
         mode: "cors",
@@ -1254,7 +1281,7 @@ export default class SchoolPlanner extends Component {
   //..............EDIT COURSE....................
   editCourse = (object) => {
       let url =
-        "https://backendstep.onrender.com/api/user/editCourse/"+ this.props.state.my_id +"/" + target_editCourse;
+        "http://localhost:4000/api/user/editCourse/"+ this.props.state.my_id +"/" + target_editCourse;
       let options = {
         method: "POST", 
         mode: "cors",
@@ -1294,7 +1321,7 @@ export default class SchoolPlanner extends Component {
     document.getElementById("schoolPlanner_addCourse_div").style.display =
       "none";
       let url =
-        "https://backendstep.onrender.com/api/user/editCourse/"+ this.props.state.my_id +"/" + target_editCourse;
+        "http://localhost:4000/api/user/editCourse/"+ this.props.state.my_id +"/" + target_editCourse;
       let options = {
         method: "POST", 
         mode: "cors",
@@ -1336,7 +1363,7 @@ editCoursePages = async () => {
   })
   for(var i = 0;i<course_pages.length;i++){
     let url =
-      "https://backendstep.onrender.com/api/user/editCoursePages/"+ this.props.state.my_id +"/" + course_pages[i].course_name;
+      "http://localhost:4000/api/user/editCoursePages/"+ this.props.state.my_id +"/" + course_pages[i].course_name;
     let options = {
       method: "POST", 
       mode: "cors",
@@ -1371,7 +1398,7 @@ editCoursePages = async () => {
     this.setState({
       lecture_isLoading:true
     })
-    let url = "https://backendstep.onrender.com/api/user/editLecture/"+ this.props.state.my_id+"/"+object._id;
+    let url = "http://localhost:4000/api/user/editLecture/"+ this.props.state.my_id+"/"+object._id;
     let options = {
       method: "POST",
       mode: "cors",
@@ -1403,7 +1430,7 @@ editCoursePages = async () => {
     if (!object.lecture_date)  object.lecture_date="-"
     if (!object.lecture_length)  object.lecture_length=0
     if (!object.lecture_progress)  object.lecture_progress=0
-    let url = "https://backendstep.onrender.com/api/user/addLecture/"+ this.props.state.my_id;
+    let url = "http://localhost:4000/api/user/addLecture/"+ this.props.state.my_id;
     let options = {
       method: "POST",
       mode: "cors",
@@ -1419,6 +1446,7 @@ editCoursePages = async () => {
       if(lecture.status===201){ 
         document.getElementById("schoolPlanner_addLecture_div").style.display="none"
         document.getElementById("schoolPlanner_lectures_labelsUl_container").style.opacity=1
+        document.getElementById("schoolPlanner_lectures_ul").style.justifyContent="start"
         this.retrieveLectures()
       }})
   };
@@ -1432,7 +1460,7 @@ editCoursePages = async () => {
     if (object.course_class==="Course classification")  object.course_class="-"
     if (object.course_status==="Course status")  object.course_status="-"
 
-    let url = "https://backendstep.onrender.com/api/user/addCourse/"+ this.props.state.my_id;
+    let url = "http://localhost:4000/api/user/addCourse/"+ this.props.state.my_id;
     let options = {
       method: "POST",
       mode: "cors",
@@ -1463,6 +1491,7 @@ editCoursePages = async () => {
         document.getElementById("schoolPlanner_addCourse_div").style.display="none";
         document.getElementById("schoolPlanner_lectures_labelsUl_container").style.opacity=1
         document.getElementById("schoolPlanner_courses_ul").innerHTML="";
+        document.getElementById("schoolPlanner_courses_ul").style.justifyContent="start"
         this.retrieveCourses()
       }})
     }else{
@@ -1620,15 +1649,15 @@ editCoursePages = async () => {
       </div>
       <div id="schoolPlanner_planDoor_div" className='fc'>
         <i class="fi fi-rr-calendar-clock" onClick={()=>{
+          let schoolPlanner_plan_days_wrapper=document.getElementById("schoolPlanner_plan_days_wrapper")
           let schoolPlanner_plan_aside = document.getElementById("schoolPlanner_plan_aside")
           let schoolPlanner_coursesLectures_wrapper= document.getElementById("schoolPlanner_coursesLectures_wrapper")
           let schoolPlanner_plan_aside_width = getComputedStyle(schoolPlanner_plan_aside).width
+          schoolPlanner_plan_days_wrapper.innerHTML=""
           if(schoolPlanner_plan_aside_width==="0px"){
-            schoolPlanner_coursesLectures_wrapper.style.width="0"     
             schoolPlanner_plan_aside.style.width="100vw"  
-            //..........
-              let schoolPlanner_plan_days_wrapper=document.getElementById("schoolPlanner_plan_days_wrapper")
-              schoolPlanner_plan_days_wrapper.innerHTML=""
+            schoolPlanner_coursesLectures_wrapper.style.width="0" 
+            if(courses_partOfPlan.length>0){   
               let coursesDays=[]
               courses_partOfPlan.forEach((course)=>{
                 var examDateinMillisec=new Date(course.exam_date)
@@ -1683,9 +1712,20 @@ editCoursePages = async () => {
               }            
             //...........   
           }else{
-            schoolPlanner_coursesLectures_wrapper.style.width="100%"
-            schoolPlanner_plan_aside.style.width="0"     
+            let p = document.createElement("p")
+            p.textContent="There is no plans available to show at this time"
+            schoolPlanner_plan_days_wrapper.style.alignItems="center"
+            schoolPlanner_plan_days_wrapper.style.justifyContent="center"
+            p.style.color="var(--white)"
+            p.style.fontSize="12px"
+            p.style.padding="10px"
+            p.setAttribute("id","p_noPlans")
+            schoolPlanner_plan_days_wrapper.append(p);
           }
+        }else{
+          schoolPlanner_coursesLectures_wrapper.style.width="100%"
+          schoolPlanner_plan_aside.style.width="0"  
+        }
         }}></i>
       </div>
       <aside id="schoolPlanner_plan_aside" style={{width:"0px"}} className='fc'>

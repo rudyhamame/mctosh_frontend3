@@ -20,7 +20,17 @@ const Login = () => {
   //.........................DECLARATION......................//
 
   //.........................formControl & formControl (functions)..........................//
-
+  //........Server answer..........
+    const serverReply = (answer) => {
+      document.getElementById("server_answer_message").textContent = answer;
+  
+      document.getElementById("server_answer").style.width = "fit-content";
+      setTimeout(() => {
+        document.getElementById("server_answer").style.width = "0";
+        document.getElementById("server_answer_message").textContent = "";
+      }, 8000);
+    };
+  
   const formControl = (text) => {
     let Login_firstname_input = document.getElementById(
       "Login_firstname_input"
@@ -69,7 +79,7 @@ const Login = () => {
     let Login_password_input = document.getElementById("Login_password_input");
     if (Login_password_input.value && Login_username_input.value) {
       setIs_loading(true);
-      let url = "https://backendstep.onrender.com/api/user/login/";
+      let url = "http://localhost:4000/api/user/login/";
       let req = new Request(url, {
         method: "POST",
         mode: "cors",
@@ -86,7 +96,8 @@ const Login = () => {
             return response.json(response);
           }
           if (response.status === 401) {
-            setLogin_ok(false);
+            serverReply("UNSUCCESSFUL LOG IN. WRONG USERNAME AND/OR PASSWORD")
+            setLogin_ok(false)
             setIs_loading(false);
             return response.json(response);
           }
@@ -109,14 +120,17 @@ const Login = () => {
               courses:userdata.user.schoolPlanner.courses,
               lectures:userdata.user.schoolPlanner.lectures
             });
-            setLogin_ok(true);
+            serverReply("YOU HAVE SUCCESSFULLY LOGGED IN!")
+            setLogin_ok(true)
           } else {
-            setLogin_ok(false);
+            serverReply("UNSUCCESSFUL LOG IN. WRONG USERNAME AND/OR PASSWORD")
             setIs_loading(false);
+            setLogin_ok(false)
           }
         });
     } else {
-      setLogin_ok(false);
+      serverReply("UNSUCCESSFUL LOG IN. WRONG USERNAME AND/OR PASSWORD")
+      setLogin_ok(false)
       setIs_loading(false);
     }
   };
@@ -184,7 +198,7 @@ const Login = () => {
       // Login_email_input.value
       // Login_dob_input.value
     ) {
-      const url = "https://backendstep.onrender.com/api/user/signup";
+      const url = "http://localhost:4000/api/user/signup";
       const options = {
         method: "POST",
         mode: "cors",
@@ -203,12 +217,14 @@ const Login = () => {
         .then((response) => {
           if (response.status === 201) {
             setIs_loading(false);
-            setSignup_ok(true);
+            serverReply("YOU HAVE SUCCESSFULLY SIGNED UP!")
+            setSignup_ok(true)
             return response.json()
             // document.getElementById("Login_loginFrom_form").reset();
           } else {
             setIs_loading(false);
-            setSignup_ok(false);
+            setSignup_ok(false)
+            serverReply("UNSUCCESSFUL SIGN UP. PLEASE FILL OUT THE FORM WITH VALID INFORMATION")
           }
         })
         .catch((err) => {
@@ -216,7 +232,8 @@ const Login = () => {
         });
     } else {
       setIs_loading(false);
-      setSignup_ok(false);
+      setSignup_ok(false)
+      serverReply("UNSUCCESSFUL SIGN UP. PLEASE FILL OUT THE FORM WITH VALID INFORMATION")
     }
   };
   ////////////////////////////////////////////Create PROFILE//////////////////////////////////////
@@ -302,13 +319,6 @@ const Login = () => {
                 >
                   Sign up?
                 </h4>
-                <h4 style={{ overflowWrap: "break-word", color: "red" }}>
-                  {login_ok === false &&
-                    "The password you entered is not correct, please try again"}
-                  {signup_ok === true && "You have successfully signed up!"}
-                  {signup_ok === false &&
-                    "Please make sure you entered valid information"}
-                </h4>
               </section>
             </section>
             </section>
@@ -326,9 +336,14 @@ const Login = () => {
             </div>
           )}
         </article>
-        <article id="test">
-
-        </article>
+        <div
+          id="server_answer"
+          onClick={() => {
+            document.getElementById("server_answer").style.width = "0";
+          }}
+        >
+          <p id="server_answer_message"></p>
+        </div>
       </Route>
       <Redirect to="/" />
     </Router>

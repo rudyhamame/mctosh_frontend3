@@ -176,7 +176,8 @@ color: var(--white);
 #schoolPlanner_courses_ul{
     overflow: scroll;
     gap:5px;
-    background-color: var(--green4);
+    flex-grow: 1;
+    justify-content: start;
 }
 #schoolPlanner_lectures_tableLabels_div label,
 #schoolPlanner_courses_ulLabels_div label {
@@ -264,6 +265,7 @@ color: var(--white);
 
 .menuLi_div {
     position: relative;
+    width: 100%;
 }
 
 .schoolPlanner_lectures_editSection_editButton {
@@ -583,4 +585,10 @@ input[type=checkbox]:checked:after {
     position: absolute;
     top: 2px;
     left: 4px;
+}
+#p_noPlans{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
