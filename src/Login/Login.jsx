@@ -3,7 +3,6 @@ import AppRouter from "../AppRouter";
 import "../Login/login.css";
 import ReactDOM from "react-dom";
 import { Redirect, BrowserRouter as Router, Route } from "react-router-dom";
-import MTProto from "telegram-mtproto";
 
 const Login = () => {
   //.........................STATE............................//
@@ -99,7 +98,7 @@ const Login = () => {
               username: userdata.user.info.username,
               firstname: userdata.user.info.firstname,
               lastname: userdata.user.info.lastname,
-              dob: userdata.user.info.dob,
+              // dob: userdata.user.info.dob,
               token: userdata.token,
               isConnected: true,
               notes: userdata.user.notes,
@@ -185,7 +184,7 @@ const Login = () => {
       // Login_email_input.value
       // Login_dob_input.value
     ) {
-      const url = "/api/user/signup";
+      const url = "https://backendstep.onrender.com/api/user/signup";
       const options = {
         method: "POST",
         mode: "cors",
