@@ -137,9 +137,10 @@ color: var(--white);
 #schoolPlanner_lectures_tableLabels_section{
     background-color: var(--green3);
     align-items: center;
-    z-index: 10;
+    z-index: 1;
     padding-left: 35.33px;
     padding-right: 29px;
+    box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.199);
 }
 #schoolPlanner_courses_ulLabels_div {
     display: flex;
@@ -232,7 +233,7 @@ color: var(--white);
 
 .lecuturesTable_menu_subdiv {
     width: 0;
-    background-color: var(--green2);
+    background-color: #4c4c4c;
     justify-content: end;
     order: 0;
     align-items: center;
@@ -543,13 +544,14 @@ justify-content: space-between;
 
 }
 .div_p_lectureName{
-    background-color: var(--white);
+    background-color: var(--green3);
     height: 100%;
     align-items: center;
     justify-content: center;
     width: 150px;
     font-size: 10px;
-    color: black; 
+    color: var(--white); 
+    box-shadow: 1px 4px 10px rgba(0, 0, 0, 0.696);
 }
 .div_p_lectureName p{
     padding: 10px;
@@ -591,4 +593,22 @@ input[type=checkbox]:checked:after {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+.p_telegram{
+padding: 7px;
+background-color: var(--white);
+box-shadow: 1px 4px 10px rgba(0, 0, 0, 0.231);
+color: var(--black);
+font-size: 12px;
+border-radius: 30px;
+}
+#telegram_messages{
+    align-items: end;
+    gap: 5px;
+    padding: 10px;
+    overflow: scroll;
+}
+#peerID_div{
+    position: absolute;
+    
 }

@@ -81,6 +81,7 @@ class App extends React.Component {
   };
   /////////////////////////////////////////////////////Lifecycle//////////////////////////
   componentDidMount() {
+    console.log(this.state.my_id);
     this.setState({
       my_id: JSON.parse(sessionStorage.getItem("state")).my_id,
       username: JSON.parse(sessionStorage.getItem("state")).username,

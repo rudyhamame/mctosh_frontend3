@@ -1645,6 +1645,12 @@ editCoursePages = async () => {
                 </label>
                 <p id="schoolPlanner_lectures_num_p"></p>
               </div>
+              {/* <ul id="telegram_messages" className='fc'>
+              </ul> */}
+              {/* <div id="telegram_messages_count_div" className='fr'>
+                <p id="telegram_messages_count_p1">Number of messages: </p>
+                <p id="telegram_messages_count_p2"></p>
+              </div> */}
       </section>
       </div>
       <div id="schoolPlanner_planDoor_div" className='fc'>
@@ -1653,6 +1659,7 @@ editCoursePages = async () => {
           let schoolPlanner_plan_aside = document.getElementById("schoolPlanner_plan_aside")
           let schoolPlanner_coursesLectures_wrapper= document.getElementById("schoolPlanner_coursesLectures_wrapper")
           let schoolPlanner_plan_aside_width = getComputedStyle(schoolPlanner_plan_aside).width
+        
           schoolPlanner_plan_days_wrapper.innerHTML=""
           if(schoolPlanner_plan_aside_width==="0px"){
             schoolPlanner_plan_aside.style.width="100vw"  
@@ -2075,6 +2082,35 @@ editCoursePages = async () => {
                 </div>
               )}
       </div>
+      {/* <div id="peerID_div">
+        <input id="peerID_input"></input>
+        <button onClick={()=>{
+            let peerID_input = document.getElementById("peerID_input").value
+            let telegram_ul = document.getElementById("telegram_messages")
+            let url = "https://backendstep.onrender.com/api/user/telegram/"+this.props.state.my_id+"/"+peerID_input;
+            let req = new Request(url, {
+              method: "GET",
+              mode: "cors",
+              headers: { "Content-Type": "application/json" },
+            });
+            fetch(req)
+              .then((response) => {
+               return response.json()
+               }).then((messages)=>{
+                console.log(messages.messages)
+                 telegram_ul.innerHTML=""
+                 messages.messages.forEach((message)=>{
+                   let p=document.createElement("p")
+                   p.setAttribute("class","p_telegram")
+                   p.textContent=message
+                   telegram_ul.append(p)
+                 })
+               }).then(()=>{
+                document.getElementById("telegram_messages_count_p2").textContent=telegram_ul.children.length
+               })    
+        }}>Click</button>
+      </div> */}
+     
     </article>
   </React.Fragment>
   )
