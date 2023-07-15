@@ -1,6 +1,7 @@
 //...........IMPORT..........
 import React, { createElement, useEffect } from 'react'
 import "./study.css"
+import Settings from './components/Settings'
 //.........VARIABLES.................
 var keywordStructure
 var keywordStructureProperty
@@ -11,13 +12,10 @@ var keywordStructurePropertySelectedSubjectArray =[]
 var keywordStructurePropertySelectedObjectArray =[]
 var keywordFuctionPropertySelected
 var keywordFunctionProperty
-var propertyObjectInEdit
-var dataTypeinEdit
-var unitsInMemoryRetrieved=[]
-var dataTypesInMemoryRetrieved=[]
+
 var setsInMemoryRetrieved=[]
 var propertyObjectsRetrieved=[]
-var keywordObjectInEdit
+var functionInMemory_InEdit_id
 var itemsOfSetInWorkingArray = []
 //.............................
 const Study = (props) => {
@@ -33,13 +31,14 @@ const Study = (props) => {
     retrieveKeywords("changeFactor",true)
     retrieveKeywords("Structure",true)
     retrieveKeywords("Function",true)
+    retrieveKeywords("functionName_inMemory",true)
   },[])
 
   //...........deleteCustomize..................
   const deleteCustomize=(customizeID,type)=>{
     setIs_loading(true)
     let url =
-    "https://backendstep.onrender.com/api/user/deleteCustomize/" +
+    "http://localhost:4000/api/user/deleteCustomize/" +
     props.state.my_id+"/"+customizeID+"/"+type;
   let options = {
     method: "DELETE",
@@ -61,7 +60,7 @@ const Study = (props) => {
   const editCustomize=(object,propertyObjectID,type)=>{
     setIs_loading(true)
     let url =
-    "https://backendstep.onrender.com/api/user/editCustomize/" +
+    "http://localhost:4000/api/user/editCustomize/" +
     props.state.my_id+"/"+propertyObjectID+"/"+type;
   let options = {
     method: "PUT",
@@ -96,7 +95,7 @@ const Study = (props) => {
   const editPropertyObjectAndUnitCustomize=(object)=>{
     setIs_loading(true)
     let url =
-    "https://backendstep.onrender.com/api/user/editPropertyObjectAndUnitCustomize/" +
+    "http://localhost:4000/api/user/editPropertyObjectAndUnitCustomize/" +
     props.state.my_id+"/"+object.propertyObject._id;
   let options = {
     method: "PUT",
@@ -123,7 +122,7 @@ const Study = (props) => {
   //..........addCustomize
   const addCustomize=(object,type)=>{
     let url =
-    "https://backendstep.onrender.com/api/user/addCustomize/" +
+    "http://localhost:4000/api/user/addCustomize/" +
     props.state.my_id+"/"+type;
   let options = {
     method: "POST",
@@ -154,7 +153,7 @@ const Study = (props) => {
    //..........addMemory
    const addMemory=(object,type)=>{
     let url =
-    "https://backendstep.onrender.com/api/user/addMemory/" +
+    "http://localhost:4000/api/user/addMemory/" +
     props.state.my_id+"/"+type;
   let options = {
     method: "POST",
@@ -175,6 +174,13 @@ const Study = (props) => {
         case "set_inMemory": document.getElementById("study_settingsCustomization_content_inMemorySets_setInput").value=""
         break
         case "unit_inMemory": document.getElementById("study_settingsCustomization_content_inMemoryUnit_unitInput").value=""
+        case "functionName_inMemory": {
+          document.getElementById("study_settingsCustomization_content_inMemory_functionNameInput").value=""
+          document.getElementById("study_settingsCustomization_content_inMemory_functionClassInput").value=""
+          document.getElementById("study_settingsCustomization_content_inMemory_functionFamilyInput").value=""
+
+        }
+
         break
       }
 
@@ -183,32 +189,13 @@ const Study = (props) => {
     }
   })
   }
-  //..........addMemory
-  const deleteMemory=(memoryID,type)=>{
-    let url =
-    "https://backendstep.onrender.com/api/user/deleteMemory/" +
-    props.state.my_id+"/"+memoryID+"/"+type;
-    let options = {
-      method: "DELETE",
-      mode: "cors",
-      headers: {
-        Authorization: "Bearer " + props.state.token,
-        "Content-Type": "application/json",
-      },
-    };
-    let req = new Request(url, options);
-    fetch(req).then((response)=>{
-      if(response.status===201){
-        retrieveKeywords(type,true)
-      }
-    })
-  }
+
   //..........editMemory
-  const editMemory=(object,memoryID,type)=>{
+  const editMemory=(object,id,type)=>{
     setIs_loading(true)
     let url =
-    "https://backendstep.onrender.com/api/user/editMemory/" +
-    props.state.my_id+"/"+memoryID+"/"+type;
+    "http://localhost:4000/api/user/editMemory/" +
+    props.state.my_id+"/"+id+"/"+type;
     let options = {
       method: "PUT",
       mode: "cors",
@@ -223,6 +210,14 @@ const Study = (props) => {
     let req = new Request(url, options);
     fetch(req).then((response)=>{
       if(response.status===201){
+        if(type==="functionName_inMemory"){
+          document.getElementById("study_settingsCustomization_content_inMemory_functionAdd_button").style.display="inline"
+          document.getElementById("study_settingsCustomization_content_inMemory_functionEdit_button").style.display="none"
+          document.getElementById("study_settingsCustomization_content_inMemory_functionNameInput").value=""
+          document.getElementById("study_settingsCustomization_content_inMemory_functionClassInput").value=""
+          document.getElementById("study_settingsCustomization_content_inMemory_functionFamilyInput").value=""
+
+        }
         retrieveKeywords(type,true)
         setIs_loading(false)
         document.getElementById("study_settingsCustomization_content_inMemoryDataType_dataTypeAddButton").style.display="inline"
@@ -234,7 +229,7 @@ const Study = (props) => {
   const updateFunctionStructureProperties= async (functionKeywordID)=>{
     let keyword_structureArray=[]
     let url =
-    "https://backendstep.onrender.com/api/user/update/" +
+    "http://localhost:4000/api/user/update/" +
     props.state.my_id;
   let options = {
     method: "GET",
@@ -345,7 +340,7 @@ const Study = (props) => {
   //.................DELETE STRUCTURE KEYWORD
   const deleteStrucutreKeywordProperty =(keywordID,keywordStructurePropertyID)=>{
     let url =
-    "https://backendstep.onrender.com/api/user/deleteKeywordStructureProperty/" +
+    "http://localhost:4000/api/user/deleteKeywordStructureProperty/" +
     props.state.my_id+"/"+keywordID+"/"+keywordStructurePropertyID;
   let options = {
     method: "POST",
@@ -370,7 +365,7 @@ const Study = (props) => {
    const editKeywordStructurePropertiesForOneStructure = async(keyword_structureArray)=>{
     setIs_loading(true)
     let url =
-    "https://backendstep.onrender.com/api/user/editKeywordStructureAfterChangingFunctionName/" +
+    "http://localhost:4000/api/user/editKeywordStructureAfterChangingFunctionName/" +
     props.state.my_id;
   let options = {
     method: "POST",
@@ -408,7 +403,7 @@ const Study = (props) => {
 
   
     let url =
-    "https://backendstep.onrender.com/api/user/editKeywordStructureProperty/" +
+    "http://localhost:4000/api/user/editKeywordStructureProperty/" +
     props.state.my_id+"/"+keyword._id+"/"+keywordStructurePropertyID;
   let options = {
     method: "POST",
@@ -460,7 +455,7 @@ const Study = (props) => {
     var editButtonkeywordFunction=document.getElementById("study_keywordFunction_edit_i")
 
     let url =
-      "https://backendstep.onrender.com/api/user/editKeyword/" +
+      "http://localhost:4000/api/user/editKeyword/" +
       props.state.my_id+"/"+keywordID+"/"+type;
     let options = {
       method: "POST",
@@ -511,7 +506,7 @@ const Study = (props) => {
   //.............DELETE KEYWORD STRUCTURE.................
   const deleteKeyword = (type,keywordID) => {
     let url =
-      "https://backendstep.onrender.com/api/user/deleteKeyword/" +
+      "http://localhost:4000/api/user/deleteKeyword/" +
       props.state.my_id+"/"+keywordID+"/"+type;
     let options = {
       method: "POST",
@@ -537,7 +532,7 @@ const Study = (props) => {
 
     if(needFetch===true){
       let url =
-        "https://backendstep.onrender.com/api/user/update/" +
+        "http://localhost:4000/api/user/update/" +
         props.state.my_id;
       let options = {
         method: "GET",
@@ -645,6 +640,58 @@ const Study = (props) => {
               ul_unit.prepend(li)
             }
           }
+          if(type==="functionName_inMemory"){
+            functionNamesInMemoryRetrieved=jsonData.study.inMemory.functionNames
+            let functionName_customization_select = document.getElementById("study_settings_content_customize_propertyFunctionName_select")
+            // functionName_customization_select.innerHTML="<option selected disabled>Property function name</option>"
+            let ul_functionNames=document.getElementById("study_settingsCustomization_content_inMemoryFunctionName_functionNameUl")
+            ul_functionNames.innerHTML=""
+            for(var i = 0;i<functionNamesInMemoryRetrieved.length;i++){
+              // functionName_customization_select.innerHTML+="<option>"+functionNamesInMemoryRetrieved[i]+"</option>"
+              let p_functionName=document.createElement("p")
+              let p_functionClass=document.createElement("p")
+              let p_functionFamily=document.createElement("p")
+              let menu_deleteIcon= document.createElement("i");
+              let menu_editIcon= document.createElement("i");
+              let div_p_functionInMemory=document.createElement("div")
+              let div_menuIcons_functionInMemory=document.createElement("div")
+              let li= document.createElement("li");
+              p_functionName.textContent=functionNamesInMemoryRetrieved[i].name
+              p_functionClass.textContent=functionNamesInMemoryRetrieved[i].class
+              p_functionFamily.textContent=functionNamesInMemoryRetrieved[i].family
+              menu_deleteIcon.setAttribute("class","fa fa-sharp fa-solid fa-trash");
+              menu_deleteIcon.setAttribute("id",i)
+              menu_editIcon.setAttribute("class","fa fa-sharp fa-solid fa-pencil");
+              menu_editIcon.setAttribute("id",i)
+              div_p_functionInMemory.setAttribute("class","div_p_functionInMemory")
+              div_menuIcons_functionInMemory.setAttribute("class","div_menuIcons_functionInMemory")
+              li.setAttribute("id","li_functionName"+"_"+i)
+              li.setAttribute("class","fr")
+              menu_deleteIcon.addEventListener("click",()=>{
+                deleteMemory(menu_deleteIcon.id,"functionName_inMemory")
+              })
+              menu_editIcon.addEventListener("click",()=>{
+                functionInMemory_InEdit_id=menu_editIcon.id
+                document.getElementById("study_settingsCustomization_content_inMemory_functionAdd_button").style.display="none"
+                document.getElementById("study_settingsCustomization_content_inMemory_functionEdit_button").style.display="inline"
+                document.getElementById("study_settingsCustomization_content_inMemory_functionNameInput").value=functionNamesInMemoryRetrieved[menu_editIcon.id].name
+                document.getElementById("study_settingsCustomization_content_inMemory_functionClassInput").value=functionNamesInMemoryRetrieved[menu_editIcon.id].class
+                document.getElementById("study_settingsCustomization_content_inMemory_functionFamilyInput").value=functionNamesInMemoryRetrieved[menu_editIcon.id].family
+              })
+              div_p_functionInMemory.append(p_functionName,p_functionClass,p_functionFamily)
+              div_menuIcons_functionInMemory.append(menu_deleteIcon,menu_editIcon)
+              li.append(div_menuIcons_functionInMemory,div_p_functionInMemory)
+              ul_functionNames.prepend(li)
+            }
+            if(jsonData.study.inMemory.functionNames.length==0){
+              let p=document.createElement("p")
+              let li= document.createElement("li");
+              p.textContent="Nothing to show"
+              li.setAttribute("class","fr li_nothingToShow")
+              li.append(p)
+              ul_functionNames.prepend(li)
+            }
+          }
           if(type==="dataType_inMemory"){
             dataTypesInMemoryRetrieved=jsonData.study.inMemory.dataTypes
             let dataType_customization_select = document.getElementById("study_settings_content_customize_propertyDataType_select")
@@ -719,359 +766,317 @@ const Study = (props) => {
               ul_set.prepend(li)
             }
           }
-          // if(type==="functionNature"){
-          //   let ul_functionNature=document.getElementById("study_settings_content_customize_functionNature_ul")
-          //   let study_keywordFunctionNature_select=document.getElementById("study_keyword_functionNature")
-          //   ul_functionNature.innerHTML=""
-          //   study_keywordFunctionNature_select.innerHTML="<option selected disabled>Function nature</option>"
-          //   jsonData.study.functionNatures.forEach((functionNature)=>{
-          //     study_keywordFunctionNature_select.innerHTML+="<option>"+functionNature.name+"</option>"
-          //     let p_functionNature=document.createElement("p")
-          //     let menu_deleteIcon= document.createElement("i");
-          //     let li= document.createElement("li");
-          //     menu_deleteIcon.setAttribute("class","fa fa-sharp fa-solid fa-trash");
-          //     li.setAttribute("id",functionNature._id+"li_functionNature")
-          //     li.setAttribute("class","fr")
-          //     menu_deleteIcon.addEventListener("click",()=>{
-          //       deleteCustomize(functionNature._id,"functionNature")
-          //     })
-          //     p_functionNature.textContent=functionNature.name
-          //     li.append(menu_deleteIcon,p_functionNature)
-          //     ul_functionNature.prepend(li)
-          //   })
-          // }
-          // if(type==="changeFactor"){
-          //   let ul_changeFactor=document.getElementById("study_settings_content_customize_changeFactor_ul")
-          //   let study_keywordChangeFactor_select=document.getElementById("study_changeFactor_select")
-          //   ul_changeFactor.innerHTML=""
-          //   study_keywordChangeFactor_select.innerHTML="<option selected disabled>Change factor</option>"
-          //   jsonData.study.changeFactors.forEach((changeFactor)=>{
-          //     study_keywordChangeFactor_select.innerHTML+="<option>"+changeFactor.name+"</option>"
-          //     let p_changeFactor=document.createElement("p")
-          //     let menu_deleteIcon= document.createElement("i");
-          //     let li= document.createElement("li");
-          //     menu_deleteIcon.setAttribute("class","fa fa-sharp fa-solid fa-trash");
-          //     li.setAttribute("id",changeFactor._id+"li_changeFactor")
-          //     li.setAttribute("class","fr")
-          //     menu_deleteIcon.addEventListener("click",()=>{
-          //       deleteCustomize(changeFactor._id,"changeFactor")
-          //     })
-          //     p_changeFactor.textContent=changeFactor.name
-          //     li.append(menu_deleteIcon,p_changeFactor)
-          //     ul_changeFactor.prepend(li)
-          //   })
-          // }
-          if(type==="Structure"){
-            if(ul_keywordProperties) ul_keywordProperties.innerHTML=""
-            if(ul_keywordsStructure) ul_keywordsStructure.innerHTML=""
+        //   if(type==="Structure"){
+        //     if(ul_keywordProperties) ul_keywordProperties.innerHTML=""
+        //     if(ul_keywordsStructure) ul_keywordsStructure.innerHTML=""
 
-            jsonData.study.structure_keywords.forEach((keyword)=>{
-            keywordStructureArray.push(keyword)
-            let p_keyword_structureName=document.createElement("p")
-            let p_keyword_structureStatus=document.createElement("p")
-            let p_keyword_structureLevelOfStudy=document.createElement("p")
-            let i_keyword_structureProperty_plus=document.createElement("i")
-            let i_keyword_structureProperty_menu=document.createElement("i")
-            let div_i_keyword_structureProperty=document.createElement("div")
-            let li=document.createElement("li")
+        //     jsonData.study.structure_keywords.forEach((keyword)=>{
+        //     keywordStructureArray.push(keyword)
+        //     let p_keyword_structureName=document.createElement("p")
+        //     let p_keyword_structureStatus=document.createElement("p")
+        //     let p_keyword_structureLevelOfStudy=document.createElement("p")
+        //     let i_keyword_structureProperty_plus=document.createElement("i")
+        //     let i_keyword_structureProperty_menu=document.createElement("i")
+        //     let div_i_keyword_structureProperty=document.createElement("div")
+        //     let li=document.createElement("li")
 
 
-            let menu_div=document.createElement("div");
-            let menu_subdiv=document.createElement("div");
-            let menu_showIcon= document.createElement("i");
-            let menu_selectIcon= document.createElement("i");
-            let menu_deleteIcon= document.createElement("i");
-            let menu_editIcon= document.createElement("i");
-            let menuLi_div=document.createElement("div")
+        //     let menu_div=document.createElement("div");
+        //     let menu_subdiv=document.createElement("div");
+        //     let menu_showIcon= document.createElement("i");
+        //     let menu_selectIcon= document.createElement("i");
+        //     let menu_deleteIcon= document.createElement("i");
+        //     let menu_editIcon= document.createElement("i");
+        //     let menuLi_div=document.createElement("div")
 
 
-            p_keyword_structureName.textContent=keyword.keyword_structureName
-            p_keyword_structureStatus.textContent=keyword.keyword_structureStatus
-            p_keyword_structureLevelOfStudy.textContent=keyword.keyword_structureLevel
+        //     p_keyword_structureName.textContent=keyword.keyword_structureName
+        //     p_keyword_structureStatus.textContent=keyword.keyword_structureStatus
+        //     p_keyword_structureLevelOfStudy.textContent=keyword.keyword_structureLevel
 
-            p_keyword_structureStatus.style.color="var(--red)"
-            p_keyword_structureName.setAttribute("id",keyword._id +"p_keyword_structureName")
-            p_keyword_structureStatus.setAttribute("id",keyword._id +"p_keyword_structureStatus")
-            p_keyword_structureLevelOfStudy.setAttribute("id",keyword._id +"p_keyword_structureLevelOfStudy")
-            menu_showIcon.setAttribute("class","fa fa-sharp fa-solid fa-bars");
-            menu_showIcon.setAttribute("id", keyword._id + "menu_showIcon");
-            menu_showIcon.setAttribute("title","")
-            menu_editIcon.setAttribute("title","")
-            menu_selectIcon.setAttribute("class","fa fa-sharp fa-solid fa-check");
-            menu_selectIcon.setAttribute("title","");
-            menu_selectIcon.setAttribute("id",keyword._id+"menu_selectIcon")
-            menu_deleteIcon.setAttribute("class","fa fa-sharp fa-solid fa-trash");
-            menu_editIcon.setAttribute("class","fa fa-sharp fa-solid fa-pencil");
-            menu_div.setAttribute("class","fr keywordsTable_menu_div");
-            menu_subdiv.setAttribute("class","fc keywordsTable_menu_subdiv");
-            menu_subdiv.setAttribute("id",keyword._id+"menu_subdiv");
-            menuLi_div.setAttribute("class","menuLi_div fr")
-            menuLi_div.setAttribute("id", keyword._id + "menuLi_div");
-            menu_editIcon.setAttribute("id",keyword._id+"menu_editIcon")
-            i_keyword_structureProperty_plus.setAttribute("id",keyword._id+"i_keyword_structureProperty_plus")
-            i_keyword_structureProperty_menu.setAttribute("id",keyword._id+"i_keyword_structureProperty_menu")
-            i_keyword_structureProperty_plus.setAttribute("class","fa fa-solid fa-plus")
-            i_keyword_structureProperty_menu.setAttribute("class","fa fa-solid fa-list")
-            div_i_keyword_structureProperty.setAttribute("class","fr div_i_keyword_structureProperty")
-            li.setAttribute("id",keyword._id+"li")
-            li.setAttribute("class","fr study_pkeywordsStructure_div")
+        //     p_keyword_structureStatus.style.color="var(--red)"
+        //     p_keyword_structureName.setAttribute("id",keyword._id +"p_keyword_structureName")
+        //     p_keyword_structureStatus.setAttribute("id",keyword._id +"p_keyword_structureStatus")
+        //     p_keyword_structureLevelOfStudy.setAttribute("id",keyword._id +"p_keyword_structureLevelOfStudy")
+        //     menu_showIcon.setAttribute("class","fa fa-sharp fa-solid fa-bars");
+        //     menu_showIcon.setAttribute("id", keyword._id + "menu_showIcon");
+        //     menu_showIcon.setAttribute("title","")
+        //     menu_editIcon.setAttribute("title","")
+        //     menu_selectIcon.setAttribute("class","fa fa-sharp fa-solid fa-check");
+        //     menu_selectIcon.setAttribute("title","");
+        //     menu_selectIcon.setAttribute("id",keyword._id+"menu_selectIcon")
+        //     menu_deleteIcon.setAttribute("class","fa fa-sharp fa-solid fa-trash");
+        //     menu_editIcon.setAttribute("class","fa fa-sharp fa-solid fa-pencil");
+        //     menu_div.setAttribute("class","fr keywordsTable_menu_div");
+        //     menu_subdiv.setAttribute("class","fc keywordsTable_menu_subdiv");
+        //     menu_subdiv.setAttribute("id",keyword._id+"menu_subdiv");
+        //     menuLi_div.setAttribute("class","menuLi_div fr")
+        //     menuLi_div.setAttribute("id", keyword._id + "menuLi_div");
+        //     menu_editIcon.setAttribute("id",keyword._id+"menu_editIcon")
+        //     i_keyword_structureProperty_plus.setAttribute("id",keyword._id+"i_keyword_structureProperty_plus")
+        //     i_keyword_structureProperty_menu.setAttribute("id",keyword._id+"i_keyword_structureProperty_menu")
+        //     i_keyword_structureProperty_plus.setAttribute("class","fa fa-solid fa-plus")
+        //     i_keyword_structureProperty_menu.setAttribute("class","fa fa-solid fa-list")
+        //     div_i_keyword_structureProperty.setAttribute("class","fr div_i_keyword_structureProperty")
+        //     li.setAttribute("id",keyword._id+"li")
+        //     li.setAttribute("class","fr study_pkeywordsStructure_div")
 
-            i_keyword_structureProperty_plus.addEventListener("click",()=>{
-              keywordStructure=keyword
-              document.getElementById("study_writing_keywordProperties_div").style.display="flex"
-              document.getElementById("study_keywordPropertyStructure_addButton").style.display="inline"
-              document.getElementById("study_keywordPropertyFunction_addButton").style.display="none"
+        //     i_keyword_structureProperty_plus.addEventListener("click",()=>{
+        //       keywordStructure=keyword
+        //       document.getElementById("study_writing_keywordProperties_div").style.display="flex"
+        //       document.getElementById("study_keywordPropertyStructure_addButton").style.display="inline"
+        //       document.getElementById("study_keywordPropertyFunction_addButton").style.display="none"
 
-              let study_keywordPropertyName_select = document.getElementById("study_keywordPropertyName")
-              study_keywordPropertyName_select.innerHTML="<option selected disabled>Property name</option>"
-                for (var i = 0;i< propertyObjectsRetrieved.length;i++){
-                  if(keyword.keyword_structureLevel===propertyObjectsRetrieved[i].propertyLevel || propertyObjectsRetrieved[i].propertyLevel==="All"){
-                    study_keywordPropertyName_select.innerHTML+="<option>"+propertyObjectsRetrieved[i].propertyName+" ("+propertyObjectsRetrieved[i].propertyDomain+")"+"</option>"
-                  }
-                }
-            })
+        //       let study_keywordPropertyName_select = document.getElementById("study_keywordPropertyName")
+        //       study_keywordPropertyName_select.innerHTML="<option selected disabled>Property name</option>"
+        //         for (var i = 0;i< propertyObjectsRetrieved.length;i++){
+        //           if(keyword.keyword_structureLevel===propertyObjectsRetrieved[i].propertyLevel || propertyObjectsRetrieved[i].propertyLevel==="All"){
+        //             study_keywordPropertyName_select.innerHTML+="<option>"+propertyObjectsRetrieved[i].propertyName+" ("+propertyObjectsRetrieved[i].propertyDomain+")"+"</option>"
+        //           }
+        //         }
+        //     })
 
-            i_keyword_structureProperty_menu.addEventListener("click",()=>{
-              document.getElementById("study_keywordProperties_div").style.display="flex";
-              keywordStructure=keyword
-              retrieveKeywordProperty(keyword,"Structure")
-            })
-            if(keyword.keyword_structureProperties.length===0) i_keyword_structureProperty_menu.style.display="none"
+        //     i_keyword_structureProperty_menu.addEventListener("click",()=>{
+        //       document.getElementById("study_keywordProperties_div").style.display="flex";
+        //       keywordStructure=keyword
+        //       retrieveKeywordProperty(keyword,"Structure")
+        //     })
+        //     if(keyword.keyword_structureProperties.length===0) i_keyword_structureProperty_menu.style.display="none"
 
 
 
-            //.........
-            menu_showIcon.addEventListener("click",()=>{
-              let menu_subdiv = document.getElementById(keyword._id + "menu_subdiv");
-              let menu_subdiv_height=getComputedStyle(menu_subdiv).height
-                if(menu_subdiv_height=="0px"){
-                  menu_subdiv.style.height="min-content"
-                }else{
-                  menu_subdiv.style.height=0
-                }
-              })
-              //............
-             //  .............EDIT FUNCTION
-             menu_editIcon.addEventListener("click", () => {
-              keywordStructure=keyword
-              var structureName_input=document.getElementById("study_keyword_structureName")
-              var structureLevel_input=document.getElementById("study_keyword_structureLevel")
+        //     //.........
+        //     menu_showIcon.addEventListener("click",()=>{
+        //       let menu_subdiv = document.getElementById(keyword._id + "menu_subdiv");
+        //       let menu_subdiv_height=getComputedStyle(menu_subdiv).height
+        //         if(menu_subdiv_height=="0px"){
+        //           menu_subdiv.style.height="min-content"
+        //         }else{
+        //           menu_subdiv.style.height=0
+        //         }
+        //       })
+        //       //............
+        //      //  .............EDIT FUNCTION
+        //      menu_editIcon.addEventListener("click", () => {
+        //       keywordStructure=keyword
+        //       var structureName_input=document.getElementById("study_keyword_structureName")
+        //       var structureLevel_input=document.getElementById("study_keyword_structureLevel")
               
-              menu_subdiv.style.height="0"
-              let li_backgroundColor=getComputedStyle(li).backgroundColor
-              if(li_backgroundColor==="rgb(240, 242, 245)"){
-                li.style.backgroundColor="#d1fc5e"
-                menu_editIcon.style.color="#d1fc5e"
-                editAddButtonKeyword()
-              }else{
-                li.style.backgroundColor="var(--white)"
-                menu_editIcon.style.color="var(--white)"
-                addEditButtonKeyword()
-              }
-              if(structureName_input) structureName_input.value=keyword.keyword_structureName
-              if(structureLevel_input) structureLevel_input.value=keyword.keyword_structureLevel
-            })
+        //       menu_subdiv.style.height="0"
+        //       let li_backgroundColor=getComputedStyle(li).backgroundColor
+        //       if(li_backgroundColor==="rgb(240, 242, 245)"){
+        //         li.style.backgroundColor="#d1fc5e"
+        //         menu_editIcon.style.color="#d1fc5e"
+        //         editAddButtonKeyword()
+        //       }else{
+        //         li.style.backgroundColor="var(--white)"
+        //         menu_editIcon.style.color="var(--white)"
+        //         addEditButtonKeyword()
+        //       }
+        //       if(structureName_input) structureName_input.value=keyword.keyword_structureName
+        //       if(structureLevel_input) structureLevel_input.value=keyword.keyword_structureLevel
+        //     })
 
-          // ................DELETE ONE keyword..........
-          menu_deleteIcon.addEventListener("click", () => deleteKeyword("Structure",keyword._id)
-          )
-          //.................
-            div_i_keyword_structureProperty.append(i_keyword_structureProperty_plus,i_keyword_structureProperty_menu)
-            menu_subdiv.append(menu_deleteIcon,menu_editIcon)
-            menu_div.append(menu_showIcon)
-            li.append(p_keyword_structureName,p_keyword_structureStatus,p_keyword_structureLevelOfStudy,div_i_keyword_structureProperty)
-            menuLi_div.append(menu_subdiv,menu_div,li)
-            ul_keywordsStructure.prepend(menuLi_div)
-          })
-        }
-          if(type==="Function"){
-            ul_keywordsFunction.innerHTML=""
-            jsonData.study.function_keywords.forEach((keyword)=>{
-            let p_keyword_functionName=document.createElement("p")
-            let p_keyword_functionNature=document.createElement("p")
-            let li=document.createElement("li")
-            let menu_div=document.createElement("div");
-            let menu_subdiv=document.createElement("div");
-            let menu_showIcon= document.createElement("i");
-            let menu_selectIcon= document.createElement("i");
-            let menu_deleteIcon= document.createElement("i");
-            let menu_editIcon= document.createElement("i");
-            let menu_workIcon = document.createElement("i");
-            let i_keyword_functionProperty_plus=document.createElement("i")
-            let i_keyword_functionProperty_menu=document.createElement("i")
-            let i_code=document.createElement("i")
-            let div_i_keyword_functionProperty=document.createElement("div")
-            let menuLi_div=document.createElement("div")
+        //   // ................DELETE ONE keyword..........
+        //   menu_deleteIcon.addEventListener("click", () => deleteKeyword("Structure",keyword._id)
+        //   )
+        //   //.................
+        //     div_i_keyword_structureProperty.append(i_keyword_structureProperty_plus,i_keyword_structureProperty_menu)
+        //     menu_subdiv.append(menu_deleteIcon,menu_editIcon)
+        //     menu_div.append(menu_showIcon)
+        //     li.append(p_keyword_structureName,p_keyword_structureStatus,p_keyword_structureLevelOfStudy,div_i_keyword_structureProperty)
+        //     menuLi_div.append(menu_subdiv,menu_div,li)
+        //     ul_keywordsStructure.prepend(menuLi_div)
+        //   })
+        // }
+        //   if(type==="Function"){
+        //     ul_keywordsFunction.innerHTML=""
+        //     jsonData.study.function_keywords.forEach((keyword)=>{
+        //     let p_keyword_functionName=document.createElement("p")
+        //     let p_keyword_functionNature=document.createElement("p")
+        //     let li=document.createElement("li")
+        //     let menu_div=document.createElement("div");
+        //     let menu_subdiv=document.createElement("div");
+        //     let menu_showIcon= document.createElement("i");
+        //     let menu_selectIcon= document.createElement("i");
+        //     let menu_deleteIcon= document.createElement("i");
+        //     let menu_editIcon= document.createElement("i");
+        //     let menu_workIcon = document.createElement("i");
+        //     let i_keyword_functionProperty_plus=document.createElement("i")
+        //     let i_keyword_functionProperty_menu=document.createElement("i")
+        //     let i_code=document.createElement("i")
+        //     let div_i_keyword_functionProperty=document.createElement("div")
+        //     let menuLi_div=document.createElement("div")
             
     
-            div_i_keyword_functionProperty.setAttribute("class","fr div_i_keyword_functionProperty")
-            li.setAttribute("class","fr")
-            li.setAttribute("id",keyword._id+"li")
-            li.setAttribute("class","study_pkeywordsFunction_div")
+        //     div_i_keyword_functionProperty.setAttribute("class","fr div_i_keyword_functionProperty")
+        //     li.setAttribute("class","fr")
+        //     li.setAttribute("id",keyword._id+"li")
+        //     li.setAttribute("class","study_pkeywordsFunction_div")
 
-            p_keyword_functionName.setAttribute("id",keyword._id +"p_keyword_functionName")
-            p_keyword_functionNature.setAttribute("id",keyword._id +"p_keyword_functionNature")
+        //     p_keyword_functionName.setAttribute("id",keyword._id +"p_keyword_functionName")
+        //     p_keyword_functionNature.setAttribute("id",keyword._id +"p_keyword_functionNature")
 
-            p_keyword_functionName.textContent=keyword.keyword_functionName
-            p_keyword_functionNature.textContent=keyword.keyword_functionNature
+        //     p_keyword_functionName.textContent=keyword.keyword_functionName
+        //     p_keyword_functionNature.textContent=keyword.keyword_functionNature
       
-            menu_showIcon.setAttribute("class","fa fa-sharp fa-solid fa-bars");
-            menu_showIcon.setAttribute("id", keyword._id + "menu_showIcon");
-            menu_selectIcon.setAttribute("class","fa fa-sharp fa-solid fa-check");
-            menu_selectIcon.setAttribute("id",keyword._id+"menu_selectIcon")
-            menu_deleteIcon.setAttribute("class","fa fa-sharp fa-solid fa-trash");
-            menu_editIcon.setAttribute("class","fa fa-sharp fa-solid fa-pencil");
-            menu_workIcon.setAttribute("class","fi fi-rr-settings")
-            menu_div.setAttribute("class","fr keywordsTable_menu_div");
-            menu_subdiv.setAttribute("class","fc keywordsTable_menu_subdiv");
-            menu_subdiv.setAttribute("id",keyword._id+"menu_subdiv");
-            menuLi_div.setAttribute("class","menuLi_div fr")
-            menuLi_div.setAttribute("id", keyword._id + "menuLi_div");
-            menu_editIcon.setAttribute("id",keyword._id+"menu_editIcon")
-            i_code.setAttribute("id",keyword._id+"i_code")
-            i_code.setAttribute("class","fi fi-rr-file-code")
+        //     menu_showIcon.setAttribute("class","fa fa-sharp fa-solid fa-bars");
+        //     menu_showIcon.setAttribute("id", keyword._id + "menu_showIcon");
+        //     menu_selectIcon.setAttribute("class","fa fa-sharp fa-solid fa-check");
+        //     menu_selectIcon.setAttribute("id",keyword._id+"menu_selectIcon")
+        //     menu_deleteIcon.setAttribute("class","fa fa-sharp fa-solid fa-trash");
+        //     menu_editIcon.setAttribute("class","fa fa-sharp fa-solid fa-pencil");
+        //     menu_workIcon.setAttribute("class","fi fi-rr-settings")
+        //     menu_div.setAttribute("class","fr keywordsTable_menu_div");
+        //     menu_subdiv.setAttribute("class","fc keywordsTable_menu_subdiv");
+        //     menu_subdiv.setAttribute("id",keyword._id+"menu_subdiv");
+        //     menuLi_div.setAttribute("class","menuLi_div fr")
+        //     menuLi_div.setAttribute("id", keyword._id + "menuLi_div");
+        //     menu_editIcon.setAttribute("id",keyword._id+"menu_editIcon")
+        //     i_code.setAttribute("id",keyword._id+"i_code")
+        //     i_code.setAttribute("class","fi fi-rr-file-code")
 
-              //..........properties
-            i_keyword_functionProperty_plus.addEventListener("click",()=>{
-              keywordFunction=keyword
-              document.getElementById("study_writing_keywordProperties_div").style.display="flex"
-              document.getElementById("study_keywordPropertyStructure_addButton").style.display="none"
-              document.getElementById("study_keywordPropertyFunction_addButton").style.display="inline"
-              })
+        //       //..........properties
+        //     i_keyword_functionProperty_plus.addEventListener("click",()=>{
+        //       keywordFunction=keyword
+        //       document.getElementById("study_writing_keywordProperties_div").style.display="flex"
+        //       document.getElementById("study_keywordPropertyStructure_addButton").style.display="none"
+        //       document.getElementById("study_keywordPropertyFunction_addButton").style.display="inline"
+        //       })
 
-            i_keyword_functionProperty_menu.addEventListener("click",()=>{
-              document.getElementById("study_keywordProperties_div").style.display="flex";
-              keywordFunction=keyword
-              retrieveKeywordProperty(keyword,"Function")
-            })
-            //...............
-            i_code.addEventListener("click",()=>{
-              document.getElementById("study_functionCode_div").style.display="flex"
-              retrieveFunctionCode(keyword)
-            })
-            //.......work 
-            menu_workIcon.addEventListener("click",()=>{
-            let menu_workIcon_color=getComputedStyle(menu_workIcon).color
-            if(keywordStructurePropertySelectedSubjectArray.length>0){
-              document.getElementById("study_workstation_keywordProperties_input_ul").innerHTML=""
-              if(menu_workIcon_color==="rgb(240, 242, 245)"){
-              keywordFunction=keyword
-              editKeyword("Function",keyword._id,{
-                _id:keyword._id,
-                keyword_functionName: keyword.keyword_functionName,
-                keyword_functionNature:keyword.keyword_functionNature,
-                keyword_functionCode:keywordStructurePropertySelectedSubjectArray
-              })
-              menu_subdiv.style.height="0"
-              li.style.backgroundColor="#d1fc5e"
-              menu_workIcon.style.color="#d1fc5e"
+        //     i_keyword_functionProperty_menu.addEventListener("click",()=>{
+        //       document.getElementById("study_keywordProperties_div").style.display="flex";
+        //       keywordFunction=keyword
+        //       retrieveKeywordProperty(keyword,"Function")
+        //     })
+        //     //...............
+        //     i_code.addEventListener("click",()=>{
+        //       document.getElementById("study_functionCode_div").style.display="flex"
+        //       retrieveFunctionCode(keyword)
+        //     })
+        //     //.......work 
+        //     menu_workIcon.addEventListener("click",()=>{
+        //     let menu_workIcon_color=getComputedStyle(menu_workIcon).color
+        //     if(keywordStructurePropertySelectedSubjectArray.length>0){
+        //       document.getElementById("study_workstation_keywordProperties_input_ul").innerHTML=""
+        //       if(menu_workIcon_color==="rgb(240, 242, 245)"){
+        //       keywordFunction=keyword
+        //       editKeyword("Function",keyword._id,{
+        //         _id:keyword._id,
+        //         keyword_functionName: keyword.keyword_functionName,
+        //         keyword_functionNature:keyword.keyword_functionNature,
+        //         keyword_functionCode:keywordStructurePropertySelectedSubjectArray
+        //       })
+        //       menu_subdiv.style.height="0"
+        //       li.style.backgroundColor="#d1fc5e"
+        //       menu_workIcon.style.color="#d1fc5e"
 
-              document.getElementById("study_workstation_keywordProperties_greeting_ul").style.display="none"
-              document.getElementById("study_workstation_keywordProperties_input_ul").style.display="flex"
-            }else{
-              menu_subdiv.style.height="0"
-              li.style.backgroundColor="var(--white)"
-              menu_workIcon.style.color="var(--white)"
+        //       document.getElementById("study_workstation_keywordProperties_greeting_ul").style.display="none"
+        //       document.getElementById("study_workstation_keywordProperties_input_ul").style.display="flex"
+        //     }else{
+        //       menu_subdiv.style.height="0"
+        //       li.style.backgroundColor="var(--white)"
+        //       menu_workIcon.style.color="var(--white)"
 
-              document.getElementById("study_workstation_keywordProperties_greeting_ul").style.display="flex"
-              document.getElementById("study_workstation_keywordProperties_input_ul").style.display="none"
-              document.getElementById("study_workstation_keywordProperties_input_ul").innerHTML=""
-              }  
-            }else{
-              props.serverReply("There is no work saved for this function.")
-            }       
-            })
-            //.......Menu select
-              menu_selectIcon.addEventListener("click",()=>{
-              let menu_selectIcon_color=getComputedStyle(menu_selectIcon).color
-              if(menu_selectIcon_color==="rgb(240, 242, 245)"){
-                if(keywordFunction===""){
-                props.serverReply("Function selected successfully")  
-                menu_selectIcon.style.color="rgb(209, 252, 94)"
-                li.style.backgroundColor="rgb(209, 252, 94)"
-                menu_subdiv.style.height="0px"
-                keywordFunction=keyword
+        //       document.getElementById("study_workstation_keywordProperties_greeting_ul").style.display="flex"
+        //       document.getElementById("study_workstation_keywordProperties_input_ul").style.display="none"
+        //       document.getElementById("study_workstation_keywordProperties_input_ul").innerHTML=""
+        //       }  
+        //     }else{
+        //       props.serverReply("There is no work saved for this function.")
+        //     }       
+        //     })
+        //     //.......Menu select
+        //       menu_selectIcon.addEventListener("click",()=>{
+        //       let menu_selectIcon_color=getComputedStyle(menu_selectIcon).color
+        //       if(menu_selectIcon_color==="rgb(240, 242, 245)"){
+        //         if(keywordFunction===""){
+        //         props.serverReply("Function selected successfully")  
+        //         menu_selectIcon.style.color="rgb(209, 252, 94)"
+        //         li.style.backgroundColor="rgb(209, 252, 94)"
+        //         menu_subdiv.style.height="0px"
+        //         keywordFunction=keyword
                
-                if(keywordStructurePropertySelectedSubjectArray.length>0 || keywordStructurePropertySelectedObjectArray.length>0){
-                document.getElementById("study_workstation_keywordProperties_input_ul").innerHTML=""
-                for(var i = 0; i< keywordStructurePropertySelectedSubjectArray.length;i++){
-                  retrieveSelectedStructuresProperty(keywordStructurePropertySelectedSubjectArray[i],"Subject",keyword,"Structure")
-                }
-                for(var i = 0; i< keywordStructurePropertySelectedObjectArray.length;i++){
-                  retrieveSelectedStructuresProperty(keywordStructurePropertySelectedObjectArray[i],"Object",keyword,"Structure")
-                }
-              }
-              }else{
-              props.serverReply("Please unselect the selected function first to be able to select another function")  
-              }
-              }else{
-                props.serverReply("Function unselected successfully")  
-                menu_selectIcon.style.color="rgb(240, 242, 245)"
-                li.style.backgroundColor="rgb(240, 242, 245)"
-                menu_subdiv.style.height="0px"
-                keywordFunction=""
-                document.getElementById("study_workstation_keywordProperties_input_ul").innerHTML=""
-                document.getElementById("study_navFunctionStructure_input_i").style.display="none"
-                document.getElementById("study_workstation_keywordProperties_greeting_ul").style.display="flex"
-                document.getElementById("study_workstation_keywordProperties_input_ul").style.display="none"
-              }
-            })
-            //.........
-            menu_showIcon.addEventListener("click",()=>{
-              let menu_subdiv_height=getComputedStyle(menu_subdiv).height
-                if(menu_subdiv_height ==="0px"){
-                  menu_subdiv.style.height="min-content"
-                }else{
-                  menu_subdiv.style.height=0
-                }
-              })
-              //............
-             //  .............EDIT FUNCTION
-             menu_editIcon.addEventListener("click", () => {
-              //...................
-              var addButton=document.getElementById("study_keywordFunction_add_i")
-              var editButton=document.getElementById("study_keywordFunction_edit_i")
-              var functionName_input=document.getElementById("study_keyword_functionName")
-              var functionNature_input=document.getElementById("study_keyword_functionNature")
-              let menu_editIcon_color=getComputedStyle(menu_editIcon).color
-              //.................
-              if(menu_editIcon_color==="rgb(240, 242, 245)"){
-                  //..............
-              keywordFunction=keyword
+        //         if(keywordStructurePropertySelectedSubjectArray.length>0 || keywordStructurePropertySelectedObjectArray.length>0){
+        //         document.getElementById("study_workstation_keywordProperties_input_ul").innerHTML=""
+        //         for(var i = 0; i< keywordStructurePropertySelectedSubjectArray.length;i++){
+        //           retrieveSelectedStructuresProperty(keywordStructurePropertySelectedSubjectArray[i],"Subject",keyword,"Structure")
+        //         }
+        //         for(var i = 0; i< keywordStructurePropertySelectedObjectArray.length;i++){
+        //           retrieveSelectedStructuresProperty(keywordStructurePropertySelectedObjectArray[i],"Object",keyword,"Structure")
+        //         }
+        //       }
+        //       }else{
+        //       props.serverReply("Please unselect the selected function first to be able to select another function")  
+        //       }
+        //       }else{
+        //         props.serverReply("Function unselected successfully")  
+        //         menu_selectIcon.style.color="rgb(240, 242, 245)"
+        //         li.style.backgroundColor="rgb(240, 242, 245)"
+        //         menu_subdiv.style.height="0px"
+        //         keywordFunction=""
+        //         document.getElementById("study_workstation_keywordProperties_input_ul").innerHTML=""
+        //         document.getElementById("study_navFunctionStructure_input_i").style.display="none"
+        //         document.getElementById("study_workstation_keywordProperties_greeting_ul").style.display="flex"
+        //         document.getElementById("study_workstation_keywordProperties_input_ul").style.display="none"
+        //       }
+        //     })
+        //     //.........
+        //     menu_showIcon.addEventListener("click",()=>{
+        //       let menu_subdiv_height=getComputedStyle(menu_subdiv).height
+        //         if(menu_subdiv_height ==="0px"){
+        //           menu_subdiv.style.height="min-content"
+        //         }else{
+        //           menu_subdiv.style.height=0
+        //         }
+        //       })
+        //       //............
+        //      //  .............EDIT FUNCTION
+        //      menu_editIcon.addEventListener("click", () => {
+        //       //...................
+        //       var addButton=document.getElementById("study_keywordFunction_add_i")
+        //       var editButton=document.getElementById("study_keywordFunction_edit_i")
+        //       var functionName_input=document.getElementById("study_keyword_functionName")
+        //       var functionNature_input=document.getElementById("study_keyword_functionNature")
+        //       let menu_editIcon_color=getComputedStyle(menu_editIcon).color
+        //       //.................
+        //       if(menu_editIcon_color==="rgb(240, 242, 245)"){
+        //           //..............
+        //       keywordFunction=keyword
 
-              addButton.style.display="none"
-              editButton.style.display="inherit"
-              menu_subdiv.style.height="0"
-              li.style.backgroundColor="#d1fc5e"
-              menu_editIcon.style.color="#d1fc5e"
+        //       addButton.style.display="none"
+        //       editButton.style.display="inherit"
+        //       menu_subdiv.style.height="0"
+        //       li.style.backgroundColor="#d1fc5e"
+        //       menu_editIcon.style.color="#d1fc5e"
 
-              functionName_input.value=keyword.keyword_functionName
-              functionNature_input.value=keyword.keyword_functionNature
-            }else{
-              addButton.style.display="inherit"
-              editButton.style.display="none"
-              menu_subdiv.style.height="0"
-              li.style.backgroundColor="var(--white)"
-              menu_editIcon.style.color="var(--white)"
-              functionName_input.value=""
-              functionNature_input.value="Function type"
+        //       functionName_input.value=keyword.keyword_functionName
+        //       functionNature_input.value=keyword.keyword_functionNature
+        //     }else{
+        //       addButton.style.display="inherit"
+        //       editButton.style.display="none"
+        //       menu_subdiv.style.height="0"
+        //       li.style.backgroundColor="var(--white)"
+        //       menu_editIcon.style.color="var(--white)"
+        //       functionName_input.value=""
+        //       functionNature_input.value="Function type"
           
-              document.getElementById("study_functionSubjects_div").style.display="none"
-              document.getElementById("study_functionSubjects_div").innerHTML=""
-              }                  
-            })
-              // ................DELETE ONE keyword..........
-              menu_deleteIcon.addEventListener("click", () => deleteKeyword("Function",keyword._id)
-              )
-              //.................
-            div_i_keyword_functionProperty.append(i_keyword_functionProperty_plus,i_keyword_functionProperty_menu)
-            menu_subdiv.append(menu_selectIcon,menu_deleteIcon,menu_editIcon,menu_workIcon)
-            menu_div.append(menu_showIcon)
-            li.append(p_keyword_functionName,p_keyword_functionNature,i_code)
-            menuLi_div.append(menu_subdiv,menu_div,li)
-            ul_keywordsFunction.prepend(menuLi_div)
-          }
-        )}
+        //       document.getElementById("study_functionSubjects_div").style.display="none"
+        //       document.getElementById("study_functionSubjects_div").innerHTML=""
+        //       }                  
+        //     })
+        //       // ................DELETE ONE keyword..........
+        //       menu_deleteIcon.addEventListener("click", () => deleteKeyword("Function",keyword._id)
+        //       )
+        //       //.................
+        //     div_i_keyword_functionProperty.append(i_keyword_functionProperty_plus,i_keyword_functionProperty_menu)
+        //     menu_subdiv.append(menu_selectIcon,menu_deleteIcon,menu_editIcon,menu_workIcon)
+        //     menu_div.append(menu_showIcon)
+        //     li.append(p_keyword_functionName,p_keyword_functionNature,i_code)
+        //     menuLi_div.append(menu_subdiv,menu_div,li)
+        //     ul_keywordsFunction.prepend(menuLi_div)
+        //   }
+        // )}
       });
     }else{
       if(type==="Structure"){
@@ -1305,7 +1310,7 @@ const Study = (props) => {
     let keyword_propertyUnit =document.getElementById("study_keywordPropertyUnit");
     var body
     let url =
-    "https://backendstep.onrender.com/api/user/addKeywordStructureProperties/" +
+    "http://localhost:4000/api/user/addKeywordStructureProperties/" +
     props.state.my_id+"/"+ keyword._id;
        body={
         _id:keyword._id+"_property_"+Date.now(),
@@ -1348,7 +1353,7 @@ const Study = (props) => {
     let keyword_propertyUnit =document.getElementById("study_keywordPropertyUnit");
     var body
     let url =
-    "https://backendstep.onrender.com/api/user/addKeywordFunctionProperties/" +
+    "http://localhost:4000/api/user/addKeywordFunctionProperties/" +
     props.state.my_id+"/"+ keyword._id;
        body={
         _id:keyword._id+"_property_"+Date.now(),
@@ -1751,7 +1756,7 @@ const Study = (props) => {
   var editButtonkeywordFunction=document.getElementById("study_keywordFunction_edit_i")
 
   let url =
-    "https://backendstep.onrender.com/api/user/addKeyword/"+ props.state.my_id+"/"+type;
+    "http://localhost:4000/api/user/addKeyword/"+ props.state.my_id+"/"+type;
   let options = {
     method: "POST",
     mode: "cors",
@@ -1943,328 +1948,7 @@ const Study = (props) => {
           }
         }></i>  
         </section>
-        <article id="study_settings_wrapper" className='fc'>
-        <section className='fc' id="study_settingsCustomization_wrapper">
-          <div id="study_settingsCustomization_titleWrapper" className='fr'>
-            <label>Customize your MCTOSH</label>
-            <i class="fi fi-rr-angle-small-down" id="study_settingsCustomization_openIcon" onClick={()=>{
-               let content_div= document.getElementById("study_settingsCustomization_contentWrapper")
-               let i=document.getElementById("study_settingsCustomization_openIcon")
-               let content_div_display=getComputedStyle(content_div).display
-               if(content_div_display==="none"){
-                 content_div.style.display="flex"
-                 i.setAttribute("class","fi fi-rr-angle-small-up")
-               }else{
-                 content_div.style.display="none"
-                 i.setAttribute("class","fi fi-rr-angle-small-down")
-               }
-              }
-            }>
-            </i>
-          </div>
-          <div id="study_settingsCustomization_contentWrapper" className='fc'>
-            <section id="study_settingsCustomization_content_inMemoryWrapper" className='fr'>
-              <section id="" className='fc study_settingsCustomization_content_inMemoryColumn'>
-                {/* DATATYPE (IN MEMORY) */}
-                <div id="study_settingsCustomization_content_inMemoryDataTypesWrapper" className='fc'>
-                  <label className='study_settingsCustomization_content_inMemoryLabels'>
-                    Data types in memory
-                  </label>
-                  <section className= "fr study_settingsCustomization_content_inMemoryInputWrapper">
-                  <input type="text" id="study_settingsCustomization_content_inMemoryDataType_dataTypeInput" placeholder='Data type'/>
-                      <button id="study_settingsCustomization_content_inMemoryDataType_dataTypeAddButton"
-                      onClick={()=>{
-                        let dataType = document.getElementById("study_settingsCustomization_content_inMemoryDataType_dataTypeInput").value
-                        addMemory(dataType.toUpperCase(),"dataType_inMemory")
-                        }
-                      }>add</button>
-                        <button id="study_settingsCustomization_content_inMemoryDataType_dataTypeEditButton"
-                      onClick={()=>{
-                        let dataType = document.getElementById("study_settingsCustomization_content_inMemoryDataType_dataTypeInput").value
-                        editMemory(dataType.toUpperCase(),dataTypeinEdit,"dataType_inMemory")
-                        }
-                      }>edit</button>
-                  </section>
-                  <ul id="study_settingsCustomization_content_inMemoryDataType_dataTypeUl"></ul>
-                </div>
-              </section>
-              <section id="" className='fc study_settingsCustomization_content_inMemoryColumn'>
-                {/* DOMAINS (IN MEMORY) */}
-                <div id="study_settingsCustomization_content_inMemorySetsWrapper" className='fc'>
-                  <label className='study_settingsCustomization_content_inMemoryLabels'>
-                    Sets in memory
-                  </label>
-                  <input type="text" id="study_settingsCustomization_content_inMemorySets_setInput" placeholder='Set' onKeyUp={(event)=>{
-                          event.preventDefault()
-                          let item = document.getElementById("study_settingsCustomization_content_inMemorySets_setInput")
-                          let ul_item = document.getElementById("study_settingsCustomization_content_inMemorySets_itemsUl")
-                          if(event.key==="Enter"){
-                            if(ul_item.children.length===0){document.getElementById("study_settingsCustomization_content_inMemorySets_itemsUl").style.display="none"
-                          }else{
-                            document.getElementById("study_settingsCustomization_content_inMemorySets_itemsUl").style.display="flex"
-                          }
-                          itemsOfSetInWorkingArray.push(item.value)
-                          let p_item = document.createElement("p")
-                          let i_delete = document.createElement("i")
-                          let li= document.createElement("li")
-                          li.setAttribute("class", "fr li_item_setInMemory")
-                          i_delete.setAttribute("class","fi fi-rr-trash")
-                          p_item.textContent=item.value
-                          i_delete.addEventListener("click",()=>{
-                            li.remove()
-                            itemsOfSetInWorkingArray.splice(itemsOfSetInWorkingArray.indexOf(item.value),1)
-                            console.log(itemsOfSetInWorkingArray)
-                          })
-                          console.log(itemsOfSetInWorkingArray)
-                          li.append(i_delete,p_item)
-                          ul_item.append(li)
-                          item.value=""
-                        }
-                      }}/>
-                  <section className= "fr study_settingsCustomization_content_inMemoryInputWrapper">
-                  <ul id="study_settingsCustomization_content_inMemorySets_itemsUl" className='fr'></ul>
-                      <button 
-                      onClick={()=>{
-                        let set = document.getElementById("study_settingsCustomization_content_inMemorySets_setInput").value
-                        if(itemsOfSetInWorkingArray.length!==0){
-                          let string="{" 
-                          for(var i = 0;i<itemsOfSetInWorkingArray.length;i++){
-                            if(i==itemsOfSetInWorkingArray.length-1){
-                              string+=itemsOfSetInWorkingArray[i]+"}"
-                            }else{
-                              string+=itemsOfSetInWorkingArray[i]+", "
-                            }
-                          }
-                          addMemory(string.toUpperCase(),"set_inMemory")
-                          console.log(string)
-                        }
-                        }
-                      }>add</button>
-                  </section>
-                
-                  <ul id="study_settingsCustomization_content_inMemorySets_setUl"></ul>
-                </div>
-                <div id="study_settingsCustomization_content_inMemoryIntervalsWrapper" className='fc'>
-                  <label className='study_settingsCustomization_content_inMemoryLabels'>
-                    Intervals in memory
-                  </label>
-                  <input type="text" id="study_settingsCustomization_content_inMemorySets_setInput" placeholder='Set' onKeyUp={(event)=>{
-                          event.preventDefault()
-                          let item = document.getElementById("study_settingsCustomization_content_inMemorySets_setInput")
-                          let ul_item = document.getElementById("study_settingsCustomization_content_inMemorySets_itemsUl")
-                          if(event.key==="Enter"){
-                            if(ul_item.children.length===0){document.getElementById("study_settingsCustomization_content_inMemorySets_itemsUl").style.display="none"
-                          }else{
-                            document.getElementById("study_settingsCustomization_content_inMemorySets_itemsUl").style.display="flex"
-                          }
-                          itemsOfSetInWorkingArray.push(item.value)
-                          let p_item = document.createElement("p")
-                          let i_delete = document.createElement("i")
-                          let li= document.createElement("li")
-                          li.setAttribute("class", "fr li_item_setInMemory")
-                          i_delete.setAttribute("class","fi fi-rr-trash")
-                          p_item.textContent=item.value
-                          i_delete.addEventListener("click",()=>{
-                            li.remove()
-                            itemsOfSetInWorkingArray.splice(itemsOfSetInWorkingArray.indexOf(item.value),1)
-                            console.log(itemsOfSetInWorkingArray)
-                          })
-                          console.log(itemsOfSetInWorkingArray)
-                          li.append(i_delete,p_item)
-                          ul_item.append(li)
-                          item.value=""
-                        }
-                      }}/>
-                  <section className= "fr study_settingsCustomization_content_inMemoryInputWrapper">
-                  <ul id="study_settingsCustomization_content_inMemorySets_itemsUl" className='fr'></ul>
-                      <button 
-                      onClick={()=>{
-                        let set = document.getElementById("study_settingsCustomization_content_inMemorySets_setInput").value
-                        if(itemsOfSetInWorkingArray.length!==0){
-                          let string="{" 
-                          for(var i = 0;i<itemsOfSetInWorkingArray.length;i++){
-                            if(i==itemsOfSetInWorkingArray.length-1){
-                              string+=itemsOfSetInWorkingArray[i]+"}"
-                            }else{
-                              string+=itemsOfSetInWorkingArray[i]+", "
-                            }
-                          }
-                          addMemory(string.toUpperCase(),"set_inMemory")
-                          console.log(string)
-                        }
-                        }
-                      }>add</button>
-                  </section>
-                
-                  <ul id="study_settingsCustomization_content_inMemorySets_setUl"></ul>
-                </div>
-              </section>
-              <section id="" className='fc study_settingsCustomization_content_inMemoryColumn'>
-                 {/* UNITS (IN MEMORY) */}
-              <div id="study_settingsCustomization_content_inMemoryUnitsWrapper" className='fc'>
-                <label className='study_settingsCustomization_content_inMemoryLabels'>
-                  Units in memory
-                </label>
-                <section className= "fr study_settingsCustomization_content_inMemoryInputWrapper">
-                  <input id="study_settingsCustomization_content_inMemoryUnit_unitInput" placeholder='Unit' onChange={()=>{
-                  let ul_unit = document.getElementById("study_settingsCustomization_content_inMemoryUnit_unitUl")
-                  let unit_input = document.getElementById("study_settingsCustomization_content_inMemoryUnit_unitInput").value.toUpperCase()
-                  for(var i = 0;i<unitsInMemoryRetrieved.length;i++){
-                    if(unitsInMemoryRetrieved[i].includes(unit_input)){
-                        ul_unit.innerHTML=""
-                        let p_unit=document.createElement("p")
-                        let menu_deleteIcon= document.createElement("i");
-                        let li= document.createElement("li");
-                        menu_deleteIcon.setAttribute("class","fa fa-sharp fa-solid fa-trash");
-                        menu_deleteIcon.setAttribute("id",i)
-                        li.setAttribute("id","li_unit"+"_"+i)
-                        li.setAttribute("class","fr")
-                        menu_deleteIcon.addEventListener("click",()=>{
-                          deleteMemory(menu_deleteIcon.id,"unit_inMemory")
-                        })
-                        p_unit.textContent=unitsInMemoryRetrieved[i]
-                        li.append(menu_deleteIcon,p_unit)
-                        ul_unit.prepend(li)
-                    }
-                    if(unit_input==="")retrieveKeywords("unit_inMemory",true)
-                  }
-                }}></input>
-                    <button onClick={()=>{
-                      let unit = document.getElementById("study_settingsCustomization_content_inMemoryUnit_unitInput").value
-                      addMemory(unit.toUpperCase(),"unit_inMemory")
-                      }
-                    }>add</button>
-                </section>
-                <ul id="study_settingsCustomization_content_inMemoryUnit_unitUl"></ul>
-              </div>
-              </section>
-            </section>
-            <section id="study_settings_content_customize_propertyName_div" className='fc'>
-              <label className='study_settingsCustomization_content_inMemoryLabels'>
-                Add a property
-              </label>
-            <div className='fr study_settings_content_customize_propertyObject_mainContent'>
-              <section className= "study_settings_content_inputPanel_section">
-                  <input id="study_settings_content_customize_propertyName_input" placeholder='Property name'></input>
-                  <select id="study_settings_content_customize_propertyLevel_select">
-                    <option selected="true" disabled="disabled">
-                      Property level
-                    </option>
-                    <option>All</option>
-                    <option>Human level</option>
-                    <option>System level</option>
-                    <option>Organ level</option>
-                    <option>Tissue level</option>
-                    <option>Cell level</option>
-                    <option>Molecule level</option>
-                  </select> 
-                  <select id="study_settings_content_customize_propertyDataType_select">
-                    <option selected="true" disabled="disabled">
-                      Property data type
-                    </option>
-                  </select> 
-                  <select id="study_settings_content_customize_propertySet_select">
-                    <option selected disabled>Property range</option>
-                  </select>
-                <div id="study_settings_content_customize_propertyUnit_container_div" className='fc'>
-                  <select id="study_settings_content_customize_propertyUnit_select" >
-                    <option selected disabled>Property unit</option>
-                  </select>
-                  <div id="study_settings_content_customize_propertyUnit_ulContainer_div">
-                    <ul id="study_settings_content_customize_propertyUnit_viewing" className='fr'></ul>
-                  </div>
-                </div>
-            </section>
-            <section id="study_settings_content_customize_propertyObject_buttonContainer_section" className='fc'>
-            <button id="study_settings_content_customize_propertyObject_addButton" onClick={()=>{
-                  let propertyName=document.getElementById("study_settings_content_customize_propertyName_input").value
-                  let propertyLevel=document.getElementById("study_settings_content_customize_propertyLevel_select").value
-                  let propertyDataType_select=document.getElementById("study_settings_content_customize_propertyDataType_select").value
-                  let propertyDomain_select=document.getElementById("study_settings_content_customize_propertySet_select").value
-                  let propertyUnit_select=document.getElementById("study_settings_content_customize_propertyUnit_select").value
-                    addCustomize(
-                    {
-                    propertyName:propertyName.toUpperCase(),
-                    propertyLevel:propertyLevel.toUpperCase(),
-                    propertyDataType:propertyDataType_select,
-                    propertyDomain:propertyDomain_select,
-                    propertyUnit:propertyUnit_select,
-                    }
-                  ,
-                  "propertyObject")
-                }
-                }>add</button>
-                 <button id="study_settings_content_customize_propertyObject_editButton" onClick={()=>{
-                  let unitArray=[]
-                  let propertyName=document.getElementById("study_settings_content_customize_propertyName_input").value
-                  let propertyDomain=document.getElementById("study_settings_content_customize_propertySet_select").value
-                  let propertyLevel=document.getElementById("study_settings_content_customize_propertyLevel_select").value
-          
-                  for (var i = 0;i<unitsInMemoryRetrieved.length;i++){
-                    if(propertyObjectInEdit.propertyName===unitsInMemoryRetrieved[i].propertyName){
-                      unitArray.push({
-                        propertyName:propertyName,
-                        propertyUnit:unitsInMemoryRetrieved[i].propertyUnit
-                      })
-                    }else{
-                      unitArray.push(unitsInMemoryRetrieved[i])
-                    }
-                  }
-                  editPropertyObjectAndUnitCustomize({
-                    propertyObject:{
-                      _id:propertyObjectInEdit._id,
-                      propertyName:propertyName,
-                      propertyDomain:propertyDomain,
-                      propertyLevel:propertyLevel
-                    },
-                    propertyUnit:unitArray,
-                  })
-                  }
-                }>Edit</button>
-            </section>
-            </div>
-            <div id="study_settings_content_customize_property_title" className='fr'>
-                <label>Property name</label>
-                <label>Property level</label>
-                <label>Property data type</label>
-                <label>Property domain</label>
-                <label>Property unit</label>
-            </div>
-            <ul id="study_settings_content_customize_propertyName_ul"></ul>
-            </section>
-            {/* <div id="study_settings_content_customize_functionNature_div" className='fc'>
-              <label className='study_settingsCustomization_content_inMemoryLabels'>
-                Add a function nature
-              </label>
-              <section className= "fr study_settings_content_inputPanel_section">
-              <input id="study_settings_content_customize_functionNature_input" placeholder='Function nature'></input>
-              <button onClick={()=>{
-                let functionNature=document.getElementById("study_settings_content_customize_functionNature_input").value
-                addCustomize({
-                  functionNature:functionNature,
-                  },"functionNature")
-                }
-              }>add</button>
-            </section>
-            <ul id="study_settings_content_customize_functionNature_ul"></ul>
-            </div> */}
-            {/* <div id="study_settings_content_customize_changeFactor_div" className='fc'>
-              <label>
-                Add a change factor
-              </label>
-              <section className= "fr study_settings_content_inputPanel_section">
-                <input id="study_settings_content_customize_changeFactor_input" placeholder='Change factor'></input>
-                <button onClick={()=>{
-                  let x=document.getElementById("study_settings_content_customize_changeFactor_input").value
-                  addCustomize(x.toUpperCase(),"changeFactor")
-                  }
-                }>add</button>
-              </section>
-              <ul id="study_settings_content_customize_changeFactor_ul"></ul>
-            </div> */}
-          </div>
-        </section>
-        </article>      
+        {/* <Settings editMemory={editMemory} addMemory={addMemory}/> */}
         </div>
       </section>
       <div id="study_barrier2" className='fr'>
@@ -2382,11 +2066,11 @@ const Study = (props) => {
             let study_keywordPropertyUnit_select = document.getElementById("study_keywordPropertyUnit")
             let study_keywordPropertyName_input = document.getElementById("study_keywordPropertyName")
             study_keywordPropertyUnit_select.innerHTML="<option selected disabled>Unit</option>"
-              for (var i = 0;i< unitsInMemoryRetrieved.length;i++){
-                if(study_keywordPropertyName_input.value===unitsInMemoryRetrieved[i].propertyName || unitsInMemoryRetrieved[i].propertyName==="All"){
-                  study_keywordPropertyUnit_select.innerHTML+="<option>"+unitsInMemoryRetrieved[i].propertyUnit+"</option>"
-                }
-              }
+              // for (var i = 0;i< unitsInMemoryRetrieved.length;i++){
+              //   if(study_keywordPropertyName_input.value===unitsInMemoryRetrieved[i].propertyName || unitsInMemoryRetrieved[i].propertyName==="All"){
+              //     study_keywordPropertyUnit_select.innerHTML+="<option>"+unitsInMemoryRetrieved[i].propertyUnit+"</option>"
+              //   }
+              // }
             }} ></select>
           <select id="study_keywordPropertyUnit"></select>
           <section id="study_keywordPropertyValue_section">

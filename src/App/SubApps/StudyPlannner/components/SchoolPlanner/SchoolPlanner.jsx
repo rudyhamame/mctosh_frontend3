@@ -1570,8 +1570,8 @@ editCoursePages = async () => {
                       schoolPlanner_lectures_ul.children[i].children[0].style.justifyContent="start"
                       for(var j = 0;j<  schoolPlanner_lectures_ul.children[i].children.length;j++){
                         schoolPlanner_lectures_ul.children[i].children[j].style.order= schoolPlanner_lectures_ul.children[i].children.length-Number(1+j)
-                        for(var z = 0;z< schoolPlanner_lectures_ul.children[i].children[3].children.length;z++){
-                          schoolPlanner_lectures_ul.children[i].children[3].children[z].style.order= schoolPlanner_lectures_ul.children[i].children[3].children.length-Number(1+z)
+                        for(var z = 0;z< schoolPlanner_lectures_ul.children[i].children[3].children[0].children.length;z++){
+                          schoolPlanner_lectures_ul.children[i].children[3].children[0].children[z].style.order= schoolPlanner_lectures_ul.children[i].children[3].children.length-Number(1+z)
                         }
                       }
                     }

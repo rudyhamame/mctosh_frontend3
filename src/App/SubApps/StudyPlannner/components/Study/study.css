@@ -679,9 +679,10 @@ font-size: 10px;
 }
 #study_settings_wrapper{
     width: 0;
-    overflow: scroll;
+    overflow: hidden;
     align-items: start;
     gap:10px;
+    
 }
 #study_settings_wrapper label
 {
@@ -715,7 +716,6 @@ font-size: 10px;
 }
 #study_settingsCustomization_contentWrapper{
     overflow: scroll;
-    display: none;
     padding: 40px;
     gap: 30px;
 }
@@ -769,13 +769,16 @@ color: var(--green4);
 #study_settingsCustomization_content_inMemoryUnitsWrapper,
 #study_settingsCustomization_content_inMemoryDataTypesWrapper,
 #study_settingsCustomization_content_inMemorySetsWrapper,
-#study_settingsCustomization_content_inMemoryIntervalsWrapper
+#study_settingsCustomization_content_inMemoryIntervalsWrapper,
+#study_settingsCustomization_content_inMemoryFunctionNamesWrapper,
+#study_settings_content_customize_propertyName_div
 {
     box-shadow: 1px 4px 10px rgba(2, 0, 0, 0.242);
     border-radius: 20px;
-    overflow: hidden;
+    overflow: scroll;
     width: 100%;
     font-size: 10px;
+    height: 200px;
 }
 #study_settingsCustomization_content_inMemorySetsWrapper input, 
 #study_settingsCustomization_content_inMemorySetsWrapper select{
@@ -919,3 +922,12 @@ flex-grow: 1;
     width: 100%;
     gap: 40px
 }
+.div_p_functionInMemory{
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr 1fr 1fr;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    padding: 5px;
+  }

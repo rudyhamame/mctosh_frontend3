@@ -79,7 +79,7 @@ const Login = () => {
     let Login_password_input = document.getElementById("Login_password_input");
     if (Login_password_input.value && Login_username_input.value) {
       setIs_loading(true);
-      let url = "https://backendstep.onrender.com/api/user/login/";
+      let url = "http://localhost:4000/api/user/login/";
       let req = new Request(url, {
         method: "POST",
         mode: "cors",
@@ -198,7 +198,7 @@ const Login = () => {
       // Login_email_input.value
       // Login_dob_input.value
     ) {
-      const url = "https://backendstep.onrender.com/api/user/signup";
+      const url = "http://localhost:4000/api/user/signup";
       const options = {
         method: "POST",
         mode: "cors",
