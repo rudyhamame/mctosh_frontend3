@@ -60,6 +60,7 @@ export default class SchoolPlanner extends Component {
     let req = new Request(url, options);
     await fetch(req).then((result)=>{
       if(result.status===201){ 
+        this.retrieveLectures()
         return result.json()
       }
     }).then((result)=>{
