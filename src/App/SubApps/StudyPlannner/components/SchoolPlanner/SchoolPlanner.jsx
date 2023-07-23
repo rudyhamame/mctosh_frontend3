@@ -1665,6 +1665,7 @@ editCoursePages = async () => {
             schoolPlanner_plan_aside.style.width="100vw"  
             schoolPlanner_coursesLectures_wrapper.style.width="0" 
             if(courses_partOfPlan.length>0){   
+              console.log(courses_partOfPlan)
               let coursesDays=[]
               courses_partOfPlan.forEach((course)=>{
                 var examDateinMillisec=new Date(course.exam_date)
@@ -1672,7 +1673,7 @@ editCoursePages = async () => {
                 var diffDaysWithoutDecimals = Math.floor(diffDaysWithDecimals)
                 coursesDays.push(diffDaysWithoutDecimals)
               })
-              let highestNum = coursesDays.sort().reverse()[0]
+              let highestNum = coursesDays.sort()[0]
               for(var i = 0;i<highestNum;i++){
                 let p_dayNum = document.createElement("p")
                 p_dayNum.setAttribute("class", "plan_p_dayNum")

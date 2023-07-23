@@ -28,7 +28,7 @@ import Greeting from "./Main/Greeting/Greeting";
 import SearchPosts from "./Main/Posts/InputPost/SearchPosts/SearchPosts";
 import Header from "./Header/Header";
 import Chat from "./SubApps/Chat/Chat";
-import Study from "./SubApps/StudyPlannner/components/Study/Study";
+// import Study from "./SubApps/StudyPlannner/components/Study/Study";
 import SchoolPlanner from "./SubApps/StudyPlannner/components/SchoolPlanner/SchoolPlanner";
 import axios from "axios";
 //...........component..................
@@ -1802,14 +1802,14 @@ class App extends React.Component {
         <Route path="/study">
           <article id="app_page" className="fc">
             <main id="Main_article" className="fr">
-              <Study
+              {/* <Study
                 state={this.state}
                 logOut={this.logOut}
                 acceptFriend={this.acceptFriend}
                 type={this.type}
                 show_profile={this.show_profile}
                 serverReply={this.serverReply}
-              />{" "}
+              />{" "} */}
             </main>
           </article>
         </Route>
