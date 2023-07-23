@@ -1673,7 +1673,9 @@ editCoursePages = async () => {
                 var diffDaysWithoutDecimals = Math.floor(diffDaysWithDecimals)
                 coursesDays.push(diffDaysWithoutDecimals)
               })
-              let highestNum = coursesDays.sort()[0]
+              let highestNum = coursesDays.sort(function compareNumbers(a, b) {
+                return b - a;
+              })[0]
               for(var i = 0;i<highestNum;i++){
                 let p_dayNum = document.createElement("p")
                 p_dayNum.setAttribute("class", "plan_p_dayNum")
