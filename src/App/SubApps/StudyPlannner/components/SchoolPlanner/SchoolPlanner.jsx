@@ -1081,7 +1081,7 @@ export default class SchoolPlanner extends Component {
           var examTime_mins = Number(String(course.exam_time).split(":")[1])
           //....
           p11.textContent = "Due in "+diffDaysWithoutDecimals+" day(s) and "+(diffHoursWithoutDecimals)+" hour(s) and " + (diffMinsWithoutDecimals)+" min(s) with "+ examTime_hour+" more hour(s) and "+examTime_mins+" min(s) on the exam day"
-          p12.textContent = Math.ceil(Number((course.course_length-course.course_progress)/diffDaysWithoutDecimals))
+          p12.textContent = Math.ceil(Number((course.course_length-course.course_progress)/(diffDaysWithoutDecimals+1)))
 
           label1.textContent="Course name:"
           label2.textContent="Course time:"
@@ -1676,7 +1676,7 @@ editCoursePages = async () => {
               })
               let highestNum = coursesDays.sort(function compareNumbers(a, b) {
                 return b - a;
-              })[0]
+              })[0]+1
               for(var i = 0;i<highestNum;i++){
                 let p_dayNum = document.createElement("p")
                 p_dayNum.setAttribute("class", "plan_p_dayNum")
@@ -1692,7 +1692,7 @@ editCoursePages = async () => {
               courses_partOfPlan.forEach((course)=>{
                 var examDateinMillisec=new Date(course.exam_date)
                 var diffDaysWithDecimals=(examDateinMillisec-todayDate)/86400000
-                var diffDaysWithoutDecimals = Math.floor(diffDaysWithDecimals)
+                var diffDaysWithoutDecimals = Math.floor(diffDaysWithDecimals+1)
                 for(var j = 0;j<diffDaysWithoutDecimals;j++){
                   let pageNum = Math.ceil(Number((course.course_length-course.course_progress)/diffDaysWithoutDecimals))
                   let p_courseName = document.createElement("p")
