@@ -125,9 +125,9 @@ class App extends React.Component {
     fetch(req)
       .then((response) => {
         if (response.status === 201 && this.state.isConnected === false) {
-          sessionStorage.removeItem("Header_timer_h1");
-          sessionStorage.removeItem("state");
-          window.location.reload();
+          if (this.props.onLogout) {
+            this.props.onLogout();
+          }
           return response.json();
         }
       })
@@ -1384,9 +1384,9 @@ class App extends React.Component {
     fetch(req)
       .then((response) => {
         if (response.status === 201 && this.state.isConnected === false) {
-          sessionStorage.removeItem("Header_timer_h1");
-          sessionStorage.removeItem("state");
-          window.location.reload();
+          if (this.props.onLogout) {
+            this.props.onLogout();
+          }
           return response.json();
         } else {
           throw new Error("bad Http");
@@ -1435,6 +1435,7 @@ class App extends React.Component {
     this.setState({
       isConnected: false,
     });
+
     if (this.props.path === "/study") {
       let input = window.confirm(
         "Do you want this study session to be counted?"
@@ -1442,12 +1443,12 @@ class App extends React.Component {
       if (input) {
         this.updateBeforeLeave();
       } else {
-        this.dbUpdate_user_connected(false);
+        this.availableToChat(false);
       }
+      return;
     }
-    if (this.props.path === "/") {
-      this.dbUpdate_user_connected(false);
-    }
+
+    this.availableToChat(false);
   };
 
   ///////////////////////Searching in posts////////////////////

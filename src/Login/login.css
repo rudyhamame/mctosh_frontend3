@@ -4,8 +4,10 @@
 }
 #Login_article {
   min-height: 100vh;
+  min-height: 100dvh;
   background-color: var(--white);
   align-items: center;
+  justify-content: space-between;
 }
 
 
@@ -15,8 +17,12 @@
   align-items: center;
   justify-content: center;
   flex-grow: 1;
-  padding: 20px;
-  /* padding: 0 30px; */
+  width: 100%;
+  padding: 32px 20px 24px;
+  box-sizing: border-box;
+}
+#Login_loginLogo_container {
+  width: 100%;
 }
 #Login_signupShow_text {
   cursor: pointer;
@@ -36,7 +42,8 @@
   font-size: 80pt;
   font-weight: 700;
   text-align: center;
-  line-height: 45px;
+  line-height: 0.85;
+  margin: 0;
   color: #01796f;
   position: relative;
 }
@@ -46,26 +53,38 @@
   font-size: 35pt;
   color: var(black);
   text-align: center;
+  margin: 18px 0 0;
 }
 
 #Login_loginForm_container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 #Login_loginFrom_form {
   justify-content: center;
   align-items: center;
-  gap: 10px;
-  padding: 20px;
+  gap: 12px;
+  padding: 24px;
   background-color: var(--brightestWhite);
-  border-radius: 10px;
+  border-radius: 20px;
   text-align: center;
   box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.486);
-  width: 450px;
+  width: min(100%, 450px);
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 #Login_loginFrom_form input {
   font-size: 12pt;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 48px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(1, 121, 111, 0.2);
+  background: #fff;
 }
 
 #Login_loginFrom_form button {
@@ -74,6 +93,8 @@
   font-weight: bold;
   font-size: 14pt;
   width: 100%;
+  min-height: 48px;
+  border-radius: 12px;
 }
 
 #Login_footer {
@@ -81,11 +102,13 @@
   text-align: center;
   box-shadow: 0px 60px 100px rgba(18, 118, 175, 0.486);
   width: 100%;
-  padding: 30px;
+  padding: 18px 20px calc(18px + env(safe-area-inset-bottom));
+  box-sizing: border-box;
 }
 
 #Login_copyright_text {
   font-weight: 300;
+  margin: 0;
 }
 
 @media screen and (max-height: 600px) {
@@ -101,6 +124,8 @@
   }
   #Login_main {
     gap: 20px;
+    padding-top: 20px;
+    padding-bottom: 16px;
   }
   #Login_loginFrom_form input,
   #Login_loginFrom_form button {
@@ -128,6 +153,11 @@
 }
 
 @media screen and (max-width: 600px) {
+  #Login_main {
+    gap: 28px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
   #Login_loginLogo_text {
     font-size: 50pt;
   }
@@ -135,18 +165,29 @@
     font-size: 30pt;
   }
   #Login_loginFrom_form {
-    width: 380px;
+    width: min(100%, 380px);
   }
 }
 @media screen and (max-width: 500px) {
+  #Login_main {
+    gap: 24px;
+    padding-top: max(16px, env(safe-area-inset-top));
+  }
   #Login_loginLogo_text {
     font-size: 45pt;
   }
   #Login_subLoginLogo_text {
-    font-size: 25pt;
+    font-size: 24pt;
   }
   #Login_loginFrom_form {
-    width: 320px;
+    width: 100%;
+    padding: 18px 16px;
+    border-radius: 16px;
+  }
+  #Login_loginFrom_form input,
+  #Login_loginFrom_form button {
+    min-height: 46px;
+    font-size: 16px;
   }
   #Login_copyright_text {
     font-size: 9pt;
@@ -155,13 +196,10 @@
 
 @media screen and (max-width: 425px) {
   #Login_loginLogo_text {
-    font-size: 40pt;
+    font-size: clamp(2.2rem, 14vw, 40pt);
   }
   #Login_subLoginLogo_text {
-    font-size: 23pt;
-  }
-  #Login_loginFrom_form {
-    width: 300px;
+    font-size: clamp(1.15rem, 7vw, 23pt);
   }
   #Login_copyright_text {
     font-size: 9pt;
@@ -169,14 +207,16 @@
 }
 
 @media screen and (max-width: 350px) {
+  #Login_main {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
   #Login_loginLogo_text {
-    font-size: 35pt;
+    font-size: clamp(2rem, 13vw, 35pt);
   }
   #Login_subLoginLogo_text {
-    font-size: 15pt;
-  }
-  #Login_loginFrom_form {
-    width: 250px;
+    font-size: clamp(1rem, 6vw, 15pt);
+    margin-top: 10px;
   }
   #Login_copyright_text {
     font-size: 9pt;

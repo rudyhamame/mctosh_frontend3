@@ -1,25 +1,18 @@
-import React, { useState } from "react";
-import AppRouter from "../AppRouter";
+import React, { useEffect, useState } from "react";
 import "../Login/login.css";
-import ReactDOM from "react-dom";
-import { Redirect, BrowserRouter as Router, Route } from "react-router-dom";
 
-const Login = () => {
-  //.........................STATE............................//
+const Login = ({ onLogin }) => {
   const [is_loading, setIs_loading] = useState(null);
   const [signup_ok, setSignup_ok] = useState(null);
   const [login_ok, setLogin_ok] = useState(null);
   const [authReport, setAuthReport] = useState(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (login_ok && authReport) {
       login_listener();
       sessionStorage.setItem("state", JSON.stringify(authReport));
     }
-  });
-  //.........................DECLARATION......................//
-
-  //.........................formControl & formControl (functions)..........................//
+  }, [authReport, login_ok]);
 
   const formControl = (text) => {
     let Login_firstname_input = document.getElementById(
@@ -34,6 +27,7 @@ const Login = () => {
     let Login_signupShow_text = document.getElementById(
       "Login_signupShow_text"
     );
+
     switch (text) {
       case "signup":
         setLogin_ok(null);
@@ -61,12 +55,11 @@ const Login = () => {
     }
   };
 
-  ////////////////////////////////////////////CHECK AND GET CREDENTIALS//////////////////////////////////////
-  const login = (event) => {
+  const login = () => {
     let login;
-    // event.preventDefault();
     let Login_username_input = document.getElementById("Login_username_input");
     let Login_password_input = document.getElementById("Login_password_input");
+
     if (Login_password_input.value && Login_username_input.value) {
       setIs_loading(true);
       let url = "http://localhost:4000/api/user/login/";
@@ -79,6 +72,7 @@ const Login = () => {
           password: Login_password_input.value,
         }),
       });
+
       fetch(req)
         .then((response) => {
           if (response.status === 201) {
@@ -106,8 +100,8 @@ const Login = () => {
               friend_requests: userdata.user.friend_requests,
               notifications: userdata.user.notifications,
               posts: userdata.user.posts,
-              courses:userdata.user.schoolPlanner.courses,
-              lectures:userdata.user.schoolPlanner.lectures
+              courses: userdata.user.schoolPlanner.courses,
+              lectures: userdata.user.schoolPlanner.lectures,
             });
             setLogin_ok(true);
           } else {
@@ -120,15 +114,16 @@ const Login = () => {
       setIs_loading(false);
     }
   };
-  //..............................................................................................
-  /////////////////////////////////////////Login listener/////////////////////////////////////////
+
   const login_listener = () => {
     let app_page_width = parseInt(
       window.getComputedStyle(document.querySelector("#root")).width
     );
+
     if (authReport) {
       document.getElementById("Login_loginFrom_form").style.height = "0";
       document.getElementById("Login_loginFrom_form").style.padding = "0";
+
       if (app_page_width > 1000) {
         document.getElementById("Login_loginLogo_text").style.fontSize =
           "100pt";
@@ -157,16 +152,17 @@ const Login = () => {
 
       setTimeout(() => {
         setIs_loading(false);
-        ReactDOM.render(<AppRouter />, document.getElementById("root"));
+        if (onLogin) {
+          onLogin(authReport);
+        }
       }, 5000);
     }
   };
-  //.............................................................................................................
-  ////////////////////////////////////////////SIGN UP AS USER AND PROFILE//////////////////////////////////////
-  const signup = (event) => {
 
+  const signup = (event) => {
     event.preventDefault();
     setIs_loading(true);
+
     let Login_username_input = document.getElementById("Login_username_input");
     let Login_password_input = document.getElementById("Login_password_input");
     let Login_firstname_input = document.getElementById(
@@ -175,14 +171,13 @@ const Login = () => {
     let Login_lastname_input = document.getElementById("Login_lastname_input");
     let Login_email_input = document.getElementById("Login_email_input");
     let Login_dob_input = document.getElementById("Login_dob_input");
-    //................................user....................................................
+
     if (
       Login_username_input.value &&
       Login_password_input.value &&
       Login_firstname_input.value &&
       Login_lastname_input.value &&
       Login_email_input.value
-      // Login_dob_input.value
     ) {
       const url = "http://localhost:4000/api/user/signup";
       const options = {
@@ -198,14 +193,14 @@ const Login = () => {
           dob: Login_dob_input.value,
         }),
       };
+
       let req = new Request(url, options);
       fetch(req)
         .then((response) => {
           if (response.status === 201) {
             setIs_loading(false);
             setSignup_ok(true);
-            return response.json()
-            // document.getElementById("Login_loginFrom_form").reset();
+            return response.json();
           } else {
             setIs_loading(false);
             setSignup_ok(false);
@@ -220,110 +215,102 @@ const Login = () => {
     }
   };
 
-  ////////////////////////////////////////////Create PROFILE//////////////////////////////////////
-
   return (
-    <Router>
-      <Route exact path="/">
-        <article id="Login_article" className="fc">
-          <main id="Login_main" className="fc">
-            <section id="Login_loginLogo_container">
-              <h1 id="Login_loginLogo_text">MCTOSH</h1>
-              <h4 id="Login_subLoginLogo_text">Virtual Medicine</h4>
-            </section>
-            <section id="Login_loginForm_container">
-              <section id="Login_loginFrom_form" className="fc">
-                <input
-                  id="Login_firstname_input"
-                  type="text"
-                  style={{ display: "none" }}
-                  placeholder="first name"
-                />
-                <input
-                  id="Login_lastname_input"
-                  type="text"
-                  style={{ display: "none" }}
-                  placeholder="last name"
-                />
-                <input
-                  id="Login_username_input"
-                  type="text"
-                  placeholder="username"
-                  onKeyPress={(event) => {
-                    if (event.which === 13) {
-                      login();
-                    }
-                  }}
-                />
-                <input
-                  id="Login_password_input"
-                  type="password"
-                  placeholder="password"
-                  onKeyPress={(event) => {
-                    if (event.which === 13) {
-                      login();
-                    }
-                  }}
-                />
-                <input
-                  id="Login_email_input"
-                  type="email"
-                  placeholder="email address"
-                  style={{ display: "none" }}
-                />
-                <input
-                  id="Login_dob_input"
-                  type="date"
-                  style={{ display: "none" }}
-                />
-                <button id="Login_login_button" onClick={login}>
-                  Log in
-                </button>
-
-                <button
-                  id="Login_signup_button"
-                  onClick={signup}
-                  style={{ display: "none" }}
-                >
-                  Sign up
-                </button>
-                <h4
-                  style={{ display: "none" }}
-                  id="Login_loginShow_text"
-                  onClick={() => formControl("login")}
-                >
-                  Log in?
-                </h4>
-                <h4
-                  id="Login_signupShow_text"
-                  onClick={() => formControl("signup")}
-                >
-                  Sign up?
-                </h4>
-                <h4 style={{ overflowWrap: "break-word", color: "red" }}>
-                  {login_ok === false &&
-                    "The password you entered is not correct, please try again"}
-                  {signup_ok === true && "You have successfully signed up!"}
-                  {signup_ok === false &&
-                    "Please make sure you entered valid information"}
-                </h4>
-              </section>
-            </section>
-          </main>
-          <footer id="Login_footer">
-            <section id="Login_copyright_container">
-              <h4 id="Login_copyright_text">©2020 Rudy Hamame</h4>
-            </section>
-          </footer>
-          {is_loading === true && (
-            <div id="Login_loaderImg_div" className="loaderImg_div fc">
-              <img src="/img/loader.gif" alt="" width="100px" />
-            </div>
-          )}
-        </article>
-      </Route>
-      <Redirect to="/" />
-    </Router>
+    <article id="Login_article" className="fc">
+      <main id="Login_main" className="fc">
+        <section id="Login_loginLogo_container">
+          <h1 id="Login_loginLogo_text">MCTOSH</h1>
+          <h4 id="Login_subLoginLogo_text">Virtual Medicine</h4>
+        </section>
+        <section id="Login_loginForm_container">
+          <section id="Login_loginFrom_form" className="fc">
+            <input
+              id="Login_firstname_input"
+              type="text"
+              style={{ display: "none" }}
+              placeholder="first name"
+            />
+            <input
+              id="Login_lastname_input"
+              type="text"
+              style={{ display: "none" }}
+              placeholder="last name"
+            />
+            <input
+              id="Login_username_input"
+              type="text"
+              placeholder="username"
+              onKeyPress={(event) => {
+                if (event.which === 13) {
+                  login();
+                }
+              }}
+            />
+            <input
+              id="Login_password_input"
+              type="password"
+              placeholder="password"
+              onKeyPress={(event) => {
+                if (event.which === 13) {
+                  login();
+                }
+              }}
+            />
+            <input
+              id="Login_email_input"
+              type="email"
+              placeholder="email address"
+              style={{ display: "none" }}
+            />
+            <input
+              id="Login_dob_input"
+              type="date"
+              style={{ display: "none" }}
+            />
+            <button id="Login_login_button" onClick={login}>
+              Log in
+            </button>
+            <button
+              id="Login_signup_button"
+              onClick={signup}
+              style={{ display: "none" }}
+            >
+              Sign up
+            </button>
+            <h4
+              style={{ display: "none" }}
+              id="Login_loginShow_text"
+              onClick={() => formControl("login")}
+            >
+              Log in?
+            </h4>
+            <h4
+              id="Login_signupShow_text"
+              onClick={() => formControl("signup")}
+            >
+              Sign up?
+            </h4>
+            <h4 style={{ overflowWrap: "break-word", color: "red" }}>
+              {login_ok === false &&
+                "The password you entered is not correct, please try again"}
+              {signup_ok === true && "You have successfully signed up!"}
+              {signup_ok === false &&
+                "Please make sure you entered valid information"}
+            </h4>
+          </section>
+        </section>
+      </main>
+      <footer id="Login_footer">
+        <section id="Login_copyright_container">
+          <h4 id="Login_copyright_text">Â©2020 Rudy Hamame</h4>
+        </section>
+      </footer>
+      {is_loading === true && (
+        <div id="Login_loaderImg_div" className="loaderImg_div fc">
+          <img src="/img/loader.gif" alt="" width="100px" />
+        </div>
+      )}
+    </article>
   );
 };
 
