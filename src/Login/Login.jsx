@@ -69,7 +69,7 @@ const Login = () => {
     let Login_password_input = document.getElementById("Login_password_input");
     if (Login_password_input.value && Login_username_input.value) {
       setIs_loading(true);
-      let url = "https://backendstep.onrender.com/api/user/login/";
+      let url = "http://localhost:4000/api/user/login/";
       let req = new Request(url, {
         method: "POST",
         mode: "cors",
@@ -184,7 +184,7 @@ const Login = () => {
       Login_email_input.value
       // Login_dob_input.value
     ) {
-      const url = "https://backendstep.onrender.com/api/user/signup";
+      const url = "http://localhost:4000/api/user/signup";
       const options = {
         method: "POST",
         mode: "cors",
@@ -312,11 +312,11 @@ const Login = () => {
           </main>
           <footer id="Login_footer">
             <section id="Login_copyright_container">
-              <h4 id="Login_copyright_text">©2021 Rudy Hamame</h4>
+              <h4 id="Login_copyright_text">©2020 Rudy Hamame</h4>
             </section>
           </footer>
           {is_loading === true && (
-            <div id="Login_loaderImg_div" className="fc">
+            <div id="Login_loaderImg_div" className="loaderImg_div fc">
               <img src="/img/loader.gif" alt="" width="100px" />
             </div>
           )}
